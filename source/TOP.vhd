@@ -255,11 +255,12 @@ signal i2c_sda                 :std_logic;
 --attribute MARK_DEBUG : string;
 --attribute MARK_DEBUG of i2c_scl,i2c_sda : signal is "TRUE";
 --ps7_wrapper
+signal fei4_cmd_out            :std_logic;
 
 signal fei4_cfg_flg            :std_logic;
 signal fei4_cfg_reg            :std_logic_vector(31 downto 0);
 signal fei4_wr_reg_dat         :std_logic_vector(15 downto 0);
-signal fei4_data_pos_sel       :std_logic_vector(3 downto 0);
+signal fei4_cmd_ph_sel         :std_logic_vector(3 downto 0);
 signal fei4_bit_slip           :std_logic;
 signal fei4_cmd_out_ph_sel     :std_logic_vector(1 downto 0);
 signal fei4_hit_or_un_sync     :std_logic;
@@ -268,6 +269,8 @@ signal fei4_hit_or_sync        :std_logic;
 signal fei4_data_out           :std_logic_vector(7 downto 0);
 signal fei4_data_fifo_wr_en    :std_logic;
 --attribute MARK_DEBUG of fei4_hit_or_sync : signal is "TRUE";
+signal fei4_a1_data_is_pix_dat :std_logic;
+signal fei4_a2_data_is_pix_dat :std_logic;
 
 signal fei4_a2_cfg_flg         :std_logic;
 signal fei4_a2_cfg_reg         :std_logic_vector(31 downto 0);
@@ -280,15 +283,15 @@ signal fei4_fr_ram_dat_out     :std_logic_vector(31 downto 0);
 
 --attribute MARK_DEBUG : string;
 --attribute MARK_DEBUG of fei4_fr_ram_addr,fei4_fr_ram_dat_in,fei4_fr_ram_dat_out: signal is "TRUE";
-signal fei4_fe_fr_rd_en        : std_logic_vector(1 downto 0);
+signal fei4_fe_sr_rd_en        : std_logic_vector(1 downto 0);
 signal fei4_frame_sync_en      : std_logic_vector(1 downto 0);
 signal fei4_reg_addr_out       : std_logic_vector(31 downto 0);
 signal fei4_reg_value_out      : std_logic_vector(31 downto 0);
 
-signal fei4_idelay_cnt_out     :std_logic_vector(4 downto 0);
-signal fei4_idelay_ctrl_rdy    :std_logic;
-signal fei4_idelay_ld          :std_logic;
-signal fei4_idelay_cnt_in      :std_logic_vector(4 downto 0);  
+signal fei4_idelay_cnt_out     :std_logic_vector(9 downto 0);
+signal fei4_idelay_ctrl_rdy    :std_logic_vector(1 downto 0);
+signal fei4_idelay_ld          :std_logic_vector(1 downto 0);
+signal fei4_idelay_cnt_in      :std_logic_vector(9 downto 0);  
 
 signal ccpd_inj_pulse_a1       :std_logic;
 signal ccpd_inj_pulse_a2       :std_logic;
@@ -821,17 +824,21 @@ port map(
         
     GLB_RST               => global_reset,
     
+    --FEI4 configure module control signals  
     FEI4_CFG_FLG          => fei4_cfg_flg,
     FEI4_CFG_REG          => fei4_cfg_reg,
     FEI4_WR_REG_DAT       => fei4_wr_reg_dat,
     FEI4_FR_RAM_ADDR      => fei4_fr_ram_addr,
     FEI4_FR_RAM_DAT_IN    => fei4_fr_ram_dat_in,
     FEI4_FR_RAM_DAT_OUT   => fei4_fr_ram_dat_out,
-    FEI4_DAT_POS_SEL      => fei4_data_pos_sel,
+    FEI4_CMD_PH_SEL       => fei4_cmd_ph_sel,
+    
+    --FEI4 RX module control signals  
     FEI4_FRAME_SYNC_EN    => fei4_frame_sync_en,
-    FEI4_FE_FR_RD_EN      => fei4_fe_fr_rd_en,
+    FEI4_FE_SR_RD_EN      => fei4_fe_sr_rd_en,    
     FEI4_REG_ADDR_OUT     => fei4_reg_addr_out,
     FEI4_REG_VALUE_OUT    => fei4_reg_value_out,
+    --FEI4 IDELAY control signals  
     FEI4_IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
     FEI4_IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
     FEI4_IDELAY_LD        => fei4_idelay_ld,
@@ -859,7 +866,7 @@ Port map(
     RST             => global_reset,
     
     CLK160          => clk160m,
-    CMD_OUT_PH_SEL  => fei4_data_pos_sel(1 downto 0),
+    CMD_OUT_PH_SEL  =>   fei4_cmd_ph_sel(1 downto 0),
        
     CMD_CLK         => clk40m,
     FR_CFG_CLK      => ps7_aclk,
@@ -871,8 +878,7 @@ Port map(
     CFG_REG         => fei4_cfg_reg,
     WR_REG_DAT      => fei4_wr_reg_dat,
     
-    CMD_OUT_P       => FEI4_A1_CMD_OUT_P,
-    CMD_OUT_N       => FEI4_A1_CMD_OUT_N
+    CMD_OUT       => fei4_cmd_out
 );
 
 --fei4_a2_cfg:FEI4B_CFG
@@ -899,19 +905,19 @@ Port MAP(
    CLK16            => clk16m,
    
    FRAME_SYNC_EN    => fei4_frame_sync_en(0),
-   FE_SR_RD_EN      => fei4_fe_fr_rd_en(0),
+   FE_FR_RD_EN      => fei4_fe_sr_rd_en(0),
    
-   REG_ADDR_OUT     => fei4_reg_addr_out,
-   REG_VALUE_OUT    => fei4_reg_value_out,
+   REG_ADDR_OUT     => fei4_reg_addr_out(15 downto 0),
+   REG_VALUE_OUT    => fei4_reg_value_out(15 downto 0),
 
    DATA_OUT         => hp2_burst_fifo_wrdata_t(7 downto 0),
-   FIFO_WR_EN       => hp2_burst_fifo_wren_t,
+   IS_PIX_DAT       => hp2_burst_fifo_wren_t,
         
    IDELAY_REFCLK    => clk200m,
-   IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
-   IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
-   IDELAY_LD        => fei4_idelay_ld,
-   IDELAY_CNT_IN    => fei4_idelay_cnt_in
+   IDELAY_CNT_OUT   => fei4_idelay_cnt_out(4 downto 0),
+   IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy(0),
+   IDELAY_LD        => fei4_idelay_ld(0),
+   IDELAY_CNT_IN    => fei4_idelay_cnt_in(4 downto 0)
 );
 
 fei4_a2_rx_1: entity work.FEI4_RX 
@@ -923,20 +929,20 @@ Port MAP(
    CLK160           => clk160m,
    CLK16            => clk16m,
    
-   FRAME_SYNC_EN    => fei4_frame_sync_en,
-   FE_SR_RD_EN      => fei4_fe_sr_rd_en,
+   FRAME_SYNC_EN    => fei4_frame_sync_en(1),
+   FE_FR_RD_EN      => fei4_fe_sr_rd_en(1),
    
-   REG_ADDR_OUT     => fei4_reg_addr_out,
-   REG_VALUE_OUT    => fei4_reg_value_out,
+   REG_ADDR_OUT     => fei4_reg_addr_out(31 downto 16),
+   REG_VALUE_OUT    => fei4_reg_value_out(31 downto 16),
 
-   DATA_OUT         => hp2_burst_fifo_wrdata_t(7 downto 0),
-   IS_PIX_DAT       => hp2_burst_fifo_wren_t,
+   DATA_OUT         => hp2_burst_fifo_wrdata_t(15 downto 8),
+   IS_PIX_DAT       => fei4_a2_data_is_pix_dat,
         
    IDELAY_REFCLK    => clk200m,
-   IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
-   IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
-   IDELAY_LD        => fei4_idelay_ld,
-   IDELAY_CNT_IN    => fei4_idelay_cnt_in
+   IDELAY_CNT_OUT   => fei4_idelay_cnt_out(9 downto 5),
+   IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy(1),
+   IDELAY_LD        => fei4_idelay_ld(1),
+   IDELAY_CNT_IN    => fei4_idelay_cnt_in(9 downto 5)
 );
   
 REFCLK_OUT_BUF:OBUFDS
@@ -1038,5 +1044,29 @@ port map(
     I =>  ccpd_inj_pulse_b2   
 );
           
+fei4_a1_cmd_out_buf:OBUFDS
+generic map (
+  IOSTANDARD => "DEFAULT",  
+  SLEW => "SLOW" 
+  ) 
+port map(
+  O  => FEI4_A1_CMD_OUT_P,  
+  OB => FEI4_A1_CMD_OUT_N,  
+  I => fei4_cmd_out  -- Buffer input
+);
+
+fei4_a2_cmd_out_buf:OBUFDS
+generic map (
+  IOSTANDARD => "DEFAULT",  
+  SLEW => "SLOW" 
+  ) 
+port map(
+  O  => FEI4_A2_CMD_OUT_P,  
+  OB => FEI4_A2_CMD_OUT_N,  
+  
+  -- Since the Positive output is connected to the negative input of the A2 FEI4, the cmd out is \
+  -- reversed.
+  I => not fei4_cmd_out  -- Buffer input
+);
                                
 end Behavioral;

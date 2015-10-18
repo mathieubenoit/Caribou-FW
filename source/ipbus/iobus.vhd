@@ -49,7 +49,7 @@ port (
     
     --FEI4 RX module control signals        
     FEI4_FRAME_SYNC_EN  :out std_logic_vector(1 downto 0);
-    FEI4_FE_FR_SR_EN    :out std_logic_vector(1 downto 0);
+    FEI4_FE_SR_RD_EN    :out std_logic_vector(1 downto 0);
     FEI4_REG_ADDR_OUT   :in std_logic_vector(31 downto 0);
     FEI4_REG_VALUE_OUT  :in std_logic_vector(31 downto 0); 
     --FEI4 IDELAY control signals     
@@ -135,7 +135,7 @@ begin
                         -- FEI4 RX module control signals                                 
                         when x"0030" =>   if(wr = '1') then  FEI4_FRAME_SYNC_EN <= Bus2IP_Data(1 downto 0); 
                                           end if;           
-                        when x"0034" =>   if (wr = '1') then  FEI4_FE_FR_SR_EN <= Bus2IP_Data(1 downto 0); 
+                        when x"0034" =>   if (wr = '1') then  FEI4_FE_SR_RD_EN <= Bus2IP_Data(1 downto 0); 
                                       end if;                                 
                         when x"0038" =>   if(rd = '1') then ip2bus_data_i <= FEI4_REG_ADDR_OUT;
                                           end if;                                      

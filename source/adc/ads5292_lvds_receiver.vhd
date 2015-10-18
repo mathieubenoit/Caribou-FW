@@ -90,7 +90,8 @@ signal adc_ch4_data :std_logic_vector(11 downto 0);
 signal adc_ch5_data :std_logic_vector(11 downto 0);
 signal adc_ch6_data :std_logic_vector(11 downto 0);
 
---attribute MARK_DEBUG : string;
+attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of dclk_freq, fclk_freq : signal is "TRUE";
 --attribute MARK_DEBUG of adc_ch1_data,adc_ch2_data,adc_ch3_data,adc_ch4_data,adc_ch5_data,adc_ch6_data: signal is "TRUE";
 
 component lvds_ch
