@@ -59,7 +59,7 @@ signal vr_cnt         :integer range 0 to 1 := 0;
 type   state_type is (START, IDLE, SOF, EOF, AR, VR, DAT, FINISH, ERROR);
 signal state          : state_type := START ;
 
-signal is_pixel_data  :std_logic_vector(63 downto 0);  
+signal is_pixel_data  :std_logic;  
 
 --attribute MARK_DEBUG : string;
 --attribute MARK_DEBUG of reg_value,reg_addr : signal is "TRUE";
