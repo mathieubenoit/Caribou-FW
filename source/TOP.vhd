@@ -10,29 +10,27 @@ use UNISIM.VCOMPONENTS.ALL;
 
 entity TOP is
   port(
-    CLK200_IN_P                                 : IN   STD_LOGIC;
-    CLK200_IN_N                                 : IN   STD_LOGIC;
-    --10MHz reference clock for signal generator
-    SIG_CLK                                     : OUT  STD_LOGIC;
+    CLK200_IN_P                                  : IN   STD_LOGIC;
+    CLK200_IN_N                                  : IN   STD_LOGIC;
 
-    HPC_LVDS6_P                                 : OUT  STD_LOGIC;
-    HPC_LVDS6_N                                 : OUT  STD_LOGIC;       
-    HPC_LVDS12_P                                : OUT  STD_LOGIC;
-    HPC_LVDS12_N                                : OUT  STD_LOGIC;
+    HPC_LVDS6_P                                  : OUT  STD_LOGIC;
+    HPC_LVDS6_N                                  : OUT  STD_LOGIC;       
+    HPC_LVDS12_P                                 : OUT  STD_LOGIC;
+    HPC_LVDS12_N                                 : OUT  STD_LOGIC;
 
-    LPC_LVDS1_P                                 : OUT  STD_LOGIC;
-    LPC_LVDS1_N                                 : OUT  STD_LOGIC;       
-    LPC_LVDS2_P                                 : OUT  STD_LOGIC;
-    LPC_LVDS2_N                                 : OUT  STD_LOGIC;
-    LPC_LVDS3_P                                 : OUT  STD_LOGIC;
-    LPC_LVDS3_N                                 : OUT  STD_LOGIC;       
-    LPC_LVDS4_P                                 : OUT  STD_LOGIC;
-    LPC_LVDS4_N                                 : OUT  STD_LOGIC;
+    LPC_LVDS1_P                                  : OUT  STD_LOGIC;
+    LPC_LVDS1_N                                  : OUT  STD_LOGIC;       
+    LPC_LVDS2_P                                  : OUT  STD_LOGIC;
+    LPC_LVDS2_N                                  : OUT  STD_LOGIC;
+    LPC_LVDS3_P                                  : OUT  STD_LOGIC;
+    LPC_LVDS3_N                                  : OUT  STD_LOGIC;       
+    LPC_LVDS4_P                                  : OUT  STD_LOGIC;
+    LPC_LVDS4_N                                  : OUT  STD_LOGIC;
                
-    LPC_LVDS6_P                                 : OUT  STD_LOGIC;
-    LPC_LVDS6_N                                 : OUT  STD_LOGIC;       
-    LPC_LVDS12_P                                : OUT  STD_LOGIC;
-    LPC_LVDS12_N                                : OUT  STD_LOGIC;
+    LPC_LVDS6_P                                  : OUT  STD_LOGIC;
+    LPC_LVDS6_N                                  : OUT  STD_LOGIC;       
+    LPC_LVDS12_P                                 : OUT  STD_LOGIC;
+    LPC_LVDS12_N                                 : OUT  STD_LOGIC;
     
     --ADC LVDS INPUT PAIR
     ADC_FCLKP                                    : IN STD_LOGIC;
@@ -82,28 +80,25 @@ entity TOP is
     IIC2_SDA                                     : INOUT STD_LOGIC;
     IIC2_SCL                                     : INOUT STD_LOGIC;
     
-    --FEI4 IOs
-    FEI4_DOB_P                                   : IN STD_LOGIC;
-    FEI4_DOB_N                                   : IN STD_LOGIC;
+    --FEI4 A1 IOs
+    FEI4_A1_DOB_P                                : IN STD_LOGIC;
+    FEI4_A1_DOB_N                                : IN STD_LOGIC;
     FEI4_A1_CMD_OUT_P                            : OUT STD_LOGIC;
     FEI4_A1_CMD_OUT_N                            : OUT STD_LOGIC;
     FEI4_A1_HIT_OR_P                             : IN STD_LOGIC;
     FEI4_A1_HIT_OR_N                             : IN STD_LOGIC;
         
+    --FEI4 A2 IOs
+    FEI4_A2_DOB_P                                : IN STD_LOGIC;
+    FEI4_A2_DOB_N                                : IN STD_LOGIC;
     FEI4_A2_CMD_OUT_P                            : OUT STD_LOGIC;
     FEI4_A2_CMD_OUT_N                            : OUT STD_LOGIC;
+    FEI4_A2_HIT_OR_P                             : IN STD_LOGIC;
+    FEI4_A2_HIT_OR_N                             : IN STD_LOGIC;
     
-    FEI4_B1_CMD_OUT_P                            : OUT STD_LOGIC;
-    FEI4_B1_CMD_OUT_N                            : OUT STD_LOGIC;
-    
-    FEI4_B2_CMD_OUT_P                            : OUT STD_LOGIC;
-    FEI4_B2_CMD_OUT_N                            : OUT STD_LOGIC;    
---    GPIO_LED_C                                   : OUT STD_LOGIC;
---    GPIO_LED_R                                   : OUT STD_LOGIC;
---    GPIO_LED_0                                   : OUT STD_LOGIC;
     --40MHz Clock output for CaR Board
-    CLK40_OUT_P                                 : out STD_LOGIC;
-    CLK40_OUT_N                                 : out STD_LOGIC                                 
+    CLK40_OUT_P                                  : out STD_LOGIC;
+    CLK40_OUT_N                                  : out STD_LOGIC                                 
 
 );
 end TOP;
@@ -115,13 +110,13 @@ signal tied_to_vcc    :std_logic;
 signal global_reset   :std_logic;
 
 --mmcm clocks 
-signal clk200m :std_logic; --Idelay reference clock
-signal clk160m :std_logic; --FEI4 data bit clock
-signal clk100m :std_logic; --output clock of mmcm module
-signal clk40m  :std_logic; --ADC clock
-signal clk16m  :std_logic; --FEI4 data byte clock
-signal mmcm_reset :std_logic;
-signal mmcm_locked:std_logic;
+signal clk200m        :std_logic; --Idelay reference clock
+signal clk160m        :std_logic; --FEI4 data bit clock
+signal clk100m        :std_logic; --output clock of mmcm module
+signal clk40m         :std_logic; --ADC clock
+signal clk16m         :std_logic; --FEI4 data byte clock
+signal mmcm_reset     :std_logic;
+signal mmcm_locked    :std_logic;
    
 ---------------------------------Keep Attribute-------------------------------
 --PS7 Signals
@@ -148,7 +143,6 @@ signal    ps7_m00_axi_wstrb    :  std_logic_vector ( 3 downto 0 );
 signal    ps7_m00_axi_wvalid   :  std_logic;
 signal    ps7_axi_areset       :  std_logic;
 --attribute MARK_DEBUG of ps7_m00_axi_araddr,ps7_m00_axi_arready,ps7_m00_axi_arvalid,ps7_m00_axi_awaddr,ps7_m00_axi_awready,ps7_m00_axi_awvalid,ps7_m00_axi_bready,ps7_m00_axi_bresp,ps7_m00_axi_bvalid,ps7_m00_axi_rdata,ps7_m00_axi_rready,ps7_m00_axi_rresp,ps7_m00_axi_rvalid,ps7_m00_axi_wdata,ps7_m00_axi_wready,ps7_m00_axi_wstrb,ps7_m00_axi_wvalid: signal is "TRUE";
-
 
 signal	m_axi_hp0_awaddr_t  :  std_logic_vector ( 31 downto 0 );
 signal	m_axi_hp0_awburst_t :  std_logic_vector ( 1 downto 0 );
@@ -225,7 +219,7 @@ signal hp2_burst_fifo_rdcnt_t    :std_logic_vector(7 downto 0);
 signal hp2_burst_addr_t          :std_logic_vector(31 downto 0);
 
 attribute MARK_DEBUG : string;
-attribute MARK_DEBUG of hp2_burst_fifo_wrdata_t,hp2_burst_fifo_wren_t : signal is "TRUE";
+--attribute MARK_DEBUG of hp2_burst_fifo_wrdata_t,hp2_burst_fifo_wren_t : signal is "TRUE";
 
 --Bram controller signals
 signal ps7_bram_porta_addr_t :  std_logic_vector ( 15 downto 0 );
@@ -239,22 +233,22 @@ signal ps7_bram_porta_we_t   :  std_logic_vector ( 3 downto 0 );
 --attribute MARK_DEBUG : string;
 --attribute MARK_DEBUG of ps7_bram_porta_clk_t,ps7_bram_porta_addr_t,ps7_bram_porta_din_t,ps7_bram_porta_dout_t,ps7_bram_porta_en_t,ps7_bram_porta_we_t : signal is "TRUE";
 
-signal basil_bus_clk : std_logic;
-signal basil_bus_wr  : std_logic;
-signal basil_bus_rd  : std_logic;
-signal basil_bus_add : std_logic_vector(31 downto 0);
-signal basil_bus_data : std_logic_vector(31 downto 0);
+signal basil_bus_clk      : std_logic;
+signal basil_bus_wr       : std_logic;
+signal basil_bus_rd       : std_logic;
+signal basil_bus_add      : std_logic_vector(31 downto 0);
+signal basil_bus_data     : std_logic_vector(31 downto 0);
 --ADC LVDS data signals
-signal adc_lvds_fclk :std_logic;
+signal adc_lvds_fclk      :std_logic;
 signal adc_lvds_ch1_data  :std_logic_vector(15 downto 0);
 signal adc_lvds_ch2_data  :std_logic_vector(15 downto 0);
 signal adc_lvds_ch3_data  :std_logic_vector(15 downto 0);
 signal adc_lvds_ch4_data  :std_logic_vector(15 downto 0);
 signal adc_lvds_ch5_data  :std_logic_vector(15 downto 0);
 signal adc_lvds_ch6_data  :std_logic_vector(15 downto 0);
-signal adc_fclk_pos    :std_logic_vector(3 downto 0);
-signal adc_dclk_freq_t :std_logic_vector(19 downto 0);
-signal adc_fclk_freq_t :std_logic_vector(19 downto 0);
+signal adc_fclk_pos       :std_logic_vector(3 downto 0);
+signal adc_dclk_freq_t    :std_logic_vector(19 downto 0);
+signal adc_fclk_freq_t    :std_logic_vector(19 downto 0);
 
 signal test_sig              :  std_logic;
 signal i2c_scl               :  std_logic;
@@ -270,14 +264,13 @@ signal fei4_wr_reg_dat       : std_logic_vector(15 downto 0);
 signal fei4_data_pos_sel     : std_logic_vector(3 downto 0);
 signal fei4_bit_slip         : std_logic;
 signal fei4_cmd_out_ph_sel   : std_logic_vector(1 downto 0);
-signal fei4_hit_or_un_sync           : std_logic;
-signal fei4_hit_or_sync           : std_logic;
+signal fei4_hit_or_un_sync   : std_logic;
+signal fei4_hit_or_sync      : std_logic;
 
 signal  fei4_data_out        : std_logic_vector(7 downto 0);
 signal  fei4_data_fifo_wr_en : std_logic;
 
-
-attribute MARK_DEBUG of fei4_hit_or_sync : signal is "TRUE";
+--attribute MARK_DEBUG of fei4_hit_or_sync : signal is "TRUE";
 
 signal fei4_a2_cfg_flg          : std_logic;
 signal fei4_a2_cfg_reg          : std_logic_vector(31 downto 0);
@@ -419,11 +412,11 @@ port
   clk_in1_p         : in     std_logic;
   clk_in1_n         : in     std_logic;
   -- Clock out ports
-  clk200          : out    std_logic;
-  clk100          : out    std_logic;
-  clk40          : out    std_logic;
-  clk160          : out    std_logic;
-  clk16           : out   std_logic;
+  clk200            : out    std_logic;
+  clk100            : out    std_logic;
+  clk40             : out    std_logic;
+  clk160            : out    std_logic;
+  clk16             : out   std_logic;
   -- Status and control signals
   reset             : in     std_logic;
   locked            : out    std_logic
@@ -434,7 +427,6 @@ begin
 
 tied_to_ground <= '0';
 tied_to_vcc <= '1';
-
 
 --LVDS Input Buffer 
 FEI4_HITOR_BUF :IBUFDS
@@ -468,15 +460,13 @@ clk_gen: clk_wiz_0
    clk160 => clk160m,
    clk16 => clk16m,
   -- Status and control signals                
-   reset => mmcm_reset,
+   reset => global_reset,
    locked => mmcm_locked            
  );
  
-mmcm_reset <= tied_to_ground;
-
 ads5292_a_input:entity work.ads5292_lvds 
   Port map ( 
-   RESET   => global_reset,
+   RESET   =>   global_reset,
    SYSCLK  =>   clk100m,
    CLK200  =>   clk200m,
    CLK40   =>   clk40m,
@@ -607,12 +597,12 @@ hp0_data_gen_trig <= hp_data_gen_softtrig(0);
 data_gen_hp0:entity work.axi_data_gen   
   port map(
      adc_clk             => adc_lvds_fclk, 
-     reset               => hp_data_gen_softreset(0),   --iobus
+     reset               => hp_data_gen_softreset(0),   
                          
-     trig                => hp0_data_gen_trig,    --iobus
-     adcburst_enb        => hp_data_gen_adcburstenb(0), --iobus
-     adcburst_len        => hp0_data_gen_adcburstlen, --iobus
-     testdata_en         => hp_data_gen_testdata_en, --iobus     
+     trig                => hp0_data_gen_trig,   
+     adcburst_enb        => hp_data_gen_adcburstenb(0), 
+     adcburst_len        => hp0_data_gen_adcburstlen, 
+     testdata_en         => hp_data_gen_testdata_en, 
  
      adc_ch0             => adc_lvds_ch1_data, 
      adc_ch1             => adc_lvds_ch2_data, 
@@ -668,54 +658,54 @@ axi_hp0_burst:entity work.axi_mburst
 
 hp2_burst_fifo_wrdata_t(31 downto 8) <= (others => '0');
 axi_hp2_burst:entity work.axi_mburst1
-      Generic map
-      (
-      start_addr => X"000_0000",
-      end_addr => X"FFF_FFFF"
-      )
-      port map(
-        axi_clk       =>  ps7_aclk,
-        axi_reset     =>  ps7_axi_areset,
-        
-        addr_rst      =>  hp_addr_rst(2),         
-        fifo_reset    => hp_fifo_rst(2), 
-        
-        last_rd_tri  => hp2_burst_last_rd_t,
-
-        fifo_wrclk    => clk16m,
-        fifo_data     => hp2_burst_fifo_wrdata_t,
-        fifo_wren     => hp2_burst_fifo_wren_t,
-        fifo_rdcnt    => hp2_burst_fifo_rdcnt_t, --iobus  
-        burst_addr    => hp2_burst_addr_t,   
-         
-        axi_awready   => m_axi_hp2_awready_t,
-        axi_awaddr    => m_axi_hp2_awaddr_t,
-        axi_awvalid   => m_axi_hp2_awvalid_t,
-        axi_awlen     => m_axi_hp2_awlen_t,
-        axi_awsize    => m_axi_hp2_awsize_t,
-        axi_awburst   => m_axi_hp2_awburst_t,
-        axi_awcache   => m_axi_hp2_awcache_t,
-        axi_awprot    => m_axi_hp2_awprot_t,
-     
-        axi_wready    => m_axi_hp2_wready_t,
-        axi_wdata     => m_axi_hp2_wdata_t,
-        axi_wvalid    => m_axi_hp2_wvalid_t,
-        axi_wstrb     => m_axi_hp2_wstrb_t,
-        axi_wlast     => m_axi_hp2_wlast_t,
+Generic map
+(
+    start_addr => X"000_0000",
+    end_addr => X"FFF_FFFF"
+)
+port map(
+    axi_clk       =>  ps7_aclk,
+    axi_reset     =>  ps7_axi_areset,
     
-        axi_bvalid    => m_axi_hp2_bvalid_t,
-        axi_bresp     => m_axi_hp2_bresp_t,
-        axi_bready    => m_axi_hp2_bready_t
-  );
+    addr_rst      =>  hp_addr_rst(2),         
+    fifo_reset    => hp_fifo_rst(2), 
+    
+    last_rd_tri  => hp2_burst_last_rd_t,
+    
+    fifo_wrclk    => clk16m,
+    fifo_data     => hp2_burst_fifo_wrdata_t,
+    fifo_wren     => hp2_burst_fifo_wren_t,
+    fifo_rdcnt    => hp2_burst_fifo_rdcnt_t, --iobus  
+    burst_addr    => hp2_burst_addr_t,   
+     
+    axi_awready   => m_axi_hp2_awready_t,
+    axi_awaddr    => m_axi_hp2_awaddr_t,
+    axi_awvalid   => m_axi_hp2_awvalid_t,
+    axi_awlen     => m_axi_hp2_awlen_t,
+    axi_awsize    => m_axi_hp2_awsize_t,
+    axi_awburst   => m_axi_hp2_awburst_t,
+    axi_awcache   => m_axi_hp2_awcache_t,
+    axi_awprot    => m_axi_hp2_awprot_t,
+    
+    axi_wready    => m_axi_hp2_wready_t,
+    axi_wdata     => m_axi_hp2_wdata_t,
+    axi_wvalid    => m_axi_hp2_wvalid_t,
+    axi_wstrb     => m_axi_hp2_wstrb_t,
+    axi_wlast     => m_axi_hp2_wlast_t,
+    
+    axi_bvalid    => m_axi_hp2_bvalid_t,
+    axi_bresp     => m_axi_hp2_bresp_t,
+    axi_bready    => m_axi_hp2_bready_t
+);
   
 ps_pl_interface:entity work.axi_lite_ipif
-  generic map(
+generic map(
     C_IPIF_ABUS_WIDTH   => 32,
     C_IPIF_DBUS_WIDTH   => 32,
     C_S_AXI_MIN_SIZE    => X"000001FF",
     C_USE_WSTRB         => 0
-    )
-  port map(
+)
+port map(
     -- AXI signals
     S_AXI_ACLK          => ps7_aclk,
     S_AXI_ARESETN       => ps7_axi_areset,
@@ -742,7 +732,7 @@ ps_pl_interface:entity work.axi_lite_ipif
     S_AXI_RVALID        => ps7_m00_axi_rvalid,
     S_AXI_RREADY        => ps7_m00_axi_rready,
     -- Controls to the IP/IPIF modules
-
+    
     Bus2IP_Addr         => bus2ip_addr_t,
                           
     Bus2IP_RD           => bus2ip_rd_t,
@@ -756,13 +746,13 @@ ps_pl_interface:entity work.axi_lite_ipif
     IP2Bus_WrAck        => wrack_t,
     IP2Bus_RdAck        => rdack_t,
     IP2Bus_Error        => '0'
-    );
+);
 
 pl_iic:entity work.iic_controller
-  generic map(
+generic map(
     BASE_ADDR => X"43c00100"
     )
-  port map( 
+port map( 
     RST    => global_reset,
     SYSCLK => ps7_aclk,   
      
@@ -782,7 +772,7 @@ ccpd_inj_gen:entity work.pulse_gen
 generic map (
   BASE_ADDR      => X"43c00200"
   )
-  port map( 
+port map( 
   RST            => global_reset,
   SYSCLK         => ps7_aclk,
   
@@ -800,7 +790,7 @@ generic map (
   PULSE_OUT2     => ccpd_inj_pulse_a2,
   PULSE_OUT3     => ccpd_inj_pulse_b1,
   PULSE_OUT4     => ccpd_inj_pulse_b2
-  );  
+);  
 
 ccpd_cfg:entity work.ccpd_cfg_tb
 Generic map(
@@ -826,10 +816,10 @@ Port map (
  );      
     
 control_interface:entity work.iobus_interface 
-   generic map (
-     BASE_ADDR => X"43c00000"
-        )
-  port map( 
+generic map (
+    BASE_ADDR => X"43c00000"
+    )
+port map( 
     RST    => tied_to_ground,
     SYSCLK => ps7_aclk,
     
@@ -842,7 +832,7 @@ control_interface:entity work.iobus_interface
     WRACK          => wrack_t,
         
     GLB_RST        => global_reset,
-   
+    
     FEI4_CFG_FLG    => fei4_cfg_flg,
     FEI4_CFG_REG    => fei4_cfg_reg,
     FEI4_WR_REG_DAT => fei4_wr_reg_dat,
@@ -858,45 +848,44 @@ control_interface:entity work.iobus_interface
     FEI4_IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
     FEI4_IDELAY_LD   => fei4_idelay_ld,
     FEI4_IDELAY_CNT_IN    => fei4_idelay_cnt_in,
-  
+    
     ADC_DCLK_FREQ    => adc_dclk_freq_t,
     ADC_FCLK_FREQ    => adc_fclk_freq_t,    
     ADC_FCLK_POS     => adc_fclk_pos,  
-
+    
     HP_GEN_RST     => hp_data_gen_softreset,
     HP_TRIGER      => hp_data_gen_softtrig,
     HP_FIFO_RST    => hp_fifo_rst,
-    HP_ADDR_RST    => hp_addr_rst,
-    HP_BURST_EN    => hp_data_gen_adcburstenb,
-    HP_TEST_DATA_EN => hp_data_gen_testdata_en,
-    HP2_FIFO_CNT     => hp2_burst_fifo_rdcnt_t,
+    HP_ADDR_RST       => hp_addr_rst,
+    HP_BURST_EN       => hp_data_gen_adcburstenb,
+    HP_TEST_DATA_EN   => hp_data_gen_testdata_en,
+    HP2_FIFO_CNT      => hp2_burst_fifo_rdcnt_t,
     HP2_BURST_LAST_RD => hp2_burst_last_rd_t,
-    HP0_BURST_LEN   => hp0_data_gen_adcburstlen,
-    HP0_BURST_ADDR  => hp0_burst_addr_t,
-    HP2_BURST_ADDR  => hp2_burst_addr_t
-    );	  
+    HP0_BURST_LEN     => hp0_data_gen_adcburstlen,
+    HP0_BURST_ADDR    => hp0_burst_addr_t,
+    HP2_BURST_ADDR    => hp2_burst_addr_t
+);	  
  
 fei4_a1_cfg:entity work.FEI4B_CFG
-      Port map(
-          
-      RST      => global_reset,
-      
-      CLK160    => clk160m,
-      CMD_OUT_PH_SEL => fei4_data_pos_sel(1 downto 0),
-           
-      CMD_CLK   => clk40m,
-      FR_CFG_CLK      => ps7_aclk,
-      FR_RAM_ADDR     => fei4_fr_ram_addr,
-      FR_RAM_DAT_IN   => fei4_fr_ram_dat_in,
-      FR_RAM_DAT_OUT  => fei4_fr_ram_dat_out,
-      
-      CFG_FLG => fei4_cfg_flg,    
-      CFG_REG => fei4_cfg_reg,
-      WR_REG_DAT => fei4_wr_reg_dat,
-     
-      CMD_OUT_P => FEI4_A1_CMD_OUT_P,
-      CMD_OUT_N => FEI4_A1_CMD_OUT_N
-      );
+Port map(     
+    RST             => global_reset,
+    
+    CLK160          => clk160m,
+    CMD_OUT_PH_SEL  => fei4_data_pos_sel(1 downto 0),
+       
+    CMD_CLK         => clk40m,
+    FR_CFG_CLK      => ps7_aclk,
+    FR_RAM_ADDR     => fei4_fr_ram_addr,
+    FR_RAM_DAT_IN   => fei4_fr_ram_dat_in,
+    FR_RAM_DAT_OUT  => fei4_fr_ram_dat_out,
+    
+    CFG_FLG         => fei4_cfg_flg,    
+    CFG_REG         => fei4_cfg_reg,
+    WR_REG_DAT      => fei4_wr_reg_dat,
+    
+    CMD_OUT_P       => FEI4_A1_CMD_OUT_P,
+    CMD_OUT_N       => FEI4_A1_CMD_OUT_N
+);
 
 --fei4_a2_cfg:FEI4B_CFG
 --      Port map(
@@ -911,156 +900,129 @@ fei4_a1_cfg:entity work.FEI4B_CFG
 --      CMD_OUT_P => FEI4_A2_CMD_OUT_P,
 --      CMD_OUT_N => FEI4_A2_CMD_OUT_N
 --      );
-
---fei4_b1_cfg:FEI4B_CFG
---      Port map(
-          
---      RST      => global_reset,
---      CMD_CLK   => clk40m,
-            
---      CFG_FLG => fei4_cfg_flg_b1,    
---      CFG_REG => fei4_cfg_reg_b1,
---      WR_REG_DAT => fei4_wr_reg_dat_b1,
-     
---      CMD_OUT_P => FEI4_B1_CMD_OUT_P,
---      CMD_OUT_N => FEI4_B1_CMD_OUT_N   
---      );
-
---fei4_b2_cfg:FEI4B_CFG
---      Port map(
-          
---      RST      => global_reset,
---      CMD_CLK   => clk40m,
-            
---      CFG_FLG => fei4_cfg_flg_b2,    
---      CFG_REG => fei4_cfg_reg_b2,
---      WR_REG_DAT => fei4_wr_reg_dat_b2,
-     
---      CMD_OUT_P => FEI4_B2_CMD_OUT_P,
---      CMD_OUT_N => FEI4_B2_CMD_OUT_N  
---      ); 
-    
-fei4_rx_1: entity work.FEI4_RX 
-    Port MAP(
-       RESET => global_reset,
-       
-       DATA_IN_P => FEI4_DOB_P,
-       DATA_IN_N => FEI4_DOB_N,
-       CLK160 => clk160m,
-       CLK16 => clk16m,
-       
-       FRAME_SYNC_EN   => fei4_frame_sync_en,
-       FE_SR_RD_EN => fei4_fe_sr_rd_en,
-       
-       REG_ADDR_OUT    => fei4_reg_addr_out,
-       REG_VALUE_OUT   => fei4_reg_value_out,
-
-       DATA_OUT        => hp2_burst_fifo_wrdata_t(7 downto 0),
-       FIFO_WR_EN      => hp2_burst_fifo_wren_t,
-            
-       IDELAY_REFCLK => clk200m,
-       IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
-       IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
-       IDELAY_LD   => fei4_idelay_ld,
-       IDELAY_CNT_IN    => fei4_idelay_cnt_in
-    );
   
+fei4_rx_1: entity work.FEI4_RX 
+Port MAP(
+   RESET => global_reset,
+   
+   DATA_IN_P        => FEI4_A1_DOB_P,
+   DATA_IN_N        => FEI4_A1_DOB_N,
+   CLK160           => clk160m,
+   CLK16            => clk16m,
+   
+   FRAME_SYNC_EN    => fei4_frame_sync_en,
+   FE_SR_RD_EN      => fei4_fe_sr_rd_en,
+   
+   REG_ADDR_OUT     => fei4_reg_addr_out,
+   REG_VALUE_OUT    => fei4_reg_value_out,
 
+   DATA_OUT         => hp2_burst_fifo_wrdata_t(7 downto 0),
+   FIFO_WR_EN       => hp2_burst_fifo_wren_t,
+        
+   IDELAY_REFCLK    => clk200m,
+   IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
+   IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
+   IDELAY_LD        => fei4_idelay_ld,
+   IDELAY_CNT_IN    => fei4_idelay_cnt_in
+);
+  
 REFCLK_OUT_BUF:OBUFDS
-  generic map (
-    IOSTANDARD => "DEFAULT", -- Specify the output I/O standard
-    SLEW => "SLOW"-- Specify the output slew rate
-    ) 
-  port map(
-    O  => CLK40_OUT_P, -- Diff_p output (connect directly to top-level port)
-    OB => CLK40_OUT_N, -- Diff_n output (connect directly to top-level port)
-    I =>  clk40m  -- Buffer input
-    );
+generic map (
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
+) 
+port map(
+    O  => CLK40_OUT_P,  
+    OB => CLK40_OUT_N,  
+    I  =>  clk40m   
+);
        
 CCPD_INJ_A1_OBUF:OBUFDS
-  generic map (
-    IOSTANDARD => "DEFAULT", -- Specify the output I/O standard
-    SLEW => "SLOW"-- Specify the output slew rate
-    ) 
-  port map(
-    O  => HPC_LVDS6_P, -- Diff_p output (connect directly to top-level port)
-    OB => HPC_LVDS6_N, -- Diff_n output (connect directly to top-level port)
-    I =>  ccpd_inj_pulse_a1  -- Buffer input
-    );
+generic map (
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
+) 
+port map(
+    O  => HPC_LVDS6_P,  
+    OB => HPC_LVDS6_N,  
+    I =>  ccpd_inj_pulse_a1   
+);
 
 CCPD_INJ_A2_OBUF:OBUFDS
-  generic map (
-    IOSTANDARD => "DEFAULT", -- Specify the output I/O standard
-    SLEW => "SLOW"-- Specify the output slew rate
-  ) 
-  port map(
-    O  => HPC_LVDS12_P, -- Diff_p output (connect directly to top-level port)
-    OB => HPC_LVDS12_N, -- Diff_n output (connect directly to top-level port)
-    I =>  ccpd_inj_pulse_a2  -- Buffer input
-  );
+generic map (
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
+) 
+port map(
+    O  => HPC_LVDS12_P,  
+    OB => HPC_LVDS12_N,  
+    I =>  ccpd_inj_pulse_a2   
+);
 
 CCPD_LD_B1_OBUF:OBUFDS
-  generic map (
-    IOSTANDARD => "DEFAULT", -- Specify the output I/O standard
-    SLEW => "SLOW"-- Specify the output slew rate
-    ) 
-  port map(
-    O  => LPC_LVDS1_P, -- Diff_p output (connect directly to top-level port)
-    OB => LPC_LVDS1_N, -- Diff_n output (connect directly to top-level port)
-    I  => ccpd_ld      -- Buffer input
-    );
+generic map (
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
+) 
+port map(
+    O  => LPC_LVDS1_P,  
+    OB => LPC_LVDS1_N,  
+    I  => ccpd_ld       
+);
+
 CCPD_SIN_B1_OBUF:OBUFDS
-  generic map (
-    IOSTANDARD => "DEFAULT", -- Specify the output I/O standard
-    SLEW => "SLOW"-- Specify the output slew rate
-    ) 
-  port map(
-    O  => LPC_LVDS2_P, -- Diff_p output (connect directly to top-level port)
-    OB => LPC_LVDS2_N, -- Diff_n output (connect directly to top-level port)
-    I  => ccpd_sin     -- Buffer input
-    );
+generic map (
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
+) 
+port map(
+    O  => LPC_LVDS2_P,  
+    OB => LPC_LVDS2_N,  
+    I  => ccpd_sin      
+);
 
 CCPD_CKD_B1_OBUF:OBUFDS
-  generic map (
-    IOSTANDARD => "DEFAULT", -- Specify the output I/O standard
-    SLEW => "SLOW"-- Specify the output slew rate
-    ) 
-  port map(
-    O  => LPC_LVDS3_P, -- Diff_p output (connect directly to top-level port)
-    OB => LPC_LVDS3_N, -- Diff_n output (connect directly to top-level port)
-    I  => ccpd_ckd     -- Buffer input
-    );
+generic map (
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
+) 
+port map(
+    O  => LPC_LVDS3_P,  
+    OB => LPC_LVDS3_N,  
+    I  => ccpd_ckd      
+);
+
 CCPD_CKC_B1_OBUF:OBUFDS
-  generic map (
-    IOSTANDARD => "DEFAULT", -- Specify the output I/O standard
-    SLEW => "SLOW"-- Specify the output slew rate
-    ) 
-  port map(
-    O  => LPC_LVDS4_P, -- Diff_p output (connect directly to top-level port)
-    OB => LPC_LVDS4_N, -- Diff_n output (connect directly to top-level port)
-    I  => ccpd_ckc  -- Buffer input
-    );
+generic map (
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
+) 
+port map(
+    O  => LPC_LVDS4_P,  
+    OB => LPC_LVDS4_N,  
+    I  => ccpd_ckc   
+);
          
 CCPD_INJ_B1_OBUF:OBUFDS
 generic map (
-    IOSTANDARD => "DEFAULT", -- Specify the output I/O standard
-    SLEW => "SLOW"-- Specify the output slew rate
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
 ) 
 port map(
-    O  => LPC_LVDS6_P, -- Diff_p output (connect directly to top-level port)
-    OB => LPC_LVDS6_N, -- Diff_n output (connect directly to top-level port)
-    I =>  ccpd_inj_pulse_b1  -- Buffer input
+    O  => LPC_LVDS6_P,  
+    OB => LPC_LVDS6_N,  
+    I =>  ccpd_inj_pulse_b1   
 );
        
 CCPD_INJ_B2_OBUF:OBUFDS
 generic map (
-    IOSTANDARD => "DEFAULT", -- Specify the output I/O standard
-    SLEW => "SLOW"-- Specify the output slew rate
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
 ) 
 port map(
-    O  => LPC_LVDS12_P, -- Diff_p output (connect directly to top-level port)
-    OB => LPC_LVDS12_N, -- Diff_n output (connect directly to top-level port)
-    I =>  ccpd_inj_pulse_b2  -- Buffer input
+    O  => LPC_LVDS12_P,  
+    OB => LPC_LVDS12_N,  
+    I =>  ccpd_inj_pulse_b2   
 );
           
                                

@@ -1,55 +1,40 @@
-# Sys Clk - 200 MHz oscillator
+# Sys Clk in - 200 MHz oscillator
 set_property PACKAGE_PIN G9 [get_ports CLK200_IN_N]
 set_property IOSTANDARD LVDS [get_ports CLK200_IN_P]
 set_property IOSTANDARD LVDS [get_ports CLK200_IN_N]
 
-##J67
-set_property PACKAGE_PIN AB29 [get_ports FEI4_DOB_P]
-set_property IOSTANDARD LVDS_25 [get_ports FEI4_DOB_P]
-set_property IOSTANDARD LVDS_25 [get_ports FEI4_DOB_N]
-
+# FEI4 A1 (LPC SLOT1) DOB
+set_property PACKAGE_PIN AB29 [get_ports FEI4_A1_DOB_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A1_DOB_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A1_DOB_N]
+# FEI4 A1 (LPC SLOT1) CMD
 set_property PACKAGE_PIN Y26 [get_ports FEI4_A1_CMD_OUT_P]
 set_property IOSTANDARD LVDS_25 [get_ports FEI4_A1_CMD_OUT_P]
 set_property IOSTANDARD LVDS_25 [get_ports FEI4_A1_CMD_OUT_N]
-
+# FEI4 A1 (LPC SLOT1) HITOR
 set_property PACKAGE_PIN AG26 [get_ports FEI4_A1_HIT_OR_P]
 set_property IOSTANDARD LVDS_25 [get_ports FEI4_A1_HIT_OR_P]
 set_property IOSTANDARD LVDS_25 [get_ports FEI4_A1_HIT_OR_N]
-#set_property PACKAGE_PIN Y26 [get_ports FEI4_CMD_OUT_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_N]
 
-#set_property PACKAGE_PIN Y26 [get_ports FEI4_CMD_OUT_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_B1_CMD_OUT_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_B1_CMD_OUT_N]
+# FEI4 A2 (LPC SLOT2) DOB
+set_property PACKAGE_PIN AC29 [get_ports FEI4_A2_DOB_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_DOB_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_DOB_N]
+# FEI4 A2 (LPC SLOT2) CMD
+set_property PACKAGE_PIN Y30 [get_ports FEI4_A2_CMD_OUT_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_N]
+# FEI4 A2 (LPC SLOT2) HITOR
+set_property PACKAGE_PIN AH26 [get_ports FEI4_A2_HIT_OR_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_HIT_OR_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_HIT_OR_N]
 
-#set_property PACKAGE_PIN Y26 [get_ports FEI4_CMD_OUT_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_B2_CMD_OUT_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_B2_CMD_OUT_N]
-#GPIO LEDS
-#set_property PACKAGE_PIN Y21 [get_ports GPIO_LED_L]
-#set_property PACKAGE_PIN G2 [get_ports GPIO_LED_C]
-#set_property PACKAGE_PIN W21 [get_ports GPIO_LED_R]
-#set_property PACKAGE_PIN A17 [get_ports GPIO_LED_0]
+# FEI4 REF CLOCK and ADC Sampling CLK OUTPUT
+set_property PACKAGE_PIN AB12 [get_ports CLK40_OUT_P]
+set_property IOSTANDARD LVDS_25 [get_ports CLK40_OUT_P]
+set_property IOSTANDARD LVDS_25 [get_ports CLK40_OUT_N]
 
-#set_property IOSTANDARD LVCMOS25 [get_ports GPIO_LED_L]
-#set_property IOSTANDARD LVCMOS18 [get_ports GPIO_LED_C]
-#set_property IOSTANDARD LVCMOS25 [get_ports GPIO_LED_R]
-#set_property IOSTANDARD LVCMOS18 [get_ports GPIO_LED_0]
-
-#--------------------------------------------------------------------------------------------------------------
-################################# RefClk Location constraints #####################
-#set_property PACKAGE_PIN AA7 [get_ports LMK_JESD_GTXCLK_N]
-
-#set_property PACKAGE_PIN AC7 [get_ports SI5324_JESD_GTXCLK_P]
-
-##-------------------------JESD SYNC Signals-------------------------------
-#set_property PACKAGE_PIN AK18 [get_ports ADC_JESD_SYNC_N]
-#set_property IOSTANDARD LVDS_25 [get_ports ADC_JESD_SYNC_P]
-#set_property IOSTANDARD LVDS_25 [get_ports ADC_JESD_SYNC_N]
-
-
-# IIC
+# Xilinx IIC Controller  
 set_property PACKAGE_PIN AF27 [get_ports PS7_IIC_SDA]
 set_property PACKAGE_PIN AJ29 [get_ports PS7_IIC_SCL]
 set_property IOSTANDARD LVCMOS25 [get_ports PS7_IIC_SDA]
@@ -59,7 +44,6 @@ set_property PACKAGE_PIN W26 [get_ports IIC2_SDA]
 set_property IOSTANDARD LVCMOS25 [get_ports IIC2_SDA]
 set_property PACKAGE_PIN V29 [get_ports IIC2_SCL]
 set_property IOSTANDARD LVCMOS25 [get_ports IIC2_SCL]
-
 
 # FMC HPC LVDS OUTPUT
 #set_property PACKAGE_PIN AJ16 [get_ports FMC_LVDS1_P]
@@ -159,9 +143,6 @@ set_property PACKAGE_PIN AF15 [get_ports LPC_LVDS12_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS12_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS12_N]
 
-set_property PACKAGE_PIN AB12 [get_ports CLK40_OUT_P]
-set_property IOSTANDARD LVDS_25 [get_ports CLK40_OUT_P]
-set_property IOSTANDARD LVDS_25 [get_ports CLK40_OUT_N]
 
 #ADC LVDS INPUT IOs
 #bank12
@@ -198,32 +179,3 @@ set_property IOSTANDARD LVDS_25 [get_ports ADC_DOUTP6]
 set_property IOSTANDARD LVDS_25 [get_ports ADC_DOUTM6]
 
 
-
-
-
-create_debug_core u_ila_0_0 ila
-set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0_0]
-set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0_0]
-set_property C_ADV_TRIGGER false [get_debug_cores u_ila_0_0]
-set_property C_DATA_DEPTH 1024 [get_debug_cores u_ila_0_0]
-set_property C_EN_STRG_QUAL false [get_debug_cores u_ila_0_0]
-set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0_0]
-set_property C_TRIGIN_EN false [get_debug_cores u_ila_0_0]
-set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0_0]
-set_property port_width 1 [get_debug_ports u_ila_0_0/clk]
-connect_debug_port u_ila_0_0/clk [get_nets [list fifo_wrclk]]
-set_property port_width 1 [get_debug_ports u_ila_0_0/probe0]
-connect_debug_port u_ila_0_0/probe0 [get_nets [list ccpd_cfg/ccpd_ckc]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 1 [get_debug_ports u_ila_0_0/probe1]
-connect_debug_port u_ila_0_0/probe1 [get_nets [list ccpd_cfg/ccpd_ckd]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 1 [get_debug_ports u_ila_0_0/probe2]
-connect_debug_port u_ila_0_0/probe2 [get_nets [list ccpd_cfg/ccpd_ld]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 1 [get_debug_ports u_ila_0_0/probe3]
-connect_debug_port u_ila_0_0/probe3 [get_nets [list ccpd_cfg/ccpd_sin]]
-set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
-set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
-set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
-connect_debug_port dbg_hub/clk [get_nets fifo_wrclk]
