@@ -125,9 +125,10 @@ signal fei4_rx_data_sof      : std_logic;
 signal fei4_rx_data_eof      : std_logic;
 signal fei4_data_wr_fifo_en  : std_logic;
 
-attribute MARK_DEBUG : string;
+--attribute MARK_DEBUG : string;
 --attribute MARK_DEBUG of fei4_frame_is_synced,fei4_rx_data_out,fei4_rx_data_isk,fei4_rx_data_idle,fei4_rx_data_sof,fei4_rx_data_eof : signal is "TRUE";
-attribute MARK_DEBUG of fei4_rx_data_out,fei4_data_wr_fifo_en: signal is "TRUE";
+--attribute MARK_DEBUG of fei4_rx_data_out,fei4_rx_data_sof,fei4_rx_data_eof : signal is "TRUE";
+
 
 begin
 data_clcok <= CLK160;

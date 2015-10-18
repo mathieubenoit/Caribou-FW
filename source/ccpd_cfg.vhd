@@ -109,9 +109,9 @@ signal ram_rd_dat      :std_logic_vector(31 downto 0);
 signal ram_wr_en       :std_logic;
 signal ram_wr_clk      :std_logic;
 
---attribute MARK_DEBUG : string;
---attribute MARK_DEBUG of ram_addr,ram_wr_dat,ram_rd_dat,ram_wr_en : signal is "TRUE";
---attribute MARK_DEBUG of ccpd_sin,ccpd_ckc,ccpd_ckd,ccpd_ld : signal is "TRUE";
+attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of ram_addr,ram_wr_dat,ram_rd_dat,ram_wr_en : signal is "TRUE";
+attribute MARK_DEBUG of ccpd_sin,ccpd_ckc,ccpd_ckd,ccpd_ld : signal is "TRUE";
 begin
 
 ccpd_cfg:ccpd_cfg_core

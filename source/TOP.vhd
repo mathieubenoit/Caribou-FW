@@ -103,10 +103,7 @@ entity TOP is
 --    GPIO_LED_0                                   : OUT STD_LOGIC;
     --40MHz Clock output for CaR Board
     CLK40_OUT_P                                 : out STD_LOGIC;
-    CLK40_OUT_N                                 : out STD_LOGIC;
-    
-    TEST_SMA_P                                  : out STD_LOGIC;
-    TEST_SMA_N                                  : out STD_LOGIC                                 
+    CLK40_OUT_N                                 : out STD_LOGIC                                 
 
 );
 end TOP;
@@ -742,6 +739,27 @@ component axi_data_gen
   ); 
 end component; 
 
+component FEI4B_CFG is
+    Port ( 
+    RST : in std_logic;
+    
+    CLK160 : in std_logic;
+    CMD_OUT_PH_SEL : in std_logic_vector(1 downto 0);
+    
+    FR_CFG_CLK : in std_logic;    
+    FR_RAM_ADDR : in std_logic_vector(5 downto 0);
+    FR_RAM_DAT_IN : in std_logic_vector(31 downto 0);
+    FR_RAM_DAT_OUT : out std_logic_vector(31 downto 0);
+    
+    CMD_CLK : in std_logic;
+    CFG_FLG : in std_logic;
+    CFG_REG : in std_logic_vector(31 downto 0);
+    WR_REG_DAT : in std_logic_vector(15 downto 0);
+    CMD_OUT_P : out std_logic;
+    CMD_OUT_N : out std_logic  
+    );    
+end component;
+
 component FEI4_RX is
     Port ( 
     RESET     : in STD_LOGIC;
@@ -796,7 +814,7 @@ END COMPONENT;
 
 component ccpd_cfg_tb is
 generic (
-  BASE_ADDR: std_logic_vector(31 downto 0) := x"43c00400"
+  BASE_ADDR: std_logic_vector(31 downto 0) := x"43c00300"
   );
 Port (
     sysclk             :in std_logic;
@@ -1321,31 +1339,27 @@ control_interface:iobus_interface
     HP2_BURST_ADDR  => hp2_burst_addr_t
     );	  
  
-fei4_cfg:entity work.fei4b_cfg
-Generic map(
-  BASE_ADDR => x"43c00300"
-  )
-Port map(
-    RST             => global_reset,    
-    SYSCLK          => clk100m,    
-    
-    --IP BUS
-    Bus2IP_Addr     => bus2ip_addr_t,
-    Bus2IP_RD       => bus2ip_rd_t,
-    Bus2IP_WR       => bus2ip_wr_t,
-    Bus2IP_Data     => bus2ip_data_t,
-    IP2Bus_Data     => ip2bus_data_t,
-    RDACK           => rdack_t,
-    WRACK           => wrack_t,  
-    
-    CLK160          => clk160m,
-    CMD_CLK         => clk40m,
-         
-    CMD_OUT_P       => FEI4_A1_CMD_OUT_P,
-    CMD_OUT_N       => FEI4_A1_CMD_OUT_N,
-    cmd_out_test    => TEST_SMA_P
-);
-TEST_SMA_N <= clk40m;
+fei4_a1_cfg:FEI4B_CFG
+      Port map(
+          
+      RST      => global_reset,
+      
+      CLK160    => clk160m,
+      CMD_OUT_PH_SEL => fei4_data_pos_sel(1 downto 0),
+           
+      CMD_CLK   => clk40m,
+      FR_CFG_CLK      => ps7_aclk,
+      FR_RAM_ADDR     => fei4_fr_ram_addr,
+      FR_RAM_DAT_IN   => fei4_fr_ram_dat_in,
+      FR_RAM_DAT_OUT  => fei4_fr_ram_dat_out,
+      
+      CFG_FLG => fei4_cfg_flg,    
+      CFG_REG => fei4_cfg_reg,
+      WR_REG_DAT => fei4_wr_reg_dat,
+     
+      CMD_OUT_P => FEI4_A1_CMD_OUT_P,
+      CMD_OUT_N => FEI4_A1_CMD_OUT_N
+      );
 
 --fei4_a2_cfg:FEI4B_CFG
 --      Port map(
