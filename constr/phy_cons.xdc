@@ -16,25 +16,25 @@ set_property PACKAGE_PIN AG26 [get_ports FEI4_A1_HIT_OR_P]
 set_property IOSTANDARD LVDS_25 [get_ports FEI4_A1_HIT_OR_P]
 set_property IOSTANDARD LVDS_25 [get_ports FEI4_A1_HIT_OR_N]
 
-# FEI4 A2 (LPC SLOT2) DOB
-set_property PACKAGE_PIN AC29 [get_ports FEI4_A2_DOB_P]
-set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_DOB_P]
-set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_DOB_N]
-# FEI4 A2 (LPC SLOT2) CMD
-set_property PACKAGE_PIN Y30 [get_ports FEI4_A2_CMD_OUT_P]
-set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_P]
-set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_N]
-# FEI4 A2 (LPC SLOT2) HITOR
-set_property PACKAGE_PIN AH26 [get_ports FEI4_A2_HIT_OR_P]
-set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_HIT_OR_P]
-set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_HIT_OR_N]
+## FEI4 A2 (LPC SLOT2) DOB
+#set_property PACKAGE_PIN AC29 [get_ports FEI4_A2_DOB_P]
+#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_DOB_P]
+#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_DOB_N]
+## FEI4 A2 (LPC SLOT2) CMD
+#set_property PACKAGE_PIN Y30 [get_ports FEI4_A2_CMD_OUT_P]
+#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_P]
+#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_N]
+## FEI4 A2 (LPC SLOT2) HITOR
+#set_property PACKAGE_PIN AH26 [get_ports FEI4_A2_HIT_OR_P]
+#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_HIT_OR_P]
+#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_HIT_OR_N]
 
 # FEI4 REF CLOCK and ADC Sampling CLK OUTPUT
 set_property PACKAGE_PIN AB12 [get_ports CLK40_OUT_P]
 set_property IOSTANDARD LVDS_25 [get_ports CLK40_OUT_P]
 set_property IOSTANDARD LVDS_25 [get_ports CLK40_OUT_N]
 
-# Xilinx IIC Controller  
+# Xilinx IIC Controller
 set_property PACKAGE_PIN AF27 [get_ports PS7_IIC_SDA]
 set_property PACKAGE_PIN AJ29 [get_ports PS7_IIC_SCL]
 set_property IOSTANDARD LVCMOS25 [get_ports PS7_IIC_SDA]
@@ -179,3 +179,24 @@ set_property IOSTANDARD LVDS_25 [get_ports ADC_DOUTP6]
 set_property IOSTANDARD LVDS_25 [get_ports ADC_DOUTM6]
 
 
+
+create_debug_core u_ila_0 ila
+set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
+set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0]
+set_property C_ADV_TRIGGER false [get_debug_cores u_ila_0]
+set_property C_DATA_DEPTH 1024 [get_debug_cores u_ila_0]
+set_property C_EN_STRG_QUAL false [get_debug_cores u_ila_0]
+set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
+set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
+set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
+set_property port_width 1 [get_debug_ports u_ila_0/clk]
+connect_debug_port u_ila_0/clk [get_nets [list clk160]]
+set_property port_width 32 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {hp2_burst_fifo_wrdata_t[0]} {hp2_burst_fifo_wrdata_t[1]} {hp2_burst_fifo_wrdata_t[2]} {hp2_burst_fifo_wrdata_t[3]} {hp2_burst_fifo_wrdata_t[4]} {hp2_burst_fifo_wrdata_t[5]} {hp2_burst_fifo_wrdata_t[6]} {hp2_burst_fifo_wrdata_t[7]} {hp2_burst_fifo_wrdata_t[8]} {hp2_burst_fifo_wrdata_t[9]} {hp2_burst_fifo_wrdata_t[10]} {hp2_burst_fifo_wrdata_t[11]} {hp2_burst_fifo_wrdata_t[12]} {hp2_burst_fifo_wrdata_t[13]} {hp2_burst_fifo_wrdata_t[14]} {hp2_burst_fifo_wrdata_t[15]} {hp2_burst_fifo_wrdata_t[16]} {hp2_burst_fifo_wrdata_t[17]} {hp2_burst_fifo_wrdata_t[18]} {hp2_burst_fifo_wrdata_t[19]} {hp2_burst_fifo_wrdata_t[20]} {hp2_burst_fifo_wrdata_t[21]} {hp2_burst_fifo_wrdata_t[22]} {hp2_burst_fifo_wrdata_t[23]} {hp2_burst_fifo_wrdata_t[24]} {hp2_burst_fifo_wrdata_t[25]} {hp2_burst_fifo_wrdata_t[26]} {hp2_burst_fifo_wrdata_t[27]} {hp2_burst_fifo_wrdata_t[28]} {hp2_burst_fifo_wrdata_t[29]} {hp2_burst_fifo_wrdata_t[30]} {hp2_burst_fifo_wrdata_t[31]}]]
+create_debug_port u_ila_0 probe
+set_property port_width 1 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list hp2_burst_fifo_wren_t]]
+set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+connect_debug_port dbg_hub/clk [get_nets clk160]

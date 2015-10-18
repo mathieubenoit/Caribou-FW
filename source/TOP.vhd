@@ -219,7 +219,7 @@ signal hp2_burst_fifo_rdcnt_t    :std_logic_vector(7 downto 0);
 signal hp2_burst_addr_t          :std_logic_vector(31 downto 0);
 
 attribute MARK_DEBUG : string;
---attribute MARK_DEBUG of hp2_burst_fifo_wrdata_t,hp2_burst_fifo_wren_t : signal is "TRUE";
+attribute MARK_DEBUG of hp2_burst_fifo_wrdata_t,hp2_burst_fifo_wren_t : signal is "TRUE";
 
 --Bram controller signals
 signal ps7_bram_porta_addr_t :  std_logic_vector ( 15 downto 0 );
