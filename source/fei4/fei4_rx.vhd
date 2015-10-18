@@ -52,10 +52,10 @@ entity FEI4_RX is
     FIFO_WR_EN : out std_logic;
     
     --Control ports
-    IDELAY_REFCLK : in std_logic;
+    IDELAY_REFCLK     : in std_logic;
     IDELAY_CNT_OUT    : out std_logic_vector(4 downto 0);
     IDELAY_CTRL_RDY   : out std_logic;
-    IDELAY_LD    : in  std_logic;
+    IDELAY_LD         : in  std_logic;
     IDELAY_CNT_IN     : in  std_logic_vector(4 downto 0)
     );
 end FEI4_RX;
