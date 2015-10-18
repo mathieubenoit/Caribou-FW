@@ -5,57 +5,56 @@ use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
      
 entity iobus_interface is
-      generic (
-        BASE_ADDR: std_logic_vector(31 downto 0) := x"43c00000"
-              );
-        port ( 
-	    RST    : in std_logic;
-		SYSCLK : in std_logic;
-		
-		Bus2IP_Addr         : in std_logic_vector(31 downto 0);
-		Bus2IP_RD           : in std_logic;
-		Bus2IP_WR           : in std_logic;
-		Bus2IP_Data        : in std_logic_vector(31 downto 0);
-		IP2Bus_Data         : out std_logic_vector(31 downto 0);
-		RDACK               : out std_logic;
-		WRACK               : out std_logic;	
-        
-        GLB_RST        :out std_logic;
-        
-		HP_GEN_RST     :out std_logic_vector(3 downto 0);
-		HP_TRIGER      :out std_logic_vector(3 downto 0);
-        HP_FIFO_RST    :out std_logic_vector(3 downto 0);
-        HP_ADDR_RST    :out std_logic_vector(3 downto 0);
-		HP_BURST_EN    :out std_logic_vector(3 downto 0);		
-		HP_TEST_DATA_EN:out std_logic;
-		HP2_FIFO_CNT    :in  std_logic_vector(7 downto 0);
-		HP0_BURST_LEN   :out std_logic_vector(31 downto 0);
-		HP0_BURST_ADDR  :in  std_logic_vector(31 downto 0); 
-		HP2_BURST_ADDR  :in  std_logic_vector(31 downto 0);		
-		HP2_BURST_LAST_RD :out std_logic;
-				
-		ADC_DCLK_FREQ   :in  std_logic_vector(19 downto 0);
-        ADC_FCLK_FREQ   :in  std_logic_vector(19 downto 0);
-        ADC_FCLK_POS    :out std_logic_vector( 3 downto 0);	
-                
-        FEI4_CFG_FLG    :out std_logic;
-        FEI4_CFG_REG    :out std_logic_vector(31 downto 0);
-        FEI4_WR_REG_DAT :out std_logic_vector(15 downto 0);
-        FEI4_FR_RAM_ADDR : out std_logic_vector(5 downto 0);
-        FEI4_FR_RAM_DAT_IN : out std_logic_vector(31 downto 0);
-        FEI4_FR_RAM_DAT_OUT : in std_logic_vector(31 downto 0);   
-        FEI4_DAT_POS_SEL :out std_logic_vector(3 downto 0);
-        FEI4_FRAME_SYNC_EN   :out std_logic;
-        FEI4_FE_SR_RD_EN   :out std_logic;
-        FEI4_REG_ADDR_OUT : in std_logic_vector(15 downto 0);
-        FEI4_REG_VALUE_OUT : in std_logic_vector(15 downto 0);  
-        
-        FEI4_IDELAY_CNT_OUT  :in  std_logic_vector(4 downto 0);
-        FEI4_IDELAY_CTRL_RDY :in  std_logic;
-        FEI4_IDELAY_LD  :out std_logic;
-        FEI4_IDELAY_CNT_IN   :out std_logic_vector(4 downto 0)
-        					
-  		);		  
+generic (
+    BASE_ADDR           :std_logic_vector(31 downto 0) := x"43c00000"
+      );
+port ( 
+    RST                 :in std_logic;
+    SYSCLK              :in std_logic;
+    
+    Bus2IP_Addr         :in std_logic_vector(31 downto 0);
+    Bus2IP_RD           :in std_logic;
+    Bus2IP_WR           :in std_logic;
+    Bus2IP_Data         :in std_logic_vector(31 downto 0);
+    IP2Bus_Data         :out std_logic_vector(31 downto 0);
+    RDACK               :out std_logic;
+    WRACK               :out std_logic;	
+    
+    GLB_RST             :out std_logic;
+    
+    HP_GEN_RST          :out std_logic_vector(3 downto 0);
+    HP_TRIGER           :out std_logic_vector(3 downto 0);
+    HP_FIFO_RST         :out std_logic_vector(3 downto 0);
+    HP_ADDR_RST         :out std_logic_vector(3 downto 0);
+    HP_BURST_EN         :out std_logic_vector(3 downto 0);		
+    HP_TEST_DATA_EN     :out std_logic;
+    HP2_FIFO_CNT        :in  std_logic_vector(7 downto 0);
+    HP0_BURST_LEN       :out std_logic_vector(31 downto 0);
+    HP0_BURST_ADDR      :in  std_logic_vector(31 downto 0); 
+    HP2_BURST_ADDR      :in  std_logic_vector(31 downto 0);		
+    HP2_BURST_LAST_RD   :out std_logic;
+            
+    ADC_DCLK_FREQ       :in  std_logic_vector(19 downto 0);
+    ADC_FCLK_FREQ       :in  std_logic_vector(19 downto 0);
+    ADC_FCLK_POS        :out std_logic_vector( 3 downto 0);	
+            
+    FEI4_CFG_FLG        :out std_logic;
+    FEI4_CFG_REG        :out std_logic_vector(31 downto 0);
+    FEI4_WR_REG_DAT     :out std_logic_vector(15 downto 0);
+    FEI4_FR_RAM_ADDR    :out std_logic_vector(5 downto 0);
+    FEI4_FR_RAM_DAT_IN  :out std_logic_vector(31 downto 0);
+    FEI4_FR_RAM_DAT_OUT :in std_logic_vector(31 downto 0);   
+    FEI4_DAT_POS_SEL    :out std_logic_vector(3 downto 0);
+    FEI4_FRAME_SYNC_EN  :out std_logic;
+    FEI4_FE_FR_RD_EN    :out std_logic;
+    FEI4_REG_ADDR_OUT   :in std_logic_vector(15 downto 0);
+    FEI4_REG_VALUE_OUT  :in std_logic_vector(15 downto 0);  
+    
+    FEI4_IDELAY_CNT_OUT :in  std_logic_vector(4 downto 0);
+    FEI4_IDELAY_CTRL_RDY:in  std_logic;
+    FEI4_IDELAY_LD      :out std_logic;
+    FEI4_IDELAY_CNT_IN  :out std_logic_vector(4 downto 0)       					
+);		  
 end iobus_interface;
   
 
@@ -199,7 +198,7 @@ begin
                         when x"007c" =>   if (wr = '1') then HP2_BURST_LAST_RD <= Bus2IP_Data(0);                                         
                                           end if;   
                        
-                        when x"0080" =>   if (wr = '1') then  FEI4_FE_SR_RD_EN <= Bus2IP_Data(0); 
+                        when x"0080" =>   if (wr = '1') then  FEI4_FE_FR_RD_EN <= Bus2IP_Data(0); 
                                                   end if;    
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             											
 						when others =>

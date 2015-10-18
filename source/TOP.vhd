@@ -105,216 +105,203 @@ end TOP;
 
 architecture Behavioral of TOP is
 --signal declaration
-signal tied_to_ground :std_logic;
-signal tied_to_vcc    :std_logic;
-signal global_reset   :std_logic;
+signal tied_to_ground          :std_logic;
+signal tied_to_vcc             :std_logic;
+signal global_reset            :std_logic;
 
 --mmcm clocks 
-signal clk200m        :std_logic; --Idelay reference clock
-signal clk160m        :std_logic; --FEI4 data bit clock
-signal clk100m        :std_logic; --output clock of mmcm module
-signal clk40m         :std_logic; --ADC clock
-signal clk16m         :std_logic; --FEI4 data byte clock
-signal mmcm_reset     :std_logic;
-signal mmcm_locked    :std_logic;
+signal clk200m                 :std_logic; --Idelay reference clock
+signal clk160m                 :std_logic; --FEI4 data bit clock
+signal clk100m                 :std_logic; --output clock of mmcm module
+signal clk40m                  :std_logic; --ADC clock
+signal clk16m                  :std_logic; --FEI4 data byte clock
+signal mmcm_reset              :std_logic;
+signal mmcm_locked             :std_logic;
    
 ---------------------------------Keep Attribute-------------------------------
 --PS7 Signals
-signal    ps7_aclk             :  std_logic;
+signal    ps7_aclk             :std_logic;
 --AXI4LITE@PS7
-signal    ps7_m00_axi_araddr   :  std_logic_vector ( 31 downto 0 );
-signal    ps7_m00_axi_arprot   :  std_logic_vector ( 2 downto 0 );
-signal    ps7_m00_axi_arready  :  std_logic;
-signal    ps7_m00_axi_arvalid  :  std_logic;
-signal    ps7_m00_axi_awaddr   :  std_logic_vector ( 31 downto 0 );
-signal    ps7_m00_axi_awprot   :  std_logic_vector ( 2 downto 0 );
-signal    ps7_m00_axi_awready  :  std_logic;
-signal    ps7_m00_axi_awvalid  :  std_logic;
-signal    ps7_m00_axi_bready   :  std_logic;
-signal    ps7_m00_axi_bresp    :  std_logic_vector ( 1 downto 0 );
-signal    ps7_m00_axi_bvalid   :  std_logic;
-signal    ps7_m00_axi_rdata    :  std_logic_vector ( 31 downto 0 );
-signal    ps7_m00_axi_rready   :  std_logic;
-signal    ps7_m00_axi_rresp    :  std_logic_vector ( 1 downto 0 );
-signal    ps7_m00_axi_rvalid   :  std_logic;
-signal    ps7_m00_axi_wdata    :  std_logic_vector ( 31 downto 0 );
-signal    ps7_m00_axi_wready   :  std_logic;
-signal    ps7_m00_axi_wstrb    :  std_logic_vector ( 3 downto 0 );
-signal    ps7_m00_axi_wvalid   :  std_logic;
-signal    ps7_axi_areset       :  std_logic;
---attribute MARK_DEBUG of ps7_m00_axi_araddr,ps7_m00_axi_arready,ps7_m00_axi_arvalid,ps7_m00_axi_awaddr,ps7_m00_axi_awready,ps7_m00_axi_awvalid,ps7_m00_axi_bready,ps7_m00_axi_bresp,ps7_m00_axi_bvalid,ps7_m00_axi_rdata,ps7_m00_axi_rready,ps7_m00_axi_rresp,ps7_m00_axi_rvalid,ps7_m00_axi_wdata,ps7_m00_axi_wready,ps7_m00_axi_wstrb,ps7_m00_axi_wvalid: signal is "TRUE";
+signal    ps7_m00_axi_araddr   :std_logic_vector ( 31 downto 0 );
+signal    ps7_m00_axi_arprot   :std_logic_vector ( 2 downto 0 );
+signal    ps7_m00_axi_arready  :std_logic;
+signal    ps7_m00_axi_arvalid  :std_logic;
+signal    ps7_m00_axi_awaddr   :std_logic_vector ( 31 downto 0 );
+signal    ps7_m00_axi_awprot   :std_logic_vector ( 2 downto 0 );
+signal    ps7_m00_axi_awready  :std_logic;
+signal    ps7_m00_axi_awvalid  :std_logic;
+signal    ps7_m00_axi_bready   :std_logic;
+signal    ps7_m00_axi_bresp    :std_logic_vector ( 1 downto 0 );
+signal    ps7_m00_axi_bvalid   :std_logic;
+signal    ps7_m00_axi_rdata    :std_logic_vector ( 31 downto 0 );
+signal    ps7_m00_axi_rready   :std_logic;
+signal    ps7_m00_axi_rresp    :std_logic_vector ( 1 downto 0 );
+signal    ps7_m00_axi_rvalid   :std_logic;
+signal    ps7_m00_axi_wdata    :std_logic_vector ( 31 downto 0 );
+signal    ps7_m00_axi_wready   :std_logic;
+signal    ps7_m00_axi_wstrb    :std_logic_vector ( 3 downto 0 );
+signal    ps7_m00_axi_wvalid   :std_logic;
+signal    ps7_axi_areset       :std_logic;
 
-signal	m_axi_hp0_awaddr_t  :  std_logic_vector ( 31 downto 0 );
-signal	m_axi_hp0_awburst_t :  std_logic_vector ( 1 downto 0 );
-signal	m_axi_hp0_awcache_t :  std_logic_vector ( 3 downto 0 );
-signal	m_axi_hp0_awlen_t   :  std_logic_vector ( 7 downto 0 );
-signal	m_axi_hp0_awlock_t  :  std_logic;
-signal	m_axi_hp0_awprot_t  :  std_logic_vector ( 2 downto 0 );
-signal	m_axi_hp0_awqos_t   :  std_logic_vector ( 3 downto 0 );
-signal	m_axi_hp0_awready_t :  std_logic;
-signal  m_axi_hp0_awregion_t:  std_logic_vector ( 3 downto 0 );
-signal	m_axi_hp0_awsize_t  :  std_logic_vector ( 2 downto 0 );
-signal	m_axi_hp0_awvalid_t :  std_logic;
-signal	m_axi_hp0_bready_t  :  std_logic;
-signal	m_axi_hp0_bresp_t   :  std_logic_vector ( 1 downto 0 );
-signal	m_axi_hp0_bvalid_t  :  std_logic;
-signal	m_axi_hp0_wdata_t   :  std_logic_vector ( 63 downto 0 );
-signal	m_axi_hp0_wlast_t   :  std_logic;
-signal	m_axi_hp0_wready_t  :  std_logic;
-signal	m_axi_hp0_wstrb_t   :  std_logic_vector ( 7 downto 0 );
-signal	m_axi_hp0_wvalid_t  :  std_logic;
+-- AXI4 signals for AXI-HP0 port
+signal	m_axi_hp0_awaddr_t     :std_logic_vector ( 31 downto 0 );
+signal	m_axi_hp0_awburst_t    :std_logic_vector ( 1 downto 0 );
+signal	m_axi_hp0_awcache_t    :std_logic_vector ( 3 downto 0 );
+signal	m_axi_hp0_awlen_t      :std_logic_vector ( 7 downto 0 );
+signal	m_axi_hp0_awlock_t     :std_logic;
+signal	m_axi_hp0_awprot_t     :std_logic_vector ( 2 downto 0 );
+signal	m_axi_hp0_awqos_t      :std_logic_vector ( 3 downto 0 );
+signal	m_axi_hp0_awready_t    :std_logic;
+signal  m_axi_hp0_awregion_t   :std_logic_vector ( 3 downto 0 );
+signal	m_axi_hp0_awsize_t     :std_logic_vector ( 2 downto 0 );
+signal	m_axi_hp0_awvalid_t    :std_logic;
+signal	m_axi_hp0_bready_t     :std_logic;
+signal	m_axi_hp0_bresp_t      :std_logic_vector ( 1 downto 0 );
+signal	m_axi_hp0_bvalid_t     :std_logic;
+signal	m_axi_hp0_wdata_t      :std_logic_vector ( 63 downto 0 );
+signal	m_axi_hp0_wlast_t      :std_logic;
+signal	m_axi_hp0_wready_t     :std_logic;
+signal	m_axi_hp0_wstrb_t      :std_logic_vector ( 7 downto 0 );
+signal	m_axi_hp0_wvalid_t     :std_logic;
 
-signal	m_axi_hp2_awaddr_t  :  std_logic_vector ( 31 downto 0 );
-signal	m_axi_hp2_awburst_t :  std_logic_vector ( 1 downto 0 );
-signal	m_axi_hp2_awcache_t :  std_logic_vector ( 3 downto 0 );
-signal	m_axi_hp2_awlen_t   :  std_logic_vector ( 7 downto 0 );
-signal	m_axi_hp2_awlock_t  :  std_logic;
-signal	m_axi_hp2_awprot_t  :  std_logic_vector ( 2 downto 0 );
-signal	m_axi_hp2_awqos_t   :  std_logic_vector ( 3 downto 0 );
-signal	m_axi_hp2_awready_t :  std_logic;
-signal  m_axi_hp2_awregion_t:  std_logic_vector ( 3 downto 0 );
-signal	m_axi_hp2_awsize_t  :  std_logic_vector ( 2 downto 0 );
-signal	m_axi_hp2_awvalid_t :  std_logic;
-signal	m_axi_hp2_bready_t  :  std_logic;
-signal	m_axi_hp2_bresp_t   :  std_logic_vector ( 1 downto 0 );
-signal	m_axi_hp2_bvalid_t  :  std_logic;
-signal	m_axi_hp2_wdata_t   :  std_logic_vector ( 31 downto 0 );
-signal	m_axi_hp2_wlast_t   :  std_logic;
-signal	m_axi_hp2_wready_t  :  std_logic;
-signal	m_axi_hp2_wstrb_t   :  std_logic_vector ( 3 downto 0 );
-signal	m_axi_hp2_wvalid_t  :  std_logic;	
---PS2PL interface signals
-signal  bus2ip_addr_t       :std_logic_vector(31 downto 0);
-signal  bus2ip_rd_t         :std_logic;
-signal  bus2ip_wr_t         :std_logic;
-signal  bus2ip_data_t       :std_logic_vector(31 downto 0);
-signal  ip2bus_data_t       :std_logic_vector(31 downto 0);
-signal  rdack_t             :std_logic;
-signal  wrack_t             :std_logic;
-signal  ip2bus_error_t      :std_logic;
-signal  bus2ip_be_t         :std_logic_vector(3 downto 0);
---attribute MARK_DEBUG of bus2ip_addr_t,bus2ip_data_t,ip2bus_data_t,bus2ip_rd_t,bus2ip_wr_t,rdack_t,wrack_t : signal is "TRUE";
-    
-signal hp_data_gen_softreset    :std_logic_vector(3 downto 0);
-signal hp_data_gen_softtrig     :std_logic_vector(3 downto 0);
-signal hp_data_gen_adcburstenb  :std_logic_vector(3 downto 0);
-signal hp_fifo_rst              :std_logic_vector(3 downto 0);
-signal hp_addr_rst              :std_logic_vector(3 downto 0);
-signal hp_data_gen_testdata_en  :std_logic;
---attribute MARK_DEBUG of hp_data_gen_softreset,hp_data_gen_softtrig,hp_data_gen_adcburstenb,hp_fifo_rst,hp_addr_rst :signal is "true";
+-- AXI4 signals for AXI-HP2 port
+signal	m_axi_hp2_awaddr_t     :std_logic_vector ( 31 downto 0 );
+signal	m_axi_hp2_awburst_t    :std_logic_vector ( 1 downto 0 );
+signal	m_axi_hp2_awcache_t    :std_logic_vector ( 3 downto 0 );
+signal	m_axi_hp2_awlen_t      :std_logic_vector ( 7 downto 0 );
+signal	m_axi_hp2_awlock_t     :std_logic;
+signal	m_axi_hp2_awprot_t     :std_logic_vector ( 2 downto 0 );
+signal	m_axi_hp2_awqos_t      :std_logic_vector ( 3 downto 0 );
+signal	m_axi_hp2_awready_t    :std_logic;
+signal  m_axi_hp2_awregion_t   :std_logic_vector ( 3 downto 0 );
+signal	m_axi_hp2_awsize_t     :std_logic_vector ( 2 downto 0 );
+signal	m_axi_hp2_awvalid_t    :std_logic;
+signal	m_axi_hp2_bready_t     :std_logic;
+signal	m_axi_hp2_bresp_t      :std_logic_vector ( 1 downto 0 );
+signal	m_axi_hp2_bvalid_t     :std_logic;
+signal	m_axi_hp2_wdata_t      :std_logic_vector ( 31 downto 0 );
+signal	m_axi_hp2_wlast_t      :std_logic;
+signal	m_axi_hp2_wready_t     :std_logic;
+signal	m_axi_hp2_wstrb_t      :std_logic_vector ( 3 downto 0 );
+signal	m_axi_hp2_wvalid_t     :std_logic;	
 
-signal hp0_burst_fifo_wrdata_t   :std_logic_vector(127 downto 0);
-signal hp0_burst_fifo_wren_t     :std_logic;
-signal hp0_burst_fifo_wrcnt_t    :std_logic_vector(9 downto 0);
-signal hp0_burst_addr_t          :std_logic_vector(31 downto 0);
-signal hp0_data_gen_trig         :std_logic;
-signal hp0_data_gen_adcburstlen  :std_logic_vector(31 downto 0);
+--IPBus signals
+signal  bus2ip_addr_t          :std_logic_vector(31 downto 0);
+signal  bus2ip_rd_t            :std_logic;
+signal  bus2ip_wr_t            :std_logic;
+signal  bus2ip_data_t          :std_logic_vector(31 downto 0);
+signal  ip2bus_data_t          :std_logic_vector(31 downto 0);
+signal  rdack_t                :std_logic;
+signal  wrack_t                :std_logic;
+signal  ip2bus_error_t         :std_logic;
+signal  bus2ip_be_t            :std_logic_vector(3 downto 0);
+  
+signal hp_data_gen_softreset   :std_logic_vector(3 downto 0);
+signal hp_data_gen_softtrig    :std_logic_vector(3 downto 0);
+signal hp_data_gen_adcburstenb :std_logic_vector(3 downto 0);
+signal hp_fifo_rst             :std_logic_vector(3 downto 0);
+signal hp_addr_rst             :std_logic_vector(3 downto 0);
+signal hp_data_gen_testdata_en :std_logic;
+
+signal hp0_burst_fifo_wrdata_t :std_logic_vector(127 downto 0);
+signal hp0_burst_fifo_wren_t   :std_logic;
+signal hp0_burst_fifo_wrcnt_t  :std_logic_vector(9 downto 0);
+signal hp0_burst_addr_t        :std_logic_vector(31 downto 0);
+signal hp0_data_gen_trig       :std_logic;
+signal hp0_data_gen_adcburstlen:std_logic_vector(31 downto 0);
 signal hp0_data_gen_burst_active :std_logic;
 
-signal hp2_burst_fifo_wrdata_t   :std_logic_vector(31 downto 0);
-signal hp2_burst_fifo_wren_t     :std_logic;
-signal hp2_burst_last_rd_t       :std_logic;
-signal hp2_burst_fifo_rdcnt_t    :std_logic_vector(7 downto 0);  
+signal hp2_burst_fifo_wrdata_t :std_logic_vector(31 downto 0);
+signal hp2_burst_fifo_wren_t   :std_logic;
+signal hp2_burst_last_rd_t     :std_logic;
+signal hp2_burst_fifo_rdcnt_t  :std_logic_vector(7 downto 0);  
 --signal hp2_burst_fifo_wrcnt_t    :std_logic_vector(9 downto 0);
-signal hp2_burst_addr_t          :std_logic_vector(31 downto 0);
+signal hp2_burst_addr_t        :std_logic_vector(31 downto 0);
 
 attribute MARK_DEBUG : string;
 attribute MARK_DEBUG of hp2_burst_fifo_wrdata_t,hp2_burst_fifo_wren_t : signal is "TRUE";
 
 --Bram controller signals
-signal ps7_bram_porta_addr_t :  std_logic_vector ( 15 downto 0 );
-signal ps7_bram_porta_clk_t  :  std_logic;
-signal ps7_bram_porta_din_t  :  std_logic_vector ( 31 downto 0 );
-signal ps7_bram_porta_dout_t :  std_logic_vector ( 31 downto 0 );
-signal ps7_bram_porta_en_t   :  std_logic;
-signal ps7_bram_porta_rst_t  :  std_logic;
-signal ps7_bram_porta_we_t   :  std_logic_vector ( 3 downto 0 );
+signal ps7_bram_porta_addr_t   :std_logic_vector ( 15 downto 0 );
+signal ps7_bram_porta_clk_t    :std_logic;
+signal ps7_bram_porta_din_t    :std_logic_vector ( 31 downto 0 );
+signal ps7_bram_porta_dout_t   :std_logic_vector ( 31 downto 0 );
+signal ps7_bram_porta_en_t     :std_logic;
+signal ps7_bram_porta_rst_t    :std_logic;
+signal ps7_bram_porta_we_t     :std_logic_vector ( 3 downto 0 );
 
 --attribute MARK_DEBUG : string;
---attribute MARK_DEBUG of ps7_bram_porta_clk_t,ps7_bram_porta_addr_t,ps7_bram_porta_din_t,ps7_bram_porta_dout_t,ps7_bram_porta_en_t,ps7_bram_porta_we_t : signal is "TRUE";
-
-signal basil_bus_clk      : std_logic;
-signal basil_bus_wr       : std_logic;
-signal basil_bus_rd       : std_logic;
-signal basil_bus_add      : std_logic_vector(31 downto 0);
-signal basil_bus_data     : std_logic_vector(31 downto 0);
+signal basil_bus_clk           :std_logic;
+signal basil_bus_wr            :std_logic;
+signal basil_bus_rd            :std_logic;
+signal basil_bus_add           :std_logic_vector(31 downto 0);
+signal basil_bus_data          :std_logic_vector(31 downto 0);
 --ADC LVDS data signals
-signal adc_lvds_fclk      :std_logic;
-signal adc_lvds_ch1_data  :std_logic_vector(15 downto 0);
-signal adc_lvds_ch2_data  :std_logic_vector(15 downto 0);
-signal adc_lvds_ch3_data  :std_logic_vector(15 downto 0);
-signal adc_lvds_ch4_data  :std_logic_vector(15 downto 0);
-signal adc_lvds_ch5_data  :std_logic_vector(15 downto 0);
-signal adc_lvds_ch6_data  :std_logic_vector(15 downto 0);
-signal adc_fclk_pos       :std_logic_vector(3 downto 0);
-signal adc_dclk_freq_t    :std_logic_vector(19 downto 0);
-signal adc_fclk_freq_t    :std_logic_vector(19 downto 0);
+signal adc_lvds_fclk           :std_logic;
+signal adc_lvds_ch1_data       :std_logic_vector(15 downto 0);
+signal adc_lvds_ch2_data       :std_logic_vector(15 downto 0);
+signal adc_lvds_ch3_data       :std_logic_vector(15 downto 0);
+signal adc_lvds_ch4_data       :std_logic_vector(15 downto 0);
+signal adc_lvds_ch5_data       :std_logic_vector(15 downto 0);
+signal adc_lvds_ch6_data       :std_logic_vector(15 downto 0);
+signal adc_fclk_pos            :std_logic_vector(3 downto 0);
+signal adc_dclk_freq_t         :std_logic_vector(19 downto 0);
+signal adc_fclk_freq_t         :std_logic_vector(19 downto 0);
 
-signal test_sig              :  std_logic;
-signal i2c_scl               :  std_logic;
-signal i2c_sda               :  std_logic;
+signal test_sig                :std_logic;
+signal i2c_scl                 :std_logic;
+signal i2c_sda                 :std_logic;
 
 --attribute MARK_DEBUG : string;
 --attribute MARK_DEBUG of i2c_scl,i2c_sda : signal is "TRUE";
 --ps7_wrapper
 
-signal fei4_cfg_flg          : std_logic;
-signal fei4_cfg_reg          : std_logic_vector(31 downto 0);
-signal fei4_wr_reg_dat       : std_logic_vector(15 downto 0);
-signal fei4_data_pos_sel     : std_logic_vector(3 downto 0);
-signal fei4_bit_slip         : std_logic;
-signal fei4_cmd_out_ph_sel   : std_logic_vector(1 downto 0);
-signal fei4_hit_or_un_sync   : std_logic;
-signal fei4_hit_or_sync      : std_logic;
+signal fei4_cfg_flg            :std_logic;
+signal fei4_cfg_reg            :std_logic_vector(31 downto 0);
+signal fei4_wr_reg_dat         :std_logic_vector(15 downto 0);
+signal fei4_data_pos_sel       :std_logic_vector(3 downto 0);
+signal fei4_bit_slip           :std_logic;
+signal fei4_cmd_out_ph_sel     :std_logic_vector(1 downto 0);
+signal fei4_hit_or_un_sync     :std_logic;
+signal fei4_hit_or_sync        :std_logic;
 
-signal  fei4_data_out        : std_logic_vector(7 downto 0);
-signal  fei4_data_fifo_wr_en : std_logic;
-
+signal fei4_data_out           :std_logic_vector(7 downto 0);
+signal fei4_data_fifo_wr_en    :std_logic;
 --attribute MARK_DEBUG of fei4_hit_or_sync : signal is "TRUE";
 
-signal fei4_a2_cfg_flg          : std_logic;
-signal fei4_a2_cfg_reg          : std_logic_vector(31 downto 0);
-signal fei4_a2_wr_reg_dat       : std_logic_vector(15 downto 0);
-signal fei4_a2_bit_slip         : std_logic;
+signal fei4_a2_cfg_flg         :std_logic;
+signal fei4_a2_cfg_reg         :std_logic_vector(31 downto 0);
+signal fei4_a2_wr_reg_dat      :std_logic_vector(15 downto 0);
+signal fei4_a2_bit_slip        :std_logic;
 
-signal fei4_b1_cfg_flg          : std_logic;
-signal fei4_b1_cfg_reg          : std_logic_vector(31 downto 0);
-signal fei4_b1_wr_reg_dat       : std_logic_vector(15 downto 0);
-signal fei4_b1_bit_slip         : std_logic;
-
-signal fei4_b2_cfg_flg          : std_logic;
-signal fei4_b2_cfg_reg          : std_logic_vector(31 downto 0);
-signal fei4_b2_wr_reg_dat       : std_logic_vector(15 downto 0);
-signal fei4_b2_bit_slip         : std_logic;
-
-signal fei4_fr_ram_addr      : std_logic_vector(5 downto 0);
-signal fei4_fr_ram_dat_in    : std_logic_vector(31 downto 0);
-signal fei4_fr_ram_dat_out   : std_logic_vector(31 downto 0);
+signal fei4_fr_ram_addr        :std_logic_vector(5 downto 0);
+signal fei4_fr_ram_dat_in      :std_logic_vector(31 downto 0);
+signal fei4_fr_ram_dat_out     :std_logic_vector(31 downto 0);
 
 --attribute MARK_DEBUG : string;
 --attribute MARK_DEBUG of fei4_fr_ram_addr,fei4_fr_ram_dat_in,fei4_fr_ram_dat_out: signal is "TRUE";
-signal fei4_fe_sr_rd_en      : std_logic;
-signal fei4_frame_sync_en    : std_logic;
-signal fei4_reg_addr_out     : std_logic_vector(15 downto 0);
-signal fei4_reg_value_out    : std_logic_vector(15 downto 0);
+signal fei4_fe_fr_rd_en        : std_logic_vector(1 downto 0);
+signal fei4_frame_sync_en      : std_logic_vector(1 downto 0);
+signal fei4_reg_addr_out       : std_logic_vector(31 downto 0);
+signal fei4_reg_value_out      : std_logic_vector(31 downto 0);
 
-signal fei4_idelay_cnt_out :std_logic_vector(4 downto 0);
-signal fei4_idelay_ctrl_rdy:std_logic;
-signal fei4_idelay_ld      :std_logic;
-signal fei4_idelay_cnt_in  :std_logic_vector(4 downto 0);  
+signal fei4_idelay_cnt_out     :std_logic_vector(4 downto 0);
+signal fei4_idelay_ctrl_rdy    :std_logic;
+signal fei4_idelay_ld          :std_logic;
+signal fei4_idelay_cnt_in      :std_logic_vector(4 downto 0);  
 
-signal ccpd_inj_pulse_a1   :std_logic;
-signal ccpd_inj_pulse_a2   :std_logic;
-signal ccpd_inj_pulse_b1   :std_logic;
-signal ccpd_inj_pulse_b2   :std_logic;
+signal ccpd_inj_pulse_a1       :std_logic;
+signal ccpd_inj_pulse_a2       :std_logic;
+signal ccpd_inj_pulse_b1       :std_logic;
+signal ccpd_inj_pulse_b2       :std_logic;
 
-signal ccpd_sin            :std_logic;
-signal ccpd_ld             :std_logic;
-signal ccpd_ckc            :std_logic;
-signal ccpd_ckd            :std_logic;
+signal ccpd_sin                :std_logic;
+signal ccpd_ld                 :std_logic;
+signal ccpd_ckc                :std_logic;
+signal ccpd_ckd                :std_logic;
 
 COMPONENT ps7_wrapper 
-  port (
+port (
     ACLK : out STD_LOGIC;
                  
     DDR_addr : inout STD_LOGIC_VECTOR ( 14 downto 0 );
@@ -431,9 +418,10 @@ tied_to_vcc <= '1';
 --LVDS Input Buffer 
 FEI4_HITOR_BUF :IBUFDS
 generic map (
-DIFF_TERM => TRUE, 
-IBUF_LOW_PWR => FALSE, 
-IOSTANDARD => "LVDS_25")
+    DIFF_TERM => TRUE, 
+    IBUF_LOW_PWR => FALSE, 
+    IOSTANDARD => "LVDS_25"
+)
 port map (
 O => fei4_hit_or_un_sync, 
 I  => FEI4_A1_HIT_OR_P, 
@@ -453,13 +441,13 @@ clk_gen: clk_wiz_0
    -- Clock in ports
    clk_in1_p => CLK200_IN_P,
    clk_in1_n => CLK200_IN_N,
-  -- Clock out ports  
+   -- Clock out ports  
    clk200 => clk200m,
    clk100 => clk100m,
    clk40 => clk40m,
    clk160 => clk160m,
    clk16 => clk16m,
-  -- Status and control signals                
+   -- Status and control signals                
    reset => global_reset,
    locked => mmcm_locked            
  );
@@ -498,162 +486,162 @@ ads5292_a_input:entity work.ads5292_lvds
    FCLK_POS => adc_fclk_pos,
    DCLKFREQ => adc_dclk_freq_t,
    FCLKFREQ => adc_fclk_freq_t         
-   );
+);
 
 
 ps7_i:ps7_wrapper
-  port map (
-      ACLK => ps7_aclk,
-      
-      --DDR Port
-      DDR_addr => PS7_DDR_ADDR,
-      DDR_ba => PS7_DDR_BA,
-      DDR_cas_n => PS7_DDR_CAS_N,
-      DDR_ck_n => PS7_DDR_CK_N,
-      DDR_ck_p => PS7_DDR_CK_P,
-      DDR_cke => PS7_DDR_CKE,
-      DDR_cs_n => PS7_DDR_CS_N,
-      DDR_dm => PS7_DDR_DM,
-      DDR_dq => PS7_DDR_DQ,
-      DDR_dqs_n => PS7_DDR_DQS_N,
-      DDR_dqs_p => PS7_DDR_DQS_P,
-      DDR_odt => PS7_DDR_ODT,
-      DDR_ras_n => PS7_DDR_RAS_N,
-      DDR_reset_n => PS7_DDR_RESET_N,
-      DDR_we_n => PS7_DDR_WE_N,
-      --Fixed IO port
-      FIXED_IO_ddr_vrn => PS7_FIXED_IO_DDR_VRN,
-      FIXED_IO_ddr_vrp => PS7_FIXED_IO_DDR_VRP,
-      FIXED_IO_mio => PS7_FIXED_IO_MIO,
-      FIXED_IO_ps_clk => PS7_FIXED_IO_PS_CLK,
-      FIXED_IO_ps_porb => PS7_FIXED_IO_PS_PORB,
-      FIXED_IO_ps_srstb => PS7_FIXED_IO_PS_SRSTB,
-      --AXI4 Lite Port
-      M00_AXI_araddr   => ps7_m00_axi_araddr,
-      M00_AXI_arprot   => ps7_m00_axi_arprot,
-      M00_AXI_arready  => ps7_m00_axi_arready,
-      M00_AXI_arvalid  => ps7_m00_axi_arvalid,
-      M00_AXI_awaddr   => ps7_m00_axi_awaddr,
-      M00_AXI_awprot   => ps7_m00_axi_awprot,
-      M00_AXI_awready  => ps7_m00_axi_awready,
-      M00_AXI_awvalid  => ps7_m00_axi_awvalid,
-      M00_AXI_bready   => ps7_m00_axi_bready,
-      M00_AXI_bresp    => ps7_m00_axi_bresp,
-      M00_AXI_bvalid   => ps7_m00_axi_bvalid,
-      M00_AXI_rdata    => ps7_m00_axi_rdata,
-      M00_AXI_rready   => ps7_m00_axi_rready,
-      M00_AXI_rresp    => ps7_m00_axi_rresp,
-      M00_AXI_rvalid   => ps7_m00_axi_rvalid,
-      M00_AXI_wdata    => ps7_m00_axi_wdata,
-      M00_AXI_wready   => ps7_m00_axi_wready,
-      M00_AXI_wstrb    => PS7_m00_axi_wstrb,
-      M00_AXI_wvalid   => ps7_m00_axi_wvalid,
-      
-      P_ARESETN        => ps7_axi_areset,
-            
-      S00_AXI_awaddr  => m_axi_hp0_awaddr_t,
-      S00_AXI_awburst => m_axi_hp0_awburst_t,
-      S00_AXI_awcache => m_axi_hp0_awcache_t,
-      S00_AXI_awlen   => m_axi_hp0_awlen_t,
-      S00_AXI_awlock  => m_axi_hp0_awlock_t,
-      S00_AXI_awprot  => m_axi_hp0_awprot_t,
-      S00_AXI_awqos   => m_axi_hp0_awqos_t,
-      S00_AXI_awready => m_axi_hp0_awready_t,
-      S00_AXI_awsize  => m_axi_hp0_awsize_t,
-      S00_AXI_awvalid => m_axi_hp0_awvalid_t,    
-      S00_AXI_bready  => m_axi_hp0_bready_t,
-      S00_AXI_bresp   => m_axi_hp0_bresp_t,
-      S00_AXI_bvalid  => m_axi_hp0_bvalid_t,   
-      S00_AXI_wdata   => m_axi_hp0_wdata_t,
-      S00_AXI_wlast   => m_axi_hp0_wlast_t,
-      S00_AXI_wready  => m_axi_hp0_wready_t,
-      S00_AXI_wstrb   => m_axi_hp0_wstrb_t,
-      S00_AXI_wvalid  => m_axi_hp0_wvalid_t,
-
-      S02_AXI_awaddr  => m_axi_hp2_awaddr_t,
-      S02_AXI_awburst => m_axi_hp2_awburst_t,
-      S02_AXI_awcache => m_axi_hp2_awcache_t,
-      S02_AXI_awlen   => m_axi_hp2_awlen_t,
-      S02_AXI_awlock  => m_axi_hp2_awlock_t,
-      S02_AXI_awprot  => m_axi_hp2_awprot_t,
-      S02_AXI_awqos   => m_axi_hp2_awqos_t,
-      S02_AXI_awready => m_axi_hp2_awready_t,
-      S02_AXI_awsize  => m_axi_hp2_awsize_t,
-      S02_AXI_awvalid => m_axi_hp2_awvalid_t,    
-      S02_AXI_bready  => m_axi_hp2_bready_t,
-      S02_AXI_bresp   => m_axi_hp2_bresp_t,
-      S02_AXI_bvalid  => m_axi_hp2_bvalid_t,   
-      S02_AXI_wdata   => m_axi_hp2_wdata_t,
-      S02_AXI_wlast   => m_axi_hp2_wlast_t,
-      S02_AXI_wready  => m_axi_hp2_wready_t,
-      S02_AXI_wstrb   => m_axi_hp2_wstrb_t,
-      S02_AXI_wvalid  => m_axi_hp2_wvalid_t,
-              
-      iic_scl_io   => PS7_IIC_SCL,
-      iic_sda_io   => PS7_IIC_SDA
-    );
+port map (
+    ACLK => ps7_aclk,
+    
+    --DDR Port
+    DDR_addr => PS7_DDR_ADDR,
+    DDR_ba => PS7_DDR_BA,
+    DDR_cas_n => PS7_DDR_CAS_N,
+    DDR_ck_n => PS7_DDR_CK_N,
+    DDR_ck_p => PS7_DDR_CK_P,
+    DDR_cke => PS7_DDR_CKE,
+    DDR_cs_n => PS7_DDR_CS_N,
+    DDR_dm => PS7_DDR_DM,
+    DDR_dq => PS7_DDR_DQ,
+    DDR_dqs_n => PS7_DDR_DQS_N,
+    DDR_dqs_p => PS7_DDR_DQS_P,
+    DDR_odt => PS7_DDR_ODT,
+    DDR_ras_n => PS7_DDR_RAS_N,
+    DDR_reset_n => PS7_DDR_RESET_N,
+    DDR_we_n => PS7_DDR_WE_N,
+    --Fixed IO port
+    FIXED_IO_ddr_vrn => PS7_FIXED_IO_DDR_VRN,
+    FIXED_IO_ddr_vrp => PS7_FIXED_IO_DDR_VRP,
+    FIXED_IO_mio => PS7_FIXED_IO_MIO,
+    FIXED_IO_ps_clk => PS7_FIXED_IO_PS_CLK,
+    FIXED_IO_ps_porb => PS7_FIXED_IO_PS_PORB,
+    FIXED_IO_ps_srstb => PS7_FIXED_IO_PS_SRSTB,
+    --AXI4 Lite Port
+    M00_AXI_araddr   => ps7_m00_axi_araddr,
+    M00_AXI_arprot   => ps7_m00_axi_arprot,
+    M00_AXI_arready  => ps7_m00_axi_arready,
+    M00_AXI_arvalid  => ps7_m00_axi_arvalid,
+    M00_AXI_awaddr   => ps7_m00_axi_awaddr,
+    M00_AXI_awprot   => ps7_m00_axi_awprot,
+    M00_AXI_awready  => ps7_m00_axi_awready,
+    M00_AXI_awvalid  => ps7_m00_axi_awvalid,
+    M00_AXI_bready   => ps7_m00_axi_bready,
+    M00_AXI_bresp    => ps7_m00_axi_bresp,
+    M00_AXI_bvalid   => ps7_m00_axi_bvalid,
+    M00_AXI_rdata    => ps7_m00_axi_rdata,
+    M00_AXI_rready   => ps7_m00_axi_rready,
+    M00_AXI_rresp    => ps7_m00_axi_rresp,
+    M00_AXI_rvalid   => ps7_m00_axi_rvalid,
+    M00_AXI_wdata    => ps7_m00_axi_wdata,
+    M00_AXI_wready   => ps7_m00_axi_wready,
+    M00_AXI_wstrb    => PS7_m00_axi_wstrb,
+    M00_AXI_wvalid   => ps7_m00_axi_wvalid,
+    
+    P_ARESETN        => ps7_axi_areset,
+        
+    S00_AXI_awaddr  => m_axi_hp0_awaddr_t,
+    S00_AXI_awburst => m_axi_hp0_awburst_t,
+    S00_AXI_awcache => m_axi_hp0_awcache_t,
+    S00_AXI_awlen   => m_axi_hp0_awlen_t,
+    S00_AXI_awlock  => m_axi_hp0_awlock_t,
+    S00_AXI_awprot  => m_axi_hp0_awprot_t,
+    S00_AXI_awqos   => m_axi_hp0_awqos_t,
+    S00_AXI_awready => m_axi_hp0_awready_t,
+    S00_AXI_awsize  => m_axi_hp0_awsize_t,
+    S00_AXI_awvalid => m_axi_hp0_awvalid_t,    
+    S00_AXI_bready  => m_axi_hp0_bready_t,
+    S00_AXI_bresp   => m_axi_hp0_bresp_t,
+    S00_AXI_bvalid  => m_axi_hp0_bvalid_t,   
+    S00_AXI_wdata   => m_axi_hp0_wdata_t,
+    S00_AXI_wlast   => m_axi_hp0_wlast_t,
+    S00_AXI_wready  => m_axi_hp0_wready_t,
+    S00_AXI_wstrb   => m_axi_hp0_wstrb_t,
+    S00_AXI_wvalid  => m_axi_hp0_wvalid_t,
+    
+    S02_AXI_awaddr  => m_axi_hp2_awaddr_t,
+    S02_AXI_awburst => m_axi_hp2_awburst_t,
+    S02_AXI_awcache => m_axi_hp2_awcache_t,
+    S02_AXI_awlen   => m_axi_hp2_awlen_t,
+    S02_AXI_awlock  => m_axi_hp2_awlock_t,
+    S02_AXI_awprot  => m_axi_hp2_awprot_t,
+    S02_AXI_awqos   => m_axi_hp2_awqos_t,
+    S02_AXI_awready => m_axi_hp2_awready_t,
+    S02_AXI_awsize  => m_axi_hp2_awsize_t,
+    S02_AXI_awvalid => m_axi_hp2_awvalid_t,    
+    S02_AXI_bready  => m_axi_hp2_bready_t,
+    S02_AXI_bresp   => m_axi_hp2_bresp_t,
+    S02_AXI_bvalid  => m_axi_hp2_bvalid_t,   
+    S02_AXI_wdata   => m_axi_hp2_wdata_t,
+    S02_AXI_wlast   => m_axi_hp2_wlast_t,
+    S02_AXI_wready  => m_axi_hp2_wready_t,
+    S02_AXI_wstrb   => m_axi_hp2_wstrb_t,
+    S02_AXI_wvalid  => m_axi_hp2_wvalid_t,
+          
+    iic_scl_io   => PS7_IIC_SCL,
+    iic_sda_io   => PS7_IIC_SDA
+);
 
 hp0_data_gen_trig <= hp_data_gen_softtrig(0);
 data_gen_hp0:entity work.axi_data_gen   
-  port map(
-     adc_clk             => adc_lvds_fclk, 
-     reset               => hp_data_gen_softreset(0),   
-                         
-     trig                => hp0_data_gen_trig,   
-     adcburst_enb        => hp_data_gen_adcburstenb(0), 
-     adcburst_len        => hp0_data_gen_adcburstlen, 
-     testdata_en         => hp_data_gen_testdata_en, 
- 
-     adc_ch0             => adc_lvds_ch1_data, 
-     adc_ch1             => adc_lvds_ch2_data, 
-     adc_ch2             => adc_lvds_ch3_data, 
-     adc_ch3             => adc_lvds_ch4_data, 
-     adc_ch4             => adc_lvds_ch5_data, 
-     adc_ch5             => adc_lvds_ch6_data, 
-     adc_ch6             => (others => '0'),  
-     adc_ch7             => (others => '0'),    
-     
-     adcdata             => hp0_burst_fifo_wrdata_t, 
-     adcdata_wren        => hp0_burst_fifo_wren_t, 
-     adcburst_active     => hp0_data_gen_burst_active       --ila
-  );     
+port map(
+    adc_clk             => adc_lvds_fclk, 
+    reset               => hp_data_gen_softreset(0),   
+                     
+    trig                => hp0_data_gen_trig,   
+    adcburst_enb        => hp_data_gen_adcburstenb(0), 
+    adcburst_len        => hp0_data_gen_adcburstlen, 
+    testdata_en         => hp_data_gen_testdata_en, 
+    
+    adc_ch0             => adc_lvds_ch1_data, 
+    adc_ch1             => adc_lvds_ch2_data, 
+    adc_ch2             => adc_lvds_ch3_data, 
+    adc_ch3             => adc_lvds_ch4_data, 
+    adc_ch4             => adc_lvds_ch5_data, 
+    adc_ch5             => adc_lvds_ch6_data, 
+    adc_ch6             => (others => '0'),  
+    adc_ch7             => (others => '0'),    
+    
+    adcdata             => hp0_burst_fifo_wrdata_t, 
+    adcdata_wren        => hp0_burst_fifo_wren_t, 
+    adcburst_active     => hp0_data_gen_burst_active       --ila
+);     
        
 axi_hp0_burst:entity work.axi_mburst
-      Generic map
-      (
-      start_addr => X"000_0000",
-      end_addr => X"3FF_FFFF"
-      )
-      port map(
-        axi_clk       =>  ps7_aclk,
-        axi_reset     =>  ps7_axi_areset,
-        addr_rst      =>  hp_addr_rst(0),         
-        fifo_reset    => hp_fifo_rst(0), 
-        
-        fifo_wrclk    => adc_lvds_fclk,
-        fifo_data     => hp0_burst_fifo_wrdata_t,
-        fifo_wren     => hp0_burst_fifo_wren_t,
-        fifo_wrcnt    => hp0_burst_fifo_wrcnt_t, --iobus  
-        burst_addr    => hp0_burst_addr_t,   
-         
-        axi_awready   => m_axi_hp0_awready_t,
-        axi_awaddr    => m_axi_hp0_awaddr_t,
-        axi_awvalid   => m_axi_hp0_awvalid_t,
-        axi_awlen     => m_axi_hp0_awlen_t,
-        axi_awsize    => m_axi_hp0_awsize_t,
-        axi_awburst   => m_axi_hp0_awburst_t,
-        axi_awcache   => m_axi_hp0_awcache_t,
-        axi_awprot    => m_axi_hp0_awprot_t,
-     
-        axi_wready    => m_axi_hp0_wready_t,
-        axi_wdata     => m_axi_hp0_wdata_t,
-        axi_wvalid    => m_axi_hp0_wvalid_t,
-        axi_wstrb     => m_axi_hp0_wstrb_t,
-        axi_wlast     => m_axi_hp0_wlast_t,
+Generic map
+(
+    start_addr => X"000_0000",
+    end_addr => X"3FF_FFFF"
+)
+port map(
+    axi_clk       =>  ps7_aclk,
+    axi_reset     =>  ps7_axi_areset,
+    addr_rst      =>  hp_addr_rst(0),         
+    fifo_reset    => hp_fifo_rst(0), 
     
-        axi_bvalid    => m_axi_hp0_bvalid_t,
-        axi_bresp     => m_axi_hp0_bresp_t,
-        axi_bready    => m_axi_hp0_bready_t
+    fifo_wrclk    => adc_lvds_fclk,
+    fifo_data     => hp0_burst_fifo_wrdata_t,
+    fifo_wren     => hp0_burst_fifo_wren_t,
+    fifo_wrcnt    => hp0_burst_fifo_wrcnt_t, --iobus  
+    burst_addr    => hp0_burst_addr_t,   
+     
+    axi_awready   => m_axi_hp0_awready_t,
+    axi_awaddr    => m_axi_hp0_awaddr_t,
+    axi_awvalid   => m_axi_hp0_awvalid_t,
+    axi_awlen     => m_axi_hp0_awlen_t,
+    axi_awsize    => m_axi_hp0_awsize_t,
+    axi_awburst   => m_axi_hp0_awburst_t,
+    axi_awcache   => m_axi_hp0_awcache_t,
+    axi_awprot    => m_axi_hp0_awprot_t,
+    
+    axi_wready    => m_axi_hp0_wready_t,
+    axi_wdata     => m_axi_hp0_wdata_t,
+    axi_wvalid    => m_axi_hp0_wvalid_t,
+    axi_wstrb     => m_axi_hp0_wstrb_t,
+    axi_wlast     => m_axi_hp0_wlast_t,
+    
+    axi_bvalid    => m_axi_hp0_bvalid_t,
+    axi_bresp     => m_axi_hp0_bresp_t,
+    axi_bready    => m_axi_hp0_bready_t
   );
 
 hp2_burst_fifo_wrdata_t(31 downto 8) <= (others => '0');
@@ -797,8 +785,8 @@ Generic map(
   BASE_ADDR => x"43c00300"
   )
 Port map (
-    sysclk             => ps7_aclk,
-    rst             => global_reset,
+    sysclk         => ps7_aclk,
+    rst            => global_reset,
 
     --IP BUS
     Bus2IP_Addr    => bus2ip_addr_t,
@@ -820,50 +808,50 @@ generic map (
     BASE_ADDR => X"43c00000"
     )
 port map( 
-    RST    => tied_to_ground,
-    SYSCLK => ps7_aclk,
+    RST                   => tied_to_ground,
+    SYSCLK                => ps7_aclk,
     
-    Bus2IP_Addr    => bus2ip_addr_t,
-    Bus2IP_RD      => bus2ip_rd_t,
-    Bus2IP_WR      => bus2ip_wr_t,
-    Bus2IP_Data    => bus2ip_data_t,
-    IP2Bus_Data    => ip2bus_data_t,
-    RDACK          => rdack_t,
-    WRACK          => wrack_t,
+    Bus2IP_Addr           => bus2ip_addr_t,
+    Bus2IP_RD             => bus2ip_rd_t,
+    Bus2IP_WR             => bus2ip_wr_t,
+    Bus2IP_Data           => bus2ip_data_t,
+    IP2Bus_Data           => ip2bus_data_t,
+    RDACK                 => rdack_t,
+    WRACK                 => wrack_t,
         
-    GLB_RST        => global_reset,
+    GLB_RST               => global_reset,
     
-    FEI4_CFG_FLG    => fei4_cfg_flg,
-    FEI4_CFG_REG    => fei4_cfg_reg,
-    FEI4_WR_REG_DAT => fei4_wr_reg_dat,
-    FEI4_FR_RAM_ADDR    => fei4_fr_ram_addr,
-    FEI4_FR_RAM_DAT_IN  => fei4_fr_ram_dat_in,
-    FEI4_FR_RAM_DAT_OUT => fei4_fr_ram_dat_out,
-    FEI4_DAT_POS_SEL => fei4_data_pos_sel,
-    FEI4_FRAME_SYNC_EN   => fei4_frame_sync_en,
-    FEI4_FE_SR_RD_EN => fei4_fe_sr_rd_en,
-    FEI4_REG_ADDR_OUT  => fei4_reg_addr_out,
-    FEI4_REG_VALUE_OUT => fei4_reg_value_out,
+    FEI4_CFG_FLG          => fei4_cfg_flg,
+    FEI4_CFG_REG          => fei4_cfg_reg,
+    FEI4_WR_REG_DAT       => fei4_wr_reg_dat,
+    FEI4_FR_RAM_ADDR      => fei4_fr_ram_addr,
+    FEI4_FR_RAM_DAT_IN    => fei4_fr_ram_dat_in,
+    FEI4_FR_RAM_DAT_OUT   => fei4_fr_ram_dat_out,
+    FEI4_DAT_POS_SEL      => fei4_data_pos_sel,
+    FEI4_FRAME_SYNC_EN    => fei4_frame_sync_en,
+    FEI4_FE_FR_RD_EN      => fei4_fe_fr_rd_en,
+    FEI4_REG_ADDR_OUT     => fei4_reg_addr_out,
+    FEI4_REG_VALUE_OUT    => fei4_reg_value_out,
     FEI4_IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
     FEI4_IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
-    FEI4_IDELAY_LD   => fei4_idelay_ld,
+    FEI4_IDELAY_LD        => fei4_idelay_ld,
     FEI4_IDELAY_CNT_IN    => fei4_idelay_cnt_in,
     
-    ADC_DCLK_FREQ    => adc_dclk_freq_t,
-    ADC_FCLK_FREQ    => adc_fclk_freq_t,    
-    ADC_FCLK_POS     => adc_fclk_pos,  
+    ADC_DCLK_FREQ         => adc_dclk_freq_t,
+    ADC_FCLK_FREQ         => adc_fclk_freq_t,    
+    ADC_FCLK_POS          => adc_fclk_pos,  
     
-    HP_GEN_RST     => hp_data_gen_softreset,
-    HP_TRIGER      => hp_data_gen_softtrig,
-    HP_FIFO_RST    => hp_fifo_rst,
-    HP_ADDR_RST       => hp_addr_rst,
-    HP_BURST_EN       => hp_data_gen_adcburstenb,
-    HP_TEST_DATA_EN   => hp_data_gen_testdata_en,
-    HP2_FIFO_CNT      => hp2_burst_fifo_rdcnt_t,
-    HP2_BURST_LAST_RD => hp2_burst_last_rd_t,
-    HP0_BURST_LEN     => hp0_data_gen_adcburstlen,
-    HP0_BURST_ADDR    => hp0_burst_addr_t,
-    HP2_BURST_ADDR    => hp2_burst_addr_t
+    HP_GEN_RST            => hp_data_gen_softreset,
+    HP_TRIGER             => hp_data_gen_softtrig,
+    HP_FIFO_RST           => hp_fifo_rst,
+    HP_ADDR_RST           => hp_addr_rst,
+    HP_BURST_EN           => hp_data_gen_adcburstenb,
+    HP_TEST_DATA_EN       => hp_data_gen_testdata_en,
+    HP2_FIFO_CNT          => hp2_burst_fifo_rdcnt_t,
+    HP2_BURST_LAST_RD     => hp2_burst_last_rd_t,
+    HP0_BURST_LEN         => hp0_data_gen_adcburstlen,
+    HP0_BURST_ADDR        => hp0_burst_addr_t,
+    HP2_BURST_ADDR        => hp2_burst_addr_t
 );	  
  
 fei4_a1_cfg:entity work.FEI4B_CFG
@@ -901,12 +889,37 @@ Port map(
 --      CMD_OUT_N => FEI4_A2_CMD_OUT_N
 --      );
   
-fei4_rx_1: entity work.FEI4_RX 
+fei4_a1_rx_1: entity work.FEI4_RX 
 Port MAP(
    RESET => global_reset,
    
    DATA_IN_P        => FEI4_A1_DOB_P,
    DATA_IN_N        => FEI4_A1_DOB_N,
+   CLK160           => clk160m,
+   CLK16            => clk16m,
+   
+   FRAME_SYNC_EN    => fei4_frame_sync_en(0),
+   FE_SR_RD_EN      => fei4_fe_fr_rd_en(0),
+   
+   REG_ADDR_OUT     => fei4_reg_addr_out,
+   REG_VALUE_OUT    => fei4_reg_value_out,
+
+   DATA_OUT         => hp2_burst_fifo_wrdata_t(7 downto 0),
+   FIFO_WR_EN       => hp2_burst_fifo_wren_t,
+        
+   IDELAY_REFCLK    => clk200m,
+   IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
+   IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
+   IDELAY_LD        => fei4_idelay_ld,
+   IDELAY_CNT_IN    => fei4_idelay_cnt_in
+);
+
+fei4_a2_rx_1: entity work.FEI4_RX 
+Port MAP(
+   RESET => global_reset,
+   
+   DATA_IN_P        => FEI4_A2_DOB_P,
+   DATA_IN_N        => FEI4_A2_DOB_N,
    CLK160           => clk160m,
    CLK16            => clk16m,
    
@@ -917,7 +930,7 @@ Port MAP(
    REG_VALUE_OUT    => fei4_reg_value_out,
 
    DATA_OUT         => hp2_burst_fifo_wrdata_t(7 downto 0),
-   FIFO_WR_EN       => hp2_burst_fifo_wren_t,
+   IS_PIX_DAT       => hp2_burst_fifo_wren_t,
         
    IDELAY_REFCLK    => clk200m,
    IDELAY_CNT_OUT   => fei4_idelay_cnt_out,

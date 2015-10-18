@@ -36,11 +36,11 @@ entity fei4_data_extract is
     RESET           : in STD_LOGIC;  
       
     FRAME_CLK       : in std_logic;  
-    FE_SR_RD_EN     : in std_logic; 
+    FE_FR_RD_EN     : in std_logic; 
     FRAME_IS_SYNCED : in std_logic;   
     DATA_IN         : in std_logic_vector(7 downto 0);
     
-    FIFO_WR_EN      : out std_logic;
+    IS_PIX_DAT      : out std_logic; -- indicate current data is pixel/SR data 
     -- Bit[15] of REG_ADDR_OUT is the address type 
     REG_ADDR_OUT    : out std_logic_vector(15 downto 0);
     REG_VALUE_OUT   : out std_logic_vector(15 downto 0)
@@ -49,24 +49,17 @@ end fei4_data_extract;
 
 architecture Behavioral of fei4_data_extract is
 
-signal fclk      :std_logic;
-signal reg_value :std_logic_vector(15 downto 0);
-signal reg_addr  :std_logic_vector(15 downto 0);
+signal fclk           :std_logic;
+signal reg_value      :std_logic_vector(15 downto 0);
+signal reg_addr       :std_logic_vector(15 downto 0);
 
-signal ar_cnt :integer range 0 to 1 := 0;
-signal vr_cnt :integer range 0 to 1 := 0;
-type state_type is (START, IDLE, SOF, EOF, AR, VR, DAT, FINISH, ERROR);
-signal state : state_type := START ;
+signal ar_cnt         :integer range 0 to 1 := 0;
+signal vr_cnt         :integer range 0 to 1 := 0;
 
-signal fifo_wr_en_i  :std_logic;
-signal fifo_rd_en  :std_logic;
+type   state_type is (START, IDLE, SOF, EOF, AR, VR, DAT, FINISH, ERROR);
+signal state          : state_type := START ;
 
-signal fifo_dat_out  :std_logic_vector(63 downto 0);  
-signal fifo_empty  :std_logic;  
-signal fifo_full   :std_logic;
-signal fifo_rd_data_count  :std_logic_vector(6 downto 0);
-signal fifo_wr_data_count  :std_logic_vector(9 downto 0);       
- 
+signal is_pixel_data  :std_logic_vector(63 downto 0);  
 
 --attribute MARK_DEBUG : string;
 --attribute MARK_DEBUG of reg_value,reg_addr : signal is "TRUE";
@@ -107,10 +100,10 @@ elsif rising_edge(fclk) then
      
      when SOF =>
        if DATA_IN = x"EA" then
-         if FE_SR_RD_EN = '1' then
+         if FE_FR_RD_EN = '1' then
            -- Write the contents from front end shift register to FIFO
            state <= DAT;
-           fifo_wr_en_i <= '1';
+           is_pixel_data <= '1';
          else
            state <= AR;
          end if;
@@ -118,7 +111,7 @@ elsif rising_edge(fclk) then
          state <= VR;     
        elsif DATA_IN = x"E9" then
          state <= DAT;
-         fifo_wr_en_i <= '1';
+         is_pixel_data <= '1';
        end if;
      
      when AR =>
@@ -146,7 +139,7 @@ elsif rising_edge(fclk) then
      when DAT =>
        if DATA_IN = x"BC" then          
          state <= EOF;
-         fifo_wr_en_i <= '0';   
+         is_pixel_data <= '0';   
        end if;
 
      when EOF =>
@@ -169,36 +162,9 @@ elsif rising_edge(fclk) then
 end if;
 
 end process; 
-
---fifo_rd_ctrl:process(fclk)
---begin
---  if rising_edge(fclk) then 
---    if fifo_empty = '0' then
---      fifo_rd_en <= '1';
---    else
---      fifo_rd_en <= '0';
---    end if;
---  end if;
---end process;
-   
---fei4_data_fifo: fifo_generator_0
---  PORT MAP (
---    rst => RESET,
---    wr_clk => fclk,
---    rd_clk => fclk,
---    din => fei4_data_out,
---    wr_en => fifo_wr_en,
---    rd_en => fifo_rd_en,
---    dout => fifo_dat_out,
---    full => fifo_full,
---    empty => fifo_empty,
---    rd_data_count => fifo_rd_data_count,
---    wr_data_count => fifo_wr_data_count
---);
-   
+ 
 REG_VALUE_OUT <= reg_value;
-REG_ADDR_OUT <= reg_addr;
-
-FIFO_WR_EN <= fifo_wr_en_i;
+REG_ADDR_OUT  <= reg_addr;
+IS_PIX_DAT    <= is_pixel_data;
 
 end Behavioral;
