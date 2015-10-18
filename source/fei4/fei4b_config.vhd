@@ -34,24 +34,23 @@ use UNISIM.VComponents.all;
 
 entity fei4b_cfg is
     Port ( 
-    RST : in std_logic;
+    RST            : in std_logic;
     
-    CLK160 : in std_logic;
+    CLK160         : in std_logic;
     CMD_OUT_PH_SEL : in std_logic_vector(1 downto 0);
     --FR_RAM_ADDR, Bit5 is write enable, bit[4:0] is address;
-    FR_CFG_CLK : in std_logic;
-    FR_RAM_ADDR : in std_logic_vector(5 downto 0);
-    FR_RAM_DAT_IN : in std_logic_vector(31 downto 0);
+    FR_CFG_CLK     : in std_logic;
+    FR_RAM_ADDR    : in std_logic_vector(5 downto 0);
+    FR_RAM_DAT_IN  : in std_logic_vector(31 downto 0);
     FR_RAM_DAT_OUT : out std_logic_vector(31 downto 0);
 
-    CMD_CLK : in std_logic;
+    CMD_CLK        : in std_logic;
     
-    CFG_FLG : in std_logic;
-    CFG_REG : in std_logic_vector(31 downto 0);
-    WR_REG_DAT : in std_logic_vector(15 downto 0);
+    CFG_FLG        : in std_logic;                              
+    CFG_REG        : in std_logic_vector(31 downto 0);
+    WR_REG_DAT     : in std_logic_vector(15 downto 0);
     
-    CMD_OUT_P : out std_logic;
-    CMD_OUT_N : out std_logic  
+    CMD_OUT        : out std_logic
     );    
 end fei4b_cfg;
 architecture Behavioral of fei4b_cfg is
@@ -290,20 +289,8 @@ cmd_out_phase_shift:process(CLK160)
 begin
 if rising_edge(CLK160) then
    cmd_out_shift <= cmd_out_shift(2 downto 0) & cmd_out_r;
-   cmd_out_r_o <= cmd_out_shift(conv_integer(CMD_OUT_PH_SEL));
+   CMD_OUT <= cmd_out_shift(conv_integer(CMD_OUT_PH_SEL));
 end if;
 end process;
 
-fei4_cmd_out_buf:OBUFDS
-generic map (
-  IOSTANDARD => "DEFAULT", -- Specify the output I/O standard
-  SLEW => "SLOW"-- Specify the output slew rate
-  ) 
-port map(
-  O  => CMD_OUT_P, -- Diff_p output (connect directly to top-level port)
-  OB => CMD_OUT_N, -- Diff_n output (connect directly to top-level port)
-  -- Since the Positive output is connected to the negative input of the FEI4, the cmd out is 
-  -- reversed.
-  I => cmd_out_r_o  -- Buffer input
-  );
 end Behavioral;
