@@ -16,18 +16,18 @@ set_property PACKAGE_PIN AG26 [get_ports FEI4_A1_HIT_OR_P]
 set_property IOSTANDARD LVDS_25 [get_ports FEI4_A1_HIT_OR_P]
 set_property IOSTANDARD LVDS_25 [get_ports FEI4_A1_HIT_OR_N]
 
-## FEI4 A2 (LPC SLOT2) DOB
-#set_property PACKAGE_PIN AC29 [get_ports FEI4_A2_DOB_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_DOB_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_DOB_N]
-## FEI4 A2 (LPC SLOT2) CMD
-#set_property PACKAGE_PIN Y30 [get_ports FEI4_A2_CMD_OUT_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_N]
-## FEI4 A2 (LPC SLOT2) HITOR
-#set_property PACKAGE_PIN AH26 [get_ports FEI4_A2_HIT_OR_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_HIT_OR_P]
-#set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_HIT_OR_N]
+# FEI4 A2 (LPC SLOT2) DOB
+set_property PACKAGE_PIN AC29 [get_ports FEI4_A2_DOB_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_DOB_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_DOB_N]
+# FEI4 A2 (LPC SLOT2) CMD
+set_property PACKAGE_PIN Y30 [get_ports FEI4_A2_CMD_OUT_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_CMD_OUT_N]
+# FEI4 A2 (LPC SLOT2) HITOR
+set_property PACKAGE_PIN AH26 [get_ports FEI4_A2_HIT_OR_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_HIT_OR_P]
+set_property IOSTANDARD LVDS_25 [get_ports FEI4_A2_HIT_OR_N]
 
 # FEI4 REF CLOCK and ADC Sampling CLK OUTPUT
 set_property PACKAGE_PIN AB12 [get_ports CLK40_OUT_P]

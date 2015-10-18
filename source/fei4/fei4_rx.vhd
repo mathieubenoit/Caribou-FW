@@ -110,7 +110,8 @@ Port map(
     CTRL_RDY         => IDELAY_CTRL_RDY,
     LD               => IDELAY_LD,
     CNT_IN           => IDELAY_CNT_IN
-);         
+);   
+
 
 data_deser:entity work.FEI4_DATA_DESER
     Port map ( 

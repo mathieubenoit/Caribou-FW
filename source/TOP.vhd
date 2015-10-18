@@ -920,7 +920,7 @@ Port MAP(
    IDELAY_CNT_IN    => fei4_idelay_cnt_in(4 downto 0)
 );
 
-fei4_a2_rx_1: entity work.FEI4_RX 
+fei4_a2_rx_1: entity work.FEI4_RX2 
 Port MAP(
    RESET => global_reset,
    
