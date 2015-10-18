@@ -37,36 +37,38 @@ port (
     ADC_DCLK_FREQ       :in  std_logic_vector(19 downto 0);
     ADC_FCLK_FREQ       :in  std_logic_vector(19 downto 0);
     ADC_FCLK_POS        :out std_logic_vector( 3 downto 0);	
-            
+    
+    --FEI4 configure module control signals        
     FEI4_CFG_FLG        :out std_logic;
     FEI4_CFG_REG        :out std_logic_vector(31 downto 0);
     FEI4_WR_REG_DAT     :out std_logic_vector(15 downto 0);
     FEI4_FR_RAM_ADDR    :out std_logic_vector(5 downto 0);
     FEI4_FR_RAM_DAT_IN  :out std_logic_vector(31 downto 0);
-    FEI4_FR_RAM_DAT_OUT :in std_logic_vector(31 downto 0);   
-    FEI4_DAT_POS_SEL    :out std_logic_vector(3 downto 0);
-    FEI4_FRAME_SYNC_EN  :out std_logic;
-    FEI4_FE_FR_RD_EN    :out std_logic;
-    FEI4_REG_ADDR_OUT   :in std_logic_vector(15 downto 0);
-    FEI4_REG_VALUE_OUT  :in std_logic_vector(15 downto 0);  
+    FEI4_FR_RAM_DAT_OUT :in std_logic_vector(31 downto 0);      
+    FEI4_CMD_PH_SEL     :out std_logic_vector(3 downto 0);
     
-    FEI4_IDELAY_CNT_OUT :in  std_logic_vector(4 downto 0);
-    FEI4_IDELAY_CTRL_RDY:in  std_logic;
-    FEI4_IDELAY_LD      :out std_logic;
-    FEI4_IDELAY_CNT_IN  :out std_logic_vector(4 downto 0)       					
+    --FEI4 RX module control signals        
+    FEI4_FRAME_SYNC_EN  :out std_logic_vector(1 downto 0);
+    FEI4_FE_FR_SR_EN    :out std_logic_vector(1 downto 0);
+    FEI4_REG_ADDR_OUT   :in std_logic_vector(31 downto 0);
+    FEI4_REG_VALUE_OUT  :in std_logic_vector(31 downto 0); 
+    --FEI4 IDELAY control signals     
+    FEI4_IDELAY_CNT_OUT :in  std_logic_vector(9 downto 0);
+    FEI4_IDELAY_CTRL_RDY:in  std_logic_vector(1 downto 0);
+    FEI4_IDELAY_LD      :out std_logic_vector(1 downto 0);
+    FEI4_IDELAY_CNT_IN  :out std_logic_vector(9 downto 0)       					
 );		  
 end iobus_interface;
   
-
 architecture Behavioral of iobus_interface is
 
-constant CTRLBASEADDR				: std_logic_vector(15 downto 0) := x"43c0";
-signal wr :std_logic;
-signal rd :std_logic;
-signal addr :std_logic_vector(31 downto 0);
-signal rdack_i :std_logic;
-signal wrack_i :std_logic;
-signal ip2bus_data_i :std_logic_vector(31 downto 0);
+constant CTRLBASEADDR	 : std_logic_vector(15 downto 0) := x"43c0";
+signal wr                :std_logic;
+signal rd                :std_logic;
+signal addr              :std_logic_vector(31 downto 0);
+signal rdack_i           :std_logic;
+signal wrack_i           :std_logic;
+signal ip2bus_data_i     :std_logic_vector(31 downto 0);
 
 
 begin
@@ -96,81 +98,75 @@ begin
 			if rising_edge(SYSCLK) then
 				if  (addr(31 downto 8) = BASE_ADDR(31 downto 8)) then
 					case addr(15 downto 0) is
-						--ADC DCLK frequency readout
+
                         when x"0004" =>   if (wr = '1') then GLB_RST <= Bus2IP_Data(0); 
                                           end if;
- -------ADC                                        						
+                                          
+                        --ADC FCLK frequency readout                                       						
                         when x"0008" =>   if (rd = '1') then 
                                                 ip2bus_data_i(19 downto 0) <= ADC_DCLK_FREQ;
                                                 ip2bus_data_i(31 downto 20)<= (others => '0');
                                           else  ip2bus_data_i  <= (others => '0');
-                                          end if;
-                    
-                        --ADC FCLK frequency readout
+                                          end if;  
                         when x"000C" =>   if (rd = '1') then ip2bus_data_i(19 downto 0) <= ADC_FCLK_FREQ;
                                                              ip2bus_data_i(31 downto 20)<= (others => '0');                    
                                           else               ip2bus_data_i              <= (others => '0');
-                                          end if;           
-                                                     					                       
-						--LVDS Frame sample position setting
+                                          end if;                                                                					                       
+						--ADC LVDS Frame sample position setting
                         when x"0010" =>   if (wr = '1' ) then ADC_FCLK_POS  <= Bus2IP_Data(3 downto 0); 
                                           end if;
---------FEI4 CFG                                        
-                        -- FEI4 CONFIGURE BLOCK
+                                     
+                        -- FEI4 configuration module control signals
                         when x"0014" =>   if (wr = '1') then FEI4_CFG_FLG <= Bus2IP_Data(0);
-                                          end if;
-                                         
+                                          end if;                                        
                         when x"0018" =>   if (wr = '1') then  FEI4_CFG_REG <= Bus2IP_Data; 
-                                          end if;
-                                        
+                                          end if;                                       
                         when x"0020" =>   if (wr = '1') then  FEI4_WR_REG_DAT <= Bus2IP_Data(15 downto 0); 
                                                         end if;
---------FEI4 RX                                                        
-                        when x"0024" =>   if (wr = '1') then  FEI4_DAT_POS_SEL <= Bus2IP_Data(3 downto 0); 
-                                                        end if;   
-                                                        
-                        when x"0028" =>   if (wr = '1') then  FEI4_FRAME_SYNC_EN <= Bus2IP_Data(0); 
-                                                        end if;       
+                        when x"0024" =>   if (wr = '1') then  FEI4_CMD_PH_SEL <= Bus2IP_Data(3 downto 0); 
+                                                        end if;                                                          
+                        --FEI4 CFG RAM                                        
+                        when x"0028" =>   if(wr = '1') then FEI4_FR_RAM_ADDR <= Bus2IP_Data(5 downto 0);
+                                          end if;                        
+                        when x"002c" =>   if(wr = '1') then FEI4_FR_RAM_DAT_IN <= Bus2IP_Data;
+                                          elsif (rd = '1') then ip2bus_data_i <= FEI4_FR_RAM_DAT_OUT;
+                                          end if;                                                        
+                        
+                        -- FEI4 RX module control signals                                 
+                        when x"0030" =>   if(wr = '1') then  FEI4_FRAME_SYNC_EN <= Bus2IP_Data(1 downto 0); 
+                                          end if;           
+                        when x"0034" =>   if (wr = '1') then  FEI4_FE_FR_SR_EN <= Bus2IP_Data(1 downto 0); 
+                                      end if;                                 
+                        when x"0038" =>   if(rd = '1') then ip2bus_data_i <= FEI4_REG_ADDR_OUT;
+                                          end if;                                      
 
-                        when x"002C" =>   if (rd = '1' ) then 
-                                              ip2bus_data_i(31 downto 8)<= (others => '0');
-                                              ip2bus_data_i(7)          <= FEI4_IDELAY_CTRL_RDY;
-                                              ip2bus_data_i(6 downto 5) <= (others => '0');
-                                              ip2bus_data_i(4 downto 0) <= FEI4_IDELAY_CNT_OUT; 
+                        when x"003C" =>   if(rd = '1') then ip2bus_data_i <= FEI4_REG_VALUE_OUT;
+                                          end if;                                                                
+                        -- FEI4 Data input delay control signals
+                        when x"0040" =>   if (rd = '1' ) then 
+                                              ip2bus_data_i(31 downto 16)<= (others => '0');
+                                              ip2bus_data_i(15)          <= FEI4_IDELAY_CTRL_RDY(1);
+                                              ip2bus_data_i(14 downto 13)<= (others => '0');
+                                              ip2bus_data_i(12 downto 8) <= FEI4_IDELAY_CNT_OUT(9 downto 5); 
+                                              ip2bus_data_i(7)           <= FEI4_IDELAY_CTRL_RDY(0);
+                                              ip2bus_data_i(6 downto 5)  <= (others => '0');
+                                              ip2bus_data_i(4 downto 0)  <= FEI4_IDELAY_CNT_OUT(4 downto 0); 
                                           else                
                                               ip2bus_data_i             <= (others => '0');
                                           end if;
-                          
-                        --FEI4 DATA DELAY tap value load
-                        when x"0030" =>   if (wr = '1' ) then FEI4_IDELAY_CNT_IN  <= Bus2IP_Data(4 downto 0); 
+                        when x"0044" =>   if (wr = '1' ) then FEI4_IDELAY_CNT_IN  <= Bus2IP_Data(9 downto 0); 
                                           end if;
-                        
-                        --FEI4 DATA DELAY load
-                        when x"0034" =>   if (wr = '1' ) then FEI4_IDELAY_LD  <= Bus2IP_Data(0); 
-                                          end if;                
-------FEI4 CFG RAM                                        
-                        when x"0038" =>   if(wr = '1') then FEI4_FR_RAM_ADDR <= Bus2IP_Data(5 downto 0);
-                                          end if;
-                        
-                        when x"003c" =>   if(wr = '1') then FEI4_FR_RAM_DAT_IN <= Bus2IP_Data;
-                                          elsif (rd = '1') then ip2bus_data_i <= FEI4_FR_RAM_DAT_OUT;
-                                          end if;
-------FEI4 RX                                          
-                        when x"0040" =>   if(rd = '1') then ip2bus_data_i(15 downto 0) <= FEI4_REG_ADDR_OUT;
-                                                            ip2bus_data_i(31 downto 16)<= (others => '0');
-                                          end if;                                      
-
-                        when x"0044" =>   if(rd = '1') then ip2bus_data_i(15 downto 0) <= FEI4_REG_VALUE_OUT;
-                                                            ip2bus_data_i(31 downto 16)<= (others => '0');
-                                          end if;   
-------AXI HP                                                                               
+                        when x"0048" =>   if (wr = '1' ) then FEI4_IDELAY_LD  <= Bus2IP_Data(1 downto 0); 
+                                          end if;      
+                                                                                                                                                                                 
+                        ------AXI HP                                                                               
                         when x"005C" =>   if (wr = '1')  then  HP_GEN_RST      <= Bus2IP_Data(3 downto 0); 
                                           end if; 
                                                                                                                                
                         when x"0060" =>   if (wr = '1')  then  
                                               HP_TRIGER       <= Bus2IP_Data(3 downto 0); 
                                               HP_FIFO_RST     <= Bus2IP_Data(7 downto 4);
-                                              HP_ADDR_RST      <= Bus2IP_Data(11 downto 8); 
+                                              HP_ADDR_RST     <= Bus2IP_Data(11 downto 8); 
                                           end if; 
                                          
                         when x"0064" =>   if (wr = '1')  then  HP_BURST_EN <= Bus2IP_Data(3 downto 0); 
@@ -197,10 +193,7 @@ begin
                                           
                         when x"007c" =>   if (wr = '1') then HP2_BURST_LAST_RD <= Bus2IP_Data(0);                                         
                                           end if;   
-                       
-                        when x"0080" =>   if (wr = '1') then  FEI4_FE_FR_RD_EN <= Bus2IP_Data(0); 
-                                                  end if;    
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            											
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    											
 						when others =>
 										  ip2bus_data_i(19 downto 0) <= (others => '0');
 				   end case;
