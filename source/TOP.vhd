@@ -439,8 +439,8 @@ tied_to_vcc <= '1';
 --LVDS Input Buffer 
 FEI4_HITOR_BUF :IBUFDS
 generic map (
-DIFF_TERM => TRUE, -- Differential Termination
-IBUF_LOW_PWR => FALSE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+DIFF_TERM => TRUE, 
+IBUF_LOW_PWR => FALSE, 
 IOSTANDARD => "LVDS_25")
 port map (
 O => fei4_hit_or_un_sync, 
@@ -454,8 +454,8 @@ begin
     fei4_hit_or_sync <= fei4_hit_or_un_sync;
   end if;
 end process;
-----------------------MMCM MODULE-------------------------------------------
-------------- Begin Cut here for INSTANTIATION Template ----- INST_TAG
+
+
 clk_gen: clk_wiz_0
    port map ( 
 
@@ -475,18 +475,7 @@ clk_gen: clk_wiz_0
  
 mmcm_reset <= tied_to_ground;
 
---si5324_clk_buf: OBUFDS
---generic map (
---    IOSTANDARD => "DEFAULT", -- Specify the output I/O standard
---    SLEW => "SLOW"-- Specify the output slew rate
---    ) 
---  port map (
---    O  => CLK_SI5324_P, -- Diff_p output (connect directly to top-level port)
---    OB => CLK_SI5324_N, -- Diff_n output (connect directly to top-level port)
---    I =>  clk100m  -- Buffer input
---);
-
-ads5292_a_input:ads5292_lvds 
+ads5292_a_input:entity work.ads5292_lvds 
   Port map ( 
    RESET   => global_reset,
    SYSCLK  =>   clk100m,
@@ -522,52 +511,7 @@ ads5292_a_input:ads5292_lvds
    FCLKFREQ => adc_fclk_freq_t         
    );
 
---ads5292_b_input:ads5292_lvds 
---  Port map ( 
---   RESET   => global_reset,
---   SYSCLK  =>   clk100m,
---   CLK200  =>   clk200m,
---   CLK40   =>   clk40m,
---   FCLKP   =>   ADC_FCLKP,
---   FCLKM   =>   ADC_FCLKM,
---   DCLKP   =>   ADC_DCLKP,
---   DCLKM   =>   ADC_DCLKM,
---   DOUTP1  =>   ADC_DOUTP1,
---   DOUTM1  =>   ADC_DOUTM1,
---   DOUTP2  =>   ADC_DOUTP2,
---   DOUTM2  =>   ADC_DOUTM2,
---   DOUTP3  =>   ADC_DOUTP3,
---   DOUTM3  =>   ADC_DOUTM3,
---   DOUTP4  =>   ADC_DOUTP4,
---   DOUTM4  =>   ADC_DOUTM4,
---   DOUTP5  =>   ADC_DOUTP5,
---   DOUTM5  =>   ADC_DOUTM5,
---   DOUTP6  =>   ADC_DOUTP6,
---   DOUTM6  =>   ADC_DOUTM6,
-  
---   CH1_DATA_OUT  =>  adc_lvds_ch1_data,
---   CH2_DATA_OUT  =>  adc_lvds_ch2_data,
---   CH3_DATA_OUT  =>  adc_lvds_ch3_data,
---   CH4_DATA_OUT  =>  adc_lvds_ch4_data,
---   CH5_DATA_OUT  =>  adc_lvds_ch5_data,
---   CH6_DATA_OUT  =>  adc_lvds_ch6_data,
---   LVDS_FCLK     =>  adc_lvds_fclk,
-      
---   FCLK_POS => adc_fclk_pos,
---   DCLKFREQ => adc_dclk_freq_t,
---   FCLKFREQ => adc_fclk_freq_t         
---   );
 
---test_bram: blk_mem_gen_0
---  PORT MAP (
---    clka => ps7_bram_porta_clk_t,
---    ena => ps7_bram_porta_en_t,
---    wea => ps7_bram_porta_we_t(0),
---    addra => ps7_bram_porta_addr_t(7 downto 0),
---    dina => ps7_bram_porta_din_t(15 downto 0),
---    douta => ps7_bram_porta_dout_t(15 downto 0)
---  );
-   
 ps7_i:ps7_wrapper
   port map (
       ACLK => ps7_aclk,
@@ -661,7 +605,7 @@ ps7_i:ps7_wrapper
     );
 
 hp0_data_gen_trig <= hp_data_gen_softtrig(0);
-data_gen_hp0:axi_data_gen   
+data_gen_hp0:entity work.axi_data_gen   
   port map(
      adc_clk             => adc_lvds_fclk, 
      reset               => hp_data_gen_softreset(0),   --iobus
@@ -685,7 +629,7 @@ data_gen_hp0:axi_data_gen
      adcburst_active     => hp0_data_gen_burst_active       --ila
   );     
        
-axi_hp0_burst:axi_mburst
+axi_hp0_burst:entity work.axi_mburst
       Generic map
       (
       start_addr => X"000_0000",
@@ -724,7 +668,7 @@ axi_hp0_burst:axi_mburst
   );
 
 hp2_burst_fifo_wrdata_t(31 downto 8) <= (others => '0');
-axi_hp2_burst:axi_mburst1
+axi_hp2_burst:entity work.axi_mburst1
       Generic map
       (
       start_addr => X"000_0000",
@@ -765,7 +709,7 @@ axi_hp2_burst:axi_mburst1
         axi_bready    => m_axi_hp2_bready_t
   );
   
-ps_pl_interface:axi_lite_ipif
+ps_pl_interface:entity work.axi_lite_ipif
   generic map(
     C_IPIF_ABUS_WIDTH   => 32,
     C_IPIF_DBUS_WIDTH   => 32,
@@ -815,7 +759,7 @@ ps_pl_interface:axi_lite_ipif
     IP2Bus_Error        => '0'
     );
 
-pl_iic:iic_controller
+pl_iic:entity work.iic_controller
   generic map(
     BASE_ADDR => X"43c00100"
     )
@@ -835,7 +779,7 @@ pl_iic:iic_controller
     SDA            => IIC2_SDA
 );
 
-ccpd_inj_gen:pulse_gen
+ccpd_inj_gen:entity work.pulse_gen
 generic map (
   BASE_ADDR      => X"43c00200"
   )
@@ -859,7 +803,7 @@ generic map (
   PULSE_OUT4     => ccpd_inj_pulse_b2
   );  
 
-ccpd_cfg:ccpd_cfg_tb
+ccpd_cfg:entity work.ccpd_cfg_tb
 Generic map(
   BASE_ADDR => x"43c00300"
   )
@@ -882,7 +826,7 @@ Port map (
     Ld             => ccpd_ld
  );      
     
-control_interface:iobus_interface 
+control_interface:entity work.iobus_interface 
    generic map (
      BASE_ADDR => X"43c00000"
         )
@@ -933,7 +877,7 @@ control_interface:iobus_interface
     HP2_BURST_ADDR  => hp2_burst_addr_t
     );	  
  
-fei4_a1_cfg:FEI4B_CFG
+fei4_a1_cfg:entity work.FEI4B_CFG
       Port map(
           
       RST      => global_reset,
@@ -997,7 +941,7 @@ fei4_a1_cfg:FEI4B_CFG
 --      CMD_OUT_N => FEI4_B2_CMD_OUT_N  
 --      ); 
     
-fei4_rx_1:FEI4_RX 
+fei4_rx_1: entity work.FEI4_RX 
     Port MAP(
        RESET => global_reset,
        
