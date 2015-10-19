@@ -79,36 +79,28 @@ entity gbt_fpga_core is
       
       -- General reset:
       -----------------
-      
---		TDI, TCK, TMS: in std_logic;
---		TDO: out std_logic;
-		
       GENERAL_RESET_I                           : in  std_logic;
       
       -- Manual resets:
-      -----------------
-      
+      -----------------      
       MANUAL_RESET_TX_I                         : in  std_logic;
       MANUAL_RESET_RX_I                         : in  std_logic;
       
       --===============--
       -- Clocks scheme --
-      --===============--
-      
+      --===============--  
+         
       -- Fabric clock:      
-      ----------------
-      
-      FABRIC_CLK_I                              : in  std_logic; 
+      ----------------     
+      FABRIC_CLK_I                              : in  std_logic;       
       
       -- MGT (GTX) reference clock:
-      -----------------------------
-      
+      -----------------------------     
       MGT_REFCLK_I                              : in  std_logic;
       
       --==============--
       -- Serial lanes --
-      --==============--
-      
+      --==============--     
       MGT_TX_P                                  : out std_logic; 
       MGT_TX_N                                  : out std_logic; 
       MGT_RX_P                                  : in  std_logic;
@@ -116,8 +108,7 @@ entity gbt_fpga_core is
       
       --=================--
       -- General control --
-      --=================--
-      
+      --=================--     
       LOOPBACK_I                                : in  std_logic_vector(2 downto 0);  
       TX_ISDATA_SEL_I                           : in  std_logic;
       ------------------------------------------    
@@ -133,34 +124,29 @@ entity gbt_fpga_core is
       
       --===============--
       -- GBT Bank data -- 
-      --===============--
-      
+      --===============--     
       -- TX data:
-      -----------
-      
+      -----------     
       TX_DATA_O                                 : out std_logic_vector(83 downto 0); 
       TX_EXTRA_DATA_WIDEBUS_O                   : out std_logic_vector(31 downto 0);     
       TX_EXTRA_DATA_GBT8B10B_O                  : out std_logic_vector( 3 downto 0);
       
       -- RX data:
-      -----------
-      
+      -----------     
       RX_DATA_O                                 : out std_logic_vector(83 downto 0);
       RX_EXTRA_DATA_WIDEBUS_O                   : out std_logic_vector(31 downto 0);
       RX_EXTRA_DATA_GBT8B10B_O                  : out std_logic_vector( 3 downto 0);
       
       --==============--
       -- Test control --
-      --==============--
-      
+      --==============--   
+     
       -- Test pattern:
-      ----------------
-      
+      ----------------     
       TEST_PATTERN_SEL_I                        : in  std_logic_vector(1 downto 0);      
       
       -- Error detection:
-      -------------------      
-      
+      -------------------            
       RESET_DATA_ERRORSEEN_FLAG_I               : in  std_logic;
       RESET_GBTRXREADY_LOST_FLAG_I              : in  std_logic;
       ------------------------------------------
@@ -169,13 +155,10 @@ entity gbt_fpga_core is
       RXEXTRADATA_WIDEBUS_ERRORSEEN_FLAG_O      : out std_logic;
       RXEXTRADATA_GBT8B10B_ERRORSEEN_FLAG_O     : out std_logic;
       
-      --=====================--
-      -- Latency measurement --
-      --=====================--
-      
+
+      --=====================--      
       -- Clocks forwarding:
-      ---------------------
-      
+      ---------------------   
       TX_FRAMECLK_O                             : out std_logic;
       TX_WORDCLK_O                              : out std_logic;
       RX_FRAMECLK_O                             : out std_logic;
@@ -183,7 +166,6 @@ entity gbt_fpga_core is
       
       -- Pattern match flags:
       -----------------------
-      
       TX_MATCHFLAG_O                            : out std_logic;
       RX_MATCHFLAG_O                            : out std_logic       
      
