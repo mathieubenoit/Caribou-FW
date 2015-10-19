@@ -67,7 +67,7 @@ use work.gbt_banks_user_setup.all;
 --#######################################   Entity   ##############################################--
 --=================================================================================================--
 
-entity xlx_k7v7_gbt_example_design is   
+entity gbt_fpga_core is   
    generic (
       GBTBANK_RESET_CLK_FREQ                    : integer := 156e6 
    );
@@ -188,13 +188,13 @@ entity xlx_k7v7_gbt_example_design is
       RX_MATCHFLAG_O                            : out std_logic       
      
    );
-end xlx_k7v7_gbt_example_design;
+end gbt_fpga_core;
 
 --=================================================================================================--
 --####################################   Architecture   ###########################################-- 
 --=================================================================================================--
 
-architecture structural of xlx_k7v7_gbt_example_design is  
+architecture structural of gbt_fpga_core is  
    
    --================================ Signal Declarations ================================--   
   

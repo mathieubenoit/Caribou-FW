@@ -98,7 +98,27 @@ entity TOP is
     
     --40MHz Clock output for CaR Board
     CLK40_OUT_P                                  : out STD_LOGIC;
-    CLK40_OUT_N                                  : out STD_LOGIC                                 
+    CLK40_OUT_N                                  : out STD_LOGIC;
+    
+    --GBT FPGA IOs
+    CPU_RESET                                    : in  std_logic;     
+    
+    USER_CLOCK_P                                 : in  std_logic;
+    USER_CLOCK_N                                 : in  std_logic;      
+    
+    SMA_MGT_REFCLK_P                             : in  std_logic;
+    SMA_MGT_REFCLK_N                             : in  std_logic; 
+    
+    SFP_TX_P                                     : out std_logic;
+    SFP_TX_N                                     : out std_logic;
+    SFP_RX_P                                     : in  std_logic;
+    SFP_RX_N                                     : in  std_logic;                  
+    SFP_TX_DISABLE                               : out std_logic;
+    
+    GPIO_LED_LEFT                                : out std_logic;
+    GPIO_LED_CENTER                              : out std_logic;
+    GPIO_LED_RIGHT                               : out std_logic;
+    GPIO_LED_0                                   : out std_logic                                 
 
 );
 end TOP;
@@ -964,6 +984,28 @@ Port MAP(
    IDELAY_LD        => fei4_idelay_ld(1),
    IDELAY_CNT_IN    => fei4_idelay_cnt_in(9 downto 5)
 );
+
+gbt_link:entity work.gbt_fpga_wrapper
+ port map (                 
+    CPU_RESET           =>  CPU_RESET,
+    
+    USER_CLOCK_P        =>  USER_CLOCK_P,
+    USER_CLOCK_N        =>  USER_CLOCK_N,    
+    
+    SMA_MGT_REFCLK_P    =>  SMA_MGT_REFCLK_P,
+    SMA_MGT_REFCLK_N    =>  SMA_MGT_REFCLK_N,
+    
+    SFP_TX_P            =>  SFP_TX_P,
+    SFP_TX_N            =>  SFP_TX_N,
+    SFP_RX_P            =>  SFP_RX_P,
+    SFP_RX_N            =>  SFP_RX_N,                 
+    SFP_TX_DISABLE      =>  SFP_TX_DISABLE,
+    
+    GPIO_LED_LEFT       =>  GPIO_LED_LEFT,
+    GPIO_LED_CENTER     =>  GPIO_LED_CENTER,
+    GPIO_LED_RIGHT      =>  GPIO_LED_RIGHT,
+    GPIO_LED_0          =>  GPIO_LED_0
+);  
   
 REFCLK_OUT_BUF:OBUFDS
 generic map (
