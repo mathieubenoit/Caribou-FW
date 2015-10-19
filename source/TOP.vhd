@@ -263,8 +263,11 @@ signal fei4_wr_reg_dat         :std_logic_vector(15 downto 0);
 signal fei4_cmd_ph_sel         :std_logic_vector(3 downto 0);
 signal fei4_bit_slip           :std_logic;
 signal fei4_cmd_out_ph_sel     :std_logic_vector(1 downto 0);
-signal fei4_hit_or_un_sync     :std_logic;
-signal fei4_hit_or_sync        :std_logic;
+
+signal fei4_a1_hit_or_un_sync  :std_logic;
+signal fei4_a2_hit_or_un_sync  :std_logic;
+signal fei4_a1_hit_or_sync     :std_logic;
+signal fei4_a2_hit_or_sync     :std_logic;
 
 signal fei4_data_out           :std_logic_vector(7 downto 0);
 signal fei4_data_fifo_wr_en    :std_logic;
@@ -426,15 +429,29 @@ generic map (
     IOSTANDARD => "LVDS_25"
 )
 port map (
-O => fei4_hit_or_un_sync, 
+O => fei4_a1_hit_or_un_sync, 
 I  => FEI4_A1_HIT_OR_P, 
 IB => FEI4_A1_HIT_OR_N 
+);
+
+--LVDS Input Buffer 
+FEI4_HITOR_BUF :IBUFDS
+generic map (
+    DIFF_TERM => TRUE, 
+    IBUF_LOW_PWR => FALSE, 
+    IOSTANDARD => "LVDS_25"
+)
+port map (
+O => fei4_a2_hit_or_un_sync, 
+I  => FEI4_A2_HIT_OR_P, 
+IB => FEI4_A2_HIT_OR_N 
 );
 
 process(clk160m)
 begin
   if rising_edge(clk160m) then
-    fei4_hit_or_sync <= fei4_hit_or_un_sync;
+    fei4_a1_hit_or_sync <= fei4_a1_hit_or_un_sync;
+    fei4_a2_hit_or_sync <= fei4_a2_hit_or_un_sync;
   end if;
 end process;
 
