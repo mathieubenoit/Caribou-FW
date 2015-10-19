@@ -290,10 +290,9 @@ signal fei4_a2_hit_or_un_sync  :std_logic;
 signal fei4_a1_hit_or_sync     :std_logic;
 signal fei4_a2_hit_or_sync     :std_logic;
 
-signal fei4_data_out           :std_logic_vector(7 downto 0);
-signal fei4_data_fifo_wr_en    :std_logic;
---attribute MARK_DEBUG of fei4_hit_or_sync : signal is "TRUE";
+signal fei4_a1_data_out        :std_logic_vector(7 downto 0);
 signal fei4_a1_data_is_pix_dat :std_logic;
+signal fei4_a2_data_out        :std_logic_vector(7 downto 0);
 signal fei4_a2_data_is_pix_dat :std_logic;
 attribute MARK_DEBUG of fei4_a1_data_is_pix_dat,fei4_a2_data_is_pix_dat : signal is "TRUE";
 
@@ -950,7 +949,7 @@ Port MAP(
    REG_ADDR_OUT     => fei4_reg_addr_out(15 downto 0),
    REG_VALUE_OUT    => fei4_reg_value_out(15 downto 0),
 
-   DATA_OUT         => hp2_burst_fifo_wrdata_t(7 downto 0),
+   DATA_OUT         => fei4_a1_data_out,
    IS_PIX_DAT       => fei4_a1_data_is_pix_dat,
         
    IDELAY_REFCLK    => clk200m,
@@ -959,6 +958,7 @@ Port MAP(
    IDELAY_LD        => fei4_idelay_ld(0),
    IDELAY_CNT_IN    => fei4_idelay_cnt_in(4 downto 0)
 );
+hp2_burst_fifo_wrdata_t(7 downto 0) <= fei4_a1_data_out;
 
 fei4_a2_rx_1: entity work.FEI4_RX2 
 Port MAP(
@@ -975,7 +975,7 @@ Port MAP(
    REG_ADDR_OUT     => fei4_reg_addr_out(31 downto 16),
    REG_VALUE_OUT    => fei4_reg_value_out(31 downto 16),
 
-   DATA_OUT         => hp2_burst_fifo_wrdata_t(15 downto 8),
+   DATA_OUT         => fei4_a2_data_out,
    IS_PIX_DAT       => fei4_a2_data_is_pix_dat,
         
    IDELAY_REFCLK    => clk200m,
@@ -984,6 +984,27 @@ Port MAP(
    IDELAY_LD        => fei4_idelay_ld(1),
    IDELAY_CNT_IN    => fei4_idelay_cnt_in(9 downto 5)
 );
+hp2_burst_fifo_wrdata_t(15 downto 8) <= fei4_a2_data_out;
+
+fei4_to_gbt: entity work.fei4_gbt_interface
+Port map (
+    RST               => global_reset,
+    
+    FEI4_DAT_CLK      => clk16m,
+    FEI4_A1_RX_DAT_IN => fei4_a1_data_out,
+    FEI4_A1_RX_IS_PIX => fei4_a2_data_is_pix_dat,
+    FEI4_A2_RX_DAT_IN => fei4_a2_data_out,
+    FEI4_A2_RX_IS_PIX => fei4_a2_data_is_pix_dat,
+    --    FEI4_B1_RX_DAT_IN : in std_logic_vector(7 downto 0);
+    --    FEI4_B1_RX_IS_PIX : in std_logic;
+    --    FEI4_B2_RX_DAT_IN : in std_logic_vector(7 downto 0);
+    --    FEI4_B2_RX_IS_PIX : in std_logic;
+
+    GBT_WR_WORD_CLK   => clk40m
+    --    GBT_TX_IS_DAT     : out std_logic;
+    --    GBT_TX_DAT        : out std_logic_vector(83 downto 0)
+);
+
 
 gbt_link:entity work.gbt_fpga_wrapper
  port map (                 
