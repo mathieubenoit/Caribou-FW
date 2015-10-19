@@ -195,6 +195,7 @@ signal  rdack_t                :std_logic;
 signal  wrack_t                :std_logic;
 signal  ip2bus_error_t         :std_logic;
 signal  bus2ip_be_t            :std_logic_vector(3 downto 0);
+attribute MARK_DEBUG of bus2ip_addr_t,bus2ip_rd_t,bus2ip_wr_t,bus2ip_data_t,ip2bus_data_t,rdack_t,wrack_t,ip2bus_error_t,bus2ip_be_t: signal is "TRUE";
   
 signal hp_data_gen_softreset   :std_logic_vector(3 downto 0);
 signal hp_data_gen_softtrig    :std_logic_vector(3 downto 0);

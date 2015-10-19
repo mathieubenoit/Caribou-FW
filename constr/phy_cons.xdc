@@ -179,7 +179,6 @@ set_property IOSTANDARD LVDS_25 [get_ports ADC_DOUTP6]
 set_property IOSTANDARD LVDS_25 [get_ports ADC_DOUTM6]
 
 
-
 create_debug_core u_ila_0 ila
 set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
 set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0]
@@ -193,9 +192,28 @@ set_property port_width 1 [get_debug_ports u_ila_0/clk]
 connect_debug_port u_ila_0/clk [get_nets [list clk160]]
 set_property port_width 32 [get_debug_ports u_ila_0/probe0]
 connect_debug_port u_ila_0/probe0 [get_nets [list {hp2_burst_fifo_wrdata_t[0]} {hp2_burst_fifo_wrdata_t[1]} {hp2_burst_fifo_wrdata_t[2]} {hp2_burst_fifo_wrdata_t[3]} {hp2_burst_fifo_wrdata_t[4]} {hp2_burst_fifo_wrdata_t[5]} {hp2_burst_fifo_wrdata_t[6]} {hp2_burst_fifo_wrdata_t[7]} {hp2_burst_fifo_wrdata_t[8]} {hp2_burst_fifo_wrdata_t[9]} {hp2_burst_fifo_wrdata_t[10]} {hp2_burst_fifo_wrdata_t[11]} {hp2_burst_fifo_wrdata_t[12]} {hp2_burst_fifo_wrdata_t[13]} {hp2_burst_fifo_wrdata_t[14]} {hp2_burst_fifo_wrdata_t[15]} {hp2_burst_fifo_wrdata_t[16]} {hp2_burst_fifo_wrdata_t[17]} {hp2_burst_fifo_wrdata_t[18]} {hp2_burst_fifo_wrdata_t[19]} {hp2_burst_fifo_wrdata_t[20]} {hp2_burst_fifo_wrdata_t[21]} {hp2_burst_fifo_wrdata_t[22]} {hp2_burst_fifo_wrdata_t[23]} {hp2_burst_fifo_wrdata_t[24]} {hp2_burst_fifo_wrdata_t[25]} {hp2_burst_fifo_wrdata_t[26]} {hp2_burst_fifo_wrdata_t[27]} {hp2_burst_fifo_wrdata_t[28]} {hp2_burst_fifo_wrdata_t[29]} {hp2_burst_fifo_wrdata_t[30]} {hp2_burst_fifo_wrdata_t[31]}]]
+create_debug_core u_ila_1 ila
+set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_1]
+set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_1]
+set_property C_ADV_TRIGGER false [get_debug_cores u_ila_1]
+set_property C_DATA_DEPTH 1024 [get_debug_cores u_ila_1]
+set_property C_EN_STRG_QUAL false [get_debug_cores u_ila_1]
+set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_1]
+set_property C_TRIGIN_EN false [get_debug_cores u_ila_1]
+set_property C_TRIGOUT_EN false [get_debug_cores u_ila_1]
+set_property port_width 1 [get_debug_ports u_ila_1/clk]
+connect_debug_port u_ila_1/clk [get_nets [list clk100]]
+set_property port_width 20 [get_debug_ports u_ila_1/probe0]
+connect_debug_port u_ila_1/probe0 [get_nets [list {ads5292_a_input/dclk_freq[0]} {ads5292_a_input/dclk_freq[1]} {ads5292_a_input/dclk_freq[2]} {ads5292_a_input/dclk_freq[3]} {ads5292_a_input/dclk_freq[4]} {ads5292_a_input/dclk_freq[5]} {ads5292_a_input/dclk_freq[6]} {ads5292_a_input/dclk_freq[7]} {ads5292_a_input/dclk_freq[8]} {ads5292_a_input/dclk_freq[9]} {ads5292_a_input/dclk_freq[10]} {ads5292_a_input/dclk_freq[11]} {ads5292_a_input/dclk_freq[12]} {ads5292_a_input/dclk_freq[13]} {ads5292_a_input/dclk_freq[14]} {ads5292_a_input/dclk_freq[15]} {ads5292_a_input/dclk_freq[16]} {ads5292_a_input/dclk_freq[17]} {ads5292_a_input/dclk_freq[18]} {ads5292_a_input/dclk_freq[19]}]]
 create_debug_port u_ila_0 probe
 set_property port_width 1 [get_debug_ports u_ila_0/probe1]
-connect_debug_port u_ila_0/probe1 [get_nets [list hp2_burst_fifo_wren_t]]
+connect_debug_port u_ila_0/probe1 [get_nets [list fei4_a1_data_is_pix_dat]]
+create_debug_port u_ila_0 probe
+set_property port_width 1 [get_debug_ports u_ila_0/probe2]
+connect_debug_port u_ila_0/probe2 [get_nets [list fei4_a2_data_is_pix_dat]]
+create_debug_port u_ila_1 probe
+set_property port_width 20 [get_debug_ports u_ila_1/probe1]
+connect_debug_port u_ila_1/probe1 [get_nets [list {ads5292_a_input/fclk_freq[0]} {ads5292_a_input/fclk_freq[1]} {ads5292_a_input/fclk_freq[2]} {ads5292_a_input/fclk_freq[3]} {ads5292_a_input/fclk_freq[4]} {ads5292_a_input/fclk_freq[5]} {ads5292_a_input/fclk_freq[6]} {ads5292_a_input/fclk_freq[7]} {ads5292_a_input/fclk_freq[8]} {ads5292_a_input/fclk_freq[9]} {ads5292_a_input/fclk_freq[10]} {ads5292_a_input/fclk_freq[11]} {ads5292_a_input/fclk_freq[12]} {ads5292_a_input/fclk_freq[13]} {ads5292_a_input/fclk_freq[14]} {ads5292_a_input/fclk_freq[15]} {ads5292_a_input/fclk_freq[16]} {ads5292_a_input/fclk_freq[17]} {ads5292_a_input/fclk_freq[18]} {ads5292_a_input/fclk_freq[19]}]]
 set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
 set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
 set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
