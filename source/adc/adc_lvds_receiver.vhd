@@ -66,7 +66,7 @@ signal data_reg_p_l :std_logic_vector(5 downto 0);
 signal data_reg_n_l :std_logic_vector(5 downto 0);
 
 signal fclk_reg   :std_logic_vector(15 downto 0);
-signal latch_p :integer:=0;
+signal latch_p :integer range 0 to 15:=0;
 signal ch_valid :std_logic;
 signal ch_valid1 :std_logic;
 
