@@ -422,7 +422,7 @@ tied_to_ground <= '0';
 tied_to_vcc <= '1';
 
 --LVDS Input Buffer 
-FEI4_HITOR_BUF :IBUFDS
+FEI4_A1_HITOR_BUF :IBUFDS
 generic map (
     DIFF_TERM => TRUE, 
     IBUF_LOW_PWR => FALSE, 
@@ -435,7 +435,7 @@ IB => FEI4_A1_HIT_OR_N
 );
 
 --LVDS Input Buffer 
-FEI4_HITOR_BUF :IBUFDS
+FEI4_A2_HITOR_BUF:IBUFDS
 generic map (
     DIFF_TERM => TRUE, 
     IBUF_LOW_PWR => FALSE, 
