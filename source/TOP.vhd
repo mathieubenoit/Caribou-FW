@@ -219,7 +219,7 @@ signal hp2_burst_fifo_rdcnt_t  :std_logic_vector(7 downto 0);
 signal hp2_burst_addr_t        :std_logic_vector(31 downto 0);
 
 attribute MARK_DEBUG : string;
-attribute MARK_DEBUG of hp2_burst_fifo_wrdata_t,hp2_burst_fifo_wren_t : signal is "TRUE";
+attribute MARK_DEBUG of hp2_burst_fifo_wrdata_t: signal is "TRUE";
 
 --Bram controller signals
 signal ps7_bram_porta_addr_t   :std_logic_vector ( 15 downto 0 );
@@ -274,6 +274,7 @@ signal fei4_data_fifo_wr_en    :std_logic;
 --attribute MARK_DEBUG of fei4_hit_or_sync : signal is "TRUE";
 signal fei4_a1_data_is_pix_dat :std_logic;
 signal fei4_a2_data_is_pix_dat :std_logic;
+attribute MARK_DEBUG of fei4_a1_data_is_pix_dat,fei4_a2_data_is_pix_dat : signal is "TRUE";
 
 signal fei4_a2_cfg_flg         :std_logic;
 signal fei4_a2_cfg_reg         :std_logic_vector(31 downto 0);
@@ -894,7 +895,7 @@ Port map(
     CFG_REG         => fei4_cfg_reg,
     WR_REG_DAT      => fei4_wr_reg_dat,
     
-    CMD_OUT       => fei4_cmd_out
+    CMD_OUT         => fei4_cmd_out
 );
 
 --fei4_a2_cfg:FEI4B_CFG
@@ -912,7 +913,7 @@ Port map(
 --      );
 
 hp2_burst_fifo_wrdata_t(31 downto 16) <= (others => '0');  
-
+hp2_burst_fifo_wren_t <= fei4_a1_data_is_pix_dat;
 fei4_a1_rx_1: entity work.FEI4_RX 
 Port MAP(
    RESET => global_reset,
@@ -929,7 +930,7 @@ Port MAP(
    REG_VALUE_OUT    => fei4_reg_value_out(15 downto 0),
 
    DATA_OUT         => hp2_burst_fifo_wrdata_t(7 downto 0),
-   IS_PIX_DAT       => hp2_burst_fifo_wren_t,
+   IS_PIX_DAT       => fei4_a1_data_is_pix_dat,
         
    IDELAY_REFCLK    => clk200m,
    IDELAY_CNT_OUT   => fei4_idelay_cnt_out(4 downto 0),
