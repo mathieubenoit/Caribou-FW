@@ -664,7 +664,6 @@ port map(
     axi_bready    => m_axi_hp0_bready_t
   );
 
-hp2_burst_fifo_wrdata_t(31 downto 8) <= (others => '0');
 axi_hp2_burst:entity work.axi_mburst1
 Generic map
 (
@@ -911,7 +910,9 @@ Port map(
 --      CMD_OUT_P => FEI4_A2_CMD_OUT_P,
 --      CMD_OUT_N => FEI4_A2_CMD_OUT_N
 --      );
-  
+
+hp2_burst_fifo_wrdata_t(31 downto 16) <= (others => '0');  
+
 fei4_a1_rx_1: entity work.FEI4_RX 
 Port MAP(
    RESET => global_reset,
