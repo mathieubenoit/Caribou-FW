@@ -1,10 +1,10 @@
 -- Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2014.2 (win64) Build 932637 Wed Jun 11 13:33:10 MDT 2014
--- Date        : Mon Oct 19 17:25:16 2015
+-- Date        : Tue Oct 20 10:49:08 2015
 -- Host        : WPO-148239 running 64-bit Service Pack 1  (build 7601)
 -- Command     : write_vhdl -force -mode funcsim
---               c:/Hongbin/ITK/firmware_git/source/ip/fei4_data_fifo/fei4_data_fifo_funcsim.vhdl
+--               C:/Hongbin/ITK/firmware_git/source/ip/fei4_data_fifo/fei4_data_fifo_funcsim.vhdl
 -- Design      : fei4_data_fifo
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -16,7 +16,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity fei4_data_fifo_blk_mem_gen_prim_wrapper is
   port (
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -24,7 +24,7 @@ entity fei4_data_fifo_blk_mem_gen_prim_wrapper is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     I1 : in STD_LOGIC_VECTOR ( 4 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of fei4_data_fifo_blk_mem_gen_prim_wrapper : entity is "blk_mem_gen_prim_wrapper";
@@ -34,6 +34,7 @@ architecture STRUCTURE of fei4_data_fifo_blk_mem_gen_prim_wrapper is
   signal \n_24_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram\ : STD_LOGIC;
   signal \n_25_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram\ : STD_LOGIC;
   signal \n_26_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram\ : STD_LOGIC;
+  signal \n_27_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram\ : STD_LOGIC;
   signal \n_35_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram\ : STD_LOGIC;
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram_DOADO_UNCONNECTED\ : STD_LOGIC_VECTOR ( 15 downto 0 );
   signal \NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram_DOBDO_UNCONNECTED\ : STD_LOGIC_VECTOR ( 15 downto 8 );
@@ -171,11 +172,13 @@ begin
       DIADI(15) => '0',
       DIADI(14) => '0',
       DIADI(13) => '0',
-      DIADI(12 downto 8) => din(4 downto 0),
+      DIADI(12) => '0',
+      DIADI(11 downto 8) => din(3 downto 0),
       DIADI(7) => '0',
       DIADI(6) => '0',
       DIADI(5) => '0',
-      DIADI(4 downto 0) => din(9 downto 5),
+      DIADI(4) => '0',
+      DIADI(3 downto 0) => din(7 downto 4),
       DIBDI(15) => '0',
       DIBDI(14) => '0',
       DIBDI(13) => '0',
@@ -201,7 +204,8 @@ begin
       DOBDO(7) => \n_24_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram\,
       DOBDO(6) => \n_25_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram\,
       DOBDO(5) => \n_26_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram\,
-      DOBDO(4 downto 0) => dout(4 downto 0),
+      DOBDO(4) => \n_27_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram\,
+      DOBDO(3 downto 0) => dout(3 downto 0),
       DOPADOP(1 downto 0) => \NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram_DOPADOP_UNCONNECTED\(1 downto 0),
       DOPBDOP(1) => \NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram_DOPBDOP_UNCONNECTED\(1),
       DOPBDOP(0) => \n_35_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram\,
@@ -1534,7 +1538,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity fei4_data_fifo_blk_mem_gen_prim_width is
   port (
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -1542,7 +1546,7 @@ entity fei4_data_fifo_blk_mem_gen_prim_width is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     I1 : in STD_LOGIC_VECTOR ( 4 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of fei4_data_fifo_blk_mem_gen_prim_width : entity is "blk_mem_gen_prim_width";
@@ -1556,8 +1560,8 @@ begin
       I1(4 downto 0) => I1(4 downto 0),
       O1(3 downto 0) => O1(3 downto 0),
       Q(0) => Q(0),
-      din(9 downto 0) => din(9 downto 0),
-      dout(4 downto 0) => dout(4 downto 0),
+      din(7 downto 0) => din(7 downto 0),
+      dout(3 downto 0) => dout(3 downto 0),
       rd_clk => rd_clk,
       tmp_ram_rd_en => tmp_ram_rd_en,
       wr_clk => wr_clk
@@ -2109,7 +2113,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity fei4_data_fifo_blk_mem_gen_generic_cstr is
   port (
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2117,7 +2121,7 @@ entity fei4_data_fifo_blk_mem_gen_generic_cstr is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     I1 : in STD_LOGIC_VECTOR ( 4 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of fei4_data_fifo_blk_mem_gen_generic_cstr : entity is "blk_mem_gen_generic_cstr";
@@ -2131,8 +2135,8 @@ begin
       I1(4 downto 0) => I1(4 downto 0),
       O1(3 downto 0) => O1(3 downto 0),
       Q(0) => Q(0),
-      din(9 downto 0) => din(9 downto 0),
-      dout(4 downto 0) => dout(4 downto 0),
+      din(7 downto 0) => din(7 downto 0),
+      dout(3 downto 0) => dout(3 downto 0),
       rd_clk => rd_clk,
       tmp_ram_rd_en => tmp_ram_rd_en,
       wr_clk => wr_clk
@@ -2144,7 +2148,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity fei4_data_fifo_blk_mem_gen_top is
   port (
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2152,7 +2156,7 @@ entity fei4_data_fifo_blk_mem_gen_top is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     I1 : in STD_LOGIC_VECTOR ( 4 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of fei4_data_fifo_blk_mem_gen_top : entity is "blk_mem_gen_top";
@@ -2166,8 +2170,8 @@ begin
       I1(4 downto 0) => I1(4 downto 0),
       O1(3 downto 0) => O1(3 downto 0),
       Q(0) => Q(0),
-      din(9 downto 0) => din(9 downto 0),
-      dout(4 downto 0) => dout(4 downto 0),
+      din(7 downto 0) => din(7 downto 0),
+      dout(3 downto 0) => dout(3 downto 0),
       rd_clk => rd_clk,
       tmp_ram_rd_en => tmp_ram_rd_en,
       wr_clk => wr_clk
@@ -2179,7 +2183,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity fei4_data_fifo_blk_mem_gen_v8_2_synth is
   port (
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2187,7 +2191,7 @@ entity fei4_data_fifo_blk_mem_gen_v8_2_synth is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     I1 : in STD_LOGIC_VECTOR ( 4 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of fei4_data_fifo_blk_mem_gen_v8_2_synth : entity is "blk_mem_gen_v8_2_synth";
@@ -2201,8 +2205,8 @@ begin
       I1(4 downto 0) => I1(4 downto 0),
       O1(3 downto 0) => O1(3 downto 0),
       Q(0) => Q(0),
-      din(9 downto 0) => din(9 downto 0),
-      dout(4 downto 0) => dout(4 downto 0),
+      din(7 downto 0) => din(7 downto 0),
+      dout(3 downto 0) => dout(3 downto 0),
       rd_clk => rd_clk,
       tmp_ram_rd_en => tmp_ram_rd_en,
       wr_clk => wr_clk
@@ -2214,7 +2218,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity \fei4_data_fifo_blk_mem_gen_v8_2__parameterized0\ is
   port (
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2222,7 +2226,7 @@ entity \fei4_data_fifo_blk_mem_gen_v8_2__parameterized0\ is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     I1 : in STD_LOGIC_VECTOR ( 4 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of \fei4_data_fifo_blk_mem_gen_v8_2__parameterized0\ : entity is "blk_mem_gen_v8_2";
@@ -2236,8 +2240,8 @@ inst_blk_mem_gen: entity work.fei4_data_fifo_blk_mem_gen_v8_2_synth
       I1(4 downto 0) => I1(4 downto 0),
       O1(3 downto 0) => O1(3 downto 0),
       Q(0) => Q(0),
-      din(9 downto 0) => din(9 downto 0),
-      dout(4 downto 0) => dout(4 downto 0),
+      din(7 downto 0) => din(7 downto 0),
+      dout(3 downto 0) => dout(3 downto 0),
       rd_clk => rd_clk,
       tmp_ram_rd_en => tmp_ram_rd_en,
       wr_clk => wr_clk
@@ -2249,7 +2253,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity fei4_data_fifo_memory is
   port (
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
@@ -2257,7 +2261,7 @@ entity fei4_data_fifo_memory is
     Q : in STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     I1 : in STD_LOGIC_VECTOR ( 4 downto 0 );
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 )
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of fei4_data_fifo_memory : entity is "memory";
@@ -2271,8 +2275,8 @@ begin
       I1(4 downto 0) => I1(4 downto 0),
       O1(3 downto 0) => O1(3 downto 0),
       Q(0) => Q(0),
-      din(9 downto 0) => din(9 downto 0),
-      dout(4 downto 0) => dout(4 downto 0),
+      din(7 downto 0) => din(7 downto 0),
+      dout(3 downto 0) => dout(3 downto 0),
       rd_clk => rd_clk,
       tmp_ram_rd_en => tmp_ram_rd_en,
       wr_clk => wr_clk
@@ -2284,7 +2288,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity fei4_data_fifo_fifo_generator_ramfifo is
   port (
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     empty : out STD_LOGIC;
     full : out STD_LOGIC;
     rd_data_count : out STD_LOGIC_VECTOR ( 4 downto 0 );
@@ -2292,7 +2296,7 @@ entity fei4_data_fifo_fifo_generator_ramfifo is
     rd_en : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
     rst : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
@@ -2377,8 +2381,8 @@ begin
       I1(4 downto 0) => p_20_out(4 downto 0),
       O1(3 downto 0) => p_9_out(3 downto 0),
       Q(0) => rd_rst_i(0),
-      din(9 downto 0) => din(9 downto 0),
-      dout(4 downto 0) => dout(4 downto 0),
+      din(7 downto 0) => din(7 downto 0),
+      dout(3 downto 0) => dout(3 downto 0),
       rd_clk => rd_clk,
       tmp_ram_rd_en => tmp_ram_rd_en,
       wr_clk => wr_clk
@@ -2405,7 +2409,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity fei4_data_fifo_fifo_generator_top is
   port (
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     empty : out STD_LOGIC;
     full : out STD_LOGIC;
     rd_data_count : out STD_LOGIC_VECTOR ( 4 downto 0 );
@@ -2413,7 +2417,7 @@ entity fei4_data_fifo_fifo_generator_top is
     rd_en : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
     rst : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
@@ -2424,8 +2428,8 @@ architecture STRUCTURE of fei4_data_fifo_fifo_generator_top is
 begin
 \grf.rf\: entity work.fei4_data_fifo_fifo_generator_ramfifo
     port map (
-      din(9 downto 0) => din(9 downto 0),
-      dout(4 downto 0) => dout(4 downto 0),
+      din(7 downto 0) => din(7 downto 0),
+      dout(3 downto 0) => dout(3 downto 0),
       empty => empty,
       full => full,
       rd_clk => rd_clk,
@@ -2442,7 +2446,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity fei4_data_fifo_fifo_generator_v12_0_synth is
   port (
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     empty : out STD_LOGIC;
     full : out STD_LOGIC;
     rd_data_count : out STD_LOGIC_VECTOR ( 4 downto 0 );
@@ -2450,7 +2454,7 @@ entity fei4_data_fifo_fifo_generator_v12_0_synth is
     rd_en : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
     rst : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
@@ -2461,8 +2465,8 @@ architecture STRUCTURE of fei4_data_fifo_fifo_generator_v12_0_synth is
 begin
 \gconvfifo.rf\: entity work.fei4_data_fifo_fifo_generator_top
     port map (
-      din(9 downto 0) => din(9 downto 0),
-      dout(4 downto 0) => dout(4 downto 0),
+      din(7 downto 0) => din(7 downto 0),
+      dout(3 downto 0) => dout(3 downto 0),
       empty => empty,
       full => full,
       rd_clk => rd_clk,
@@ -2488,7 +2492,7 @@ entity \fei4_data_fifo_fifo_generator_v12_0__parameterized0\ is
     wr_rst : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
     rd_rst : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
     wr_en : in STD_LOGIC;
     rd_en : in STD_LOGIC;
     prog_empty_thresh : in STD_LOGIC_VECTOR ( 4 downto 0 );
@@ -2501,7 +2505,7 @@ entity \fei4_data_fifo_fifo_generator_v12_0__parameterized0\ is
     injectdbiterr : in STD_LOGIC;
     injectsbiterr : in STD_LOGIC;
     sleep : in STD_LOGIC;
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     full : out STD_LOGIC;
     almost_full : out STD_LOGIC;
     wr_ack : out STD_LOGIC;
@@ -2722,11 +2726,11 @@ entity \fei4_data_fifo_fifo_generator_v12_0__parameterized0\ is
   attribute C_DEFAULT_VALUE : string;
   attribute C_DEFAULT_VALUE of \fei4_data_fifo_fifo_generator_v12_0__parameterized0\ : entity is "BlankString";
   attribute C_DIN_WIDTH : integer;
-  attribute C_DIN_WIDTH of \fei4_data_fifo_fifo_generator_v12_0__parameterized0\ : entity is 10;
+  attribute C_DIN_WIDTH of \fei4_data_fifo_fifo_generator_v12_0__parameterized0\ : entity is 8;
   attribute C_DOUT_RST_VAL : string;
   attribute C_DOUT_RST_VAL of \fei4_data_fifo_fifo_generator_v12_0__parameterized0\ : entity is "0";
   attribute C_DOUT_WIDTH : integer;
-  attribute C_DOUT_WIDTH of \fei4_data_fifo_fifo_generator_v12_0__parameterized0\ : entity is 5;
+  attribute C_DOUT_WIDTH of \fei4_data_fifo_fifo_generator_v12_0__parameterized0\ : entity is 4;
   attribute C_ENABLE_RLOCS : integer;
   attribute C_ENABLE_RLOCS of \fei4_data_fifo_fifo_generator_v12_0__parameterized0\ : entity is 0;
   attribute C_FAMILY : string;
@@ -3632,8 +3636,8 @@ VCC: unisim.vcomponents.VCC
     );
 inst_fifo_gen: entity work.fei4_data_fifo_fifo_generator_v12_0_synth
     port map (
-      din(9 downto 0) => din(9 downto 0),
-      dout(4 downto 0) => dout(4 downto 0),
+      din(7 downto 0) => din(7 downto 0),
+      dout(3 downto 0) => dout(3 downto 0),
       empty => empty,
       full => full,
       rd_clk => rd_clk,
@@ -3653,10 +3657,10 @@ entity fei4_data_fifo is
     rst : in STD_LOGIC;
     wr_clk : in STD_LOGIC;
     rd_clk : in STD_LOGIC;
-    din : in STD_LOGIC_VECTOR ( 9 downto 0 );
+    din : in STD_LOGIC_VECTOR ( 7 downto 0 );
     wr_en : in STD_LOGIC;
     rd_en : in STD_LOGIC;
-    dout : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 3 downto 0 );
     full : out STD_LOGIC;
     empty : out STD_LOGIC;
     rd_data_count : out STD_LOGIC_VECTOR ( 4 downto 0 )
@@ -3670,7 +3674,7 @@ entity fei4_data_fifo is
   attribute CHECK_LICENSE_TYPE : string;
   attribute CHECK_LICENSE_TYPE of fei4_data_fifo : entity is "fei4_data_fifo,fifo_generator_v12_0,{}";
   attribute core_generation_info : string;
-  attribute core_generation_info of fei4_data_fifo : entity is "fei4_data_fifo,fifo_generator_v12_0,{x_ipProduct=Vivado 2014.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=fifo_generator,x_ipVersion=12.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,C_COMMON_CLOCK=0,C_COUNT_TYPE=0,C_DATA_COUNT_WIDTH=4,C_DEFAULT_VALUE=BlankString,C_DIN_WIDTH=10,C_DOUT_RST_VAL=0,C_DOUT_WIDTH=5,C_ENABLE_RLOCS=0,C_FAMILY=zynq,C_FULL_FLAGS_RST_VAL=1,C_HAS_ALMOST_EMPTY=0,C_HAS_ALMOST_FULL=0,C_HAS_BACKUP=0,C_HAS_DATA_COUNT=0,C_HAS_INT_CLK=0,C_HAS_MEMINIT_FILE=0,C_HAS_OVERFLOW=0,C_HAS_RD_DATA_COUNT=1,C_HAS_RD_RST=0,C_HAS_RST=1,C_HAS_SRST=0,C_HAS_UNDERFLOW=0,C_HAS_VALID=0,C_HAS_WR_ACK=0,C_HAS_WR_DATA_COUNT=0,C_HAS_WR_RST=0,C_IMPLEMENTATION_TYPE=2,C_INIT_WR_PNTR_VAL=0,C_MEMORY_TYPE=1,C_MIF_FILE_NAME=BlankString,C_OPTIMIZATION_MODE=0,C_OVERFLOW_LOW=0,C_PRELOAD_LATENCY=1,C_PRELOAD_REGS=0,C_PRIM_FIFO_TYPE=512x36,C_PROG_EMPTY_THRESH_ASSERT_VAL=2,C_PROG_EMPTY_THRESH_NEGATE_VAL=3,C_PROG_EMPTY_TYPE=0,C_PROG_FULL_THRESH_ASSERT_VAL=13,C_PROG_FULL_THRESH_NEGATE_VAL=12,C_PROG_FULL_TYPE=0,C_RD_DATA_COUNT_WIDTH=5,C_RD_DEPTH=32,C_RD_FREQ=1,C_RD_PNTR_WIDTH=5,C_UNDERFLOW_LOW=0,C_USE_DOUT_RST=1,C_USE_ECC=0,C_USE_EMBEDDED_REG=0,C_USE_PIPELINE_REG=0,C_POWER_SAVING_MODE=0,C_USE_FIFO16_FLAGS=0,C_USE_FWFT_DATA_COUNT=0,C_VALID_LOW=0,C_WR_ACK_LOW=0,C_WR_DATA_COUNT_WIDTH=4,C_WR_DEPTH=16,C_WR_FREQ=1,C_WR_PNTR_WIDTH=4,C_WR_RESPONSE_LATENCY=1,C_MSGON_VAL=1,C_ENABLE_RST_SYNC=1,C_ERROR_INJECTION_TYPE=0,C_SYNCHRONIZER_STAGE=2,C_INTERFACE_TYPE=0,C_AXI_TYPE=1,C_HAS_AXI_WR_CHANNEL=1,C_HAS_AXI_RD_CHANNEL=1,C_HAS_SLAVE_CE=0,C_HAS_MASTER_CE=0,C_ADD_NGC_CONSTRAINT=0,C_USE_COMMON_OVERFLOW=0,C_USE_COMMON_UNDERFLOW=0,C_USE_DEFAULT_SETTINGS=0,C_AXI_ID_WIDTH=1,C_AXI_ADDR_WIDTH=32,C_AXI_DATA_WIDTH=64,C_AXI_LEN_WIDTH=8,C_AXI_LOCK_WIDTH=1,C_HAS_AXI_ID=0,C_HAS_AXI_AWUSER=0,C_HAS_AXI_WUSER=0,C_HAS_AXI_BUSER=0,C_HAS_AXI_ARUSER=0,C_HAS_AXI_RUSER=0,C_AXI_ARUSER_WIDTH=1,C_AXI_AWUSER_WIDTH=1,C_AXI_WUSER_WIDTH=1,C_AXI_BUSER_WIDTH=1,C_AXI_RUSER_WIDTH=1,C_HAS_AXIS_TDATA=1,C_HAS_AXIS_TID=0,C_HAS_AXIS_TDEST=0,C_HAS_AXIS_TUSER=1,C_HAS_AXIS_TREADY=1,C_HAS_AXIS_TLAST=0,C_HAS_AXIS_TSTRB=0,C_HAS_AXIS_TKEEP=0,C_AXIS_TDATA_WIDTH=8,C_AXIS_TID_WIDTH=1,C_AXIS_TDEST_WIDTH=1,C_AXIS_TUSER_WIDTH=4,C_AXIS_TSTRB_WIDTH=1,C_AXIS_TKEEP_WIDTH=1,C_WACH_TYPE=0,C_WDCH_TYPE=0,C_WRCH_TYPE=0,C_RACH_TYPE=0,C_RDCH_TYPE=0,C_AXIS_TYPE=0,C_IMPLEMENTATION_TYPE_WACH=1,C_IMPLEMENTATION_TYPE_WDCH=1,C_IMPLEMENTATION_TYPE_WRCH=1,C_IMPLEMENTATION_TYPE_RACH=1,C_IMPLEMENTATION_TYPE_RDCH=1,C_IMPLEMENTATION_TYPE_AXIS=1,C_APPLICATION_TYPE_WACH=0,C_APPLICATION_TYPE_WDCH=0,C_APPLICATION_TYPE_WRCH=0,C_APPLICATION_TYPE_RACH=0,C_APPLICATION_TYPE_RDCH=0,C_APPLICATION_TYPE_AXIS=0,C_PRIM_FIFO_TYPE_WACH=512x36,C_PRIM_FIFO_TYPE_WDCH=1kx36,C_PRIM_FIFO_TYPE_WRCH=512x36,C_PRIM_FIFO_TYPE_RACH=512x36,C_PRIM_FIFO_TYPE_RDCH=1kx36,C_PRIM_FIFO_TYPE_AXIS=1kx18,C_USE_ECC_WACH=0,C_USE_ECC_WDCH=0,C_USE_ECC_WRCH=0,C_USE_ECC_RACH=0,C_USE_ECC_RDCH=0,C_USE_ECC_AXIS=0,C_ERROR_INJECTION_TYPE_WACH=0,C_ERROR_INJECTION_TYPE_WDCH=0,C_ERROR_INJECTION_TYPE_WRCH=0,C_ERROR_INJECTION_TYPE_RACH=0,C_ERROR_INJECTION_TYPE_RDCH=0,C_ERROR_INJECTION_TYPE_AXIS=0,C_DIN_WIDTH_WACH=32,C_DIN_WIDTH_WDCH=64,C_DIN_WIDTH_WRCH=2,C_DIN_WIDTH_RACH=32,C_DIN_WIDTH_RDCH=64,C_DIN_WIDTH_AXIS=1,C_WR_DEPTH_WACH=16,C_WR_DEPTH_WDCH=1024,C_WR_DEPTH_WRCH=16,C_WR_DEPTH_RACH=16,C_WR_DEPTH_RDCH=1024,C_WR_DEPTH_AXIS=1024,C_WR_PNTR_WIDTH_WACH=4,C_WR_PNTR_WIDTH_WDCH=10,C_WR_PNTR_WIDTH_WRCH=4,C_WR_PNTR_WIDTH_RACH=4,C_WR_PNTR_WIDTH_RDCH=10,C_WR_PNTR_WIDTH_AXIS=10,C_HAS_DATA_COUNTS_WACH=0,C_HAS_DATA_COUNTS_WDCH=0,C_HAS_DATA_COUNTS_WRCH=0,C_HAS_DATA_COUNTS_RACH=0,C_HAS_DATA_COUNTS_RDCH=0,C_HAS_DATA_COUNTS_AXIS=0,C_HAS_PROG_FLAGS_WACH=0,C_HAS_PROG_FLAGS_WDCH=0,C_HAS_PROG_FLAGS_WRCH=0,C_HAS_PROG_FLAGS_RACH=0,C_HAS_PROG_FLAGS_RDCH=0,C_HAS_PROG_FLAGS_AXIS=0,C_PROG_FULL_TYPE_WACH=0,C_PROG_FULL_TYPE_WDCH=0,C_PROG_FULL_TYPE_WRCH=0,C_PROG_FULL_TYPE_RACH=0,C_PROG_FULL_TYPE_RDCH=0,C_PROG_FULL_TYPE_AXIS=0,C_PROG_FULL_THRESH_ASSERT_VAL_WACH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_WDCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_WRCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_RACH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_RDCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_AXIS=1023,C_PROG_EMPTY_TYPE_WACH=0,C_PROG_EMPTY_TYPE_WDCH=0,C_PROG_EMPTY_TYPE_WRCH=0,C_PROG_EMPTY_TYPE_RACH=0,C_PROG_EMPTY_TYPE_RDCH=0,C_PROG_EMPTY_TYPE_AXIS=0,C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS=1022,C_REG_SLICE_MODE_WACH=0,C_REG_SLICE_MODE_WDCH=0,C_REG_SLICE_MODE_WRCH=0,C_REG_SLICE_MODE_RACH=0,C_REG_SLICE_MODE_RDCH=0,C_REG_SLICE_MODE_AXIS=0}";
+  attribute core_generation_info of fei4_data_fifo : entity is "fei4_data_fifo,fifo_generator_v12_0,{x_ipProduct=Vivado 2014.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=fifo_generator,x_ipVersion=12.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,C_COMMON_CLOCK=0,C_COUNT_TYPE=0,C_DATA_COUNT_WIDTH=4,C_DEFAULT_VALUE=BlankString,C_DIN_WIDTH=8,C_DOUT_RST_VAL=0,C_DOUT_WIDTH=4,C_ENABLE_RLOCS=0,C_FAMILY=zynq,C_FULL_FLAGS_RST_VAL=1,C_HAS_ALMOST_EMPTY=0,C_HAS_ALMOST_FULL=0,C_HAS_BACKUP=0,C_HAS_DATA_COUNT=0,C_HAS_INT_CLK=0,C_HAS_MEMINIT_FILE=0,C_HAS_OVERFLOW=0,C_HAS_RD_DATA_COUNT=1,C_HAS_RD_RST=0,C_HAS_RST=1,C_HAS_SRST=0,C_HAS_UNDERFLOW=0,C_HAS_VALID=0,C_HAS_WR_ACK=0,C_HAS_WR_DATA_COUNT=0,C_HAS_WR_RST=0,C_IMPLEMENTATION_TYPE=2,C_INIT_WR_PNTR_VAL=0,C_MEMORY_TYPE=1,C_MIF_FILE_NAME=BlankString,C_OPTIMIZATION_MODE=0,C_OVERFLOW_LOW=0,C_PRELOAD_LATENCY=1,C_PRELOAD_REGS=0,C_PRIM_FIFO_TYPE=512x36,C_PROG_EMPTY_THRESH_ASSERT_VAL=2,C_PROG_EMPTY_THRESH_NEGATE_VAL=3,C_PROG_EMPTY_TYPE=0,C_PROG_FULL_THRESH_ASSERT_VAL=13,C_PROG_FULL_THRESH_NEGATE_VAL=12,C_PROG_FULL_TYPE=0,C_RD_DATA_COUNT_WIDTH=5,C_RD_DEPTH=32,C_RD_FREQ=1,C_RD_PNTR_WIDTH=5,C_UNDERFLOW_LOW=0,C_USE_DOUT_RST=1,C_USE_ECC=0,C_USE_EMBEDDED_REG=0,C_USE_PIPELINE_REG=0,C_POWER_SAVING_MODE=0,C_USE_FIFO16_FLAGS=0,C_USE_FWFT_DATA_COUNT=0,C_VALID_LOW=0,C_WR_ACK_LOW=0,C_WR_DATA_COUNT_WIDTH=4,C_WR_DEPTH=16,C_WR_FREQ=1,C_WR_PNTR_WIDTH=4,C_WR_RESPONSE_LATENCY=1,C_MSGON_VAL=1,C_ENABLE_RST_SYNC=1,C_ERROR_INJECTION_TYPE=0,C_SYNCHRONIZER_STAGE=2,C_INTERFACE_TYPE=0,C_AXI_TYPE=1,C_HAS_AXI_WR_CHANNEL=1,C_HAS_AXI_RD_CHANNEL=1,C_HAS_SLAVE_CE=0,C_HAS_MASTER_CE=0,C_ADD_NGC_CONSTRAINT=0,C_USE_COMMON_OVERFLOW=0,C_USE_COMMON_UNDERFLOW=0,C_USE_DEFAULT_SETTINGS=0,C_AXI_ID_WIDTH=1,C_AXI_ADDR_WIDTH=32,C_AXI_DATA_WIDTH=64,C_AXI_LEN_WIDTH=8,C_AXI_LOCK_WIDTH=1,C_HAS_AXI_ID=0,C_HAS_AXI_AWUSER=0,C_HAS_AXI_WUSER=0,C_HAS_AXI_BUSER=0,C_HAS_AXI_ARUSER=0,C_HAS_AXI_RUSER=0,C_AXI_ARUSER_WIDTH=1,C_AXI_AWUSER_WIDTH=1,C_AXI_WUSER_WIDTH=1,C_AXI_BUSER_WIDTH=1,C_AXI_RUSER_WIDTH=1,C_HAS_AXIS_TDATA=1,C_HAS_AXIS_TID=0,C_HAS_AXIS_TDEST=0,C_HAS_AXIS_TUSER=1,C_HAS_AXIS_TREADY=1,C_HAS_AXIS_TLAST=0,C_HAS_AXIS_TSTRB=0,C_HAS_AXIS_TKEEP=0,C_AXIS_TDATA_WIDTH=8,C_AXIS_TID_WIDTH=1,C_AXIS_TDEST_WIDTH=1,C_AXIS_TUSER_WIDTH=4,C_AXIS_TSTRB_WIDTH=1,C_AXIS_TKEEP_WIDTH=1,C_WACH_TYPE=0,C_WDCH_TYPE=0,C_WRCH_TYPE=0,C_RACH_TYPE=0,C_RDCH_TYPE=0,C_AXIS_TYPE=0,C_IMPLEMENTATION_TYPE_WACH=1,C_IMPLEMENTATION_TYPE_WDCH=1,C_IMPLEMENTATION_TYPE_WRCH=1,C_IMPLEMENTATION_TYPE_RACH=1,C_IMPLEMENTATION_TYPE_RDCH=1,C_IMPLEMENTATION_TYPE_AXIS=1,C_APPLICATION_TYPE_WACH=0,C_APPLICATION_TYPE_WDCH=0,C_APPLICATION_TYPE_WRCH=0,C_APPLICATION_TYPE_RACH=0,C_APPLICATION_TYPE_RDCH=0,C_APPLICATION_TYPE_AXIS=0,C_PRIM_FIFO_TYPE_WACH=512x36,C_PRIM_FIFO_TYPE_WDCH=1kx36,C_PRIM_FIFO_TYPE_WRCH=512x36,C_PRIM_FIFO_TYPE_RACH=512x36,C_PRIM_FIFO_TYPE_RDCH=1kx36,C_PRIM_FIFO_TYPE_AXIS=1kx18,C_USE_ECC_WACH=0,C_USE_ECC_WDCH=0,C_USE_ECC_WRCH=0,C_USE_ECC_RACH=0,C_USE_ECC_RDCH=0,C_USE_ECC_AXIS=0,C_ERROR_INJECTION_TYPE_WACH=0,C_ERROR_INJECTION_TYPE_WDCH=0,C_ERROR_INJECTION_TYPE_WRCH=0,C_ERROR_INJECTION_TYPE_RACH=0,C_ERROR_INJECTION_TYPE_RDCH=0,C_ERROR_INJECTION_TYPE_AXIS=0,C_DIN_WIDTH_WACH=32,C_DIN_WIDTH_WDCH=64,C_DIN_WIDTH_WRCH=2,C_DIN_WIDTH_RACH=32,C_DIN_WIDTH_RDCH=64,C_DIN_WIDTH_AXIS=1,C_WR_DEPTH_WACH=16,C_WR_DEPTH_WDCH=1024,C_WR_DEPTH_WRCH=16,C_WR_DEPTH_RACH=16,C_WR_DEPTH_RDCH=1024,C_WR_DEPTH_AXIS=1024,C_WR_PNTR_WIDTH_WACH=4,C_WR_PNTR_WIDTH_WDCH=10,C_WR_PNTR_WIDTH_WRCH=4,C_WR_PNTR_WIDTH_RACH=4,C_WR_PNTR_WIDTH_RDCH=10,C_WR_PNTR_WIDTH_AXIS=10,C_HAS_DATA_COUNTS_WACH=0,C_HAS_DATA_COUNTS_WDCH=0,C_HAS_DATA_COUNTS_WRCH=0,C_HAS_DATA_COUNTS_RACH=0,C_HAS_DATA_COUNTS_RDCH=0,C_HAS_DATA_COUNTS_AXIS=0,C_HAS_PROG_FLAGS_WACH=0,C_HAS_PROG_FLAGS_WDCH=0,C_HAS_PROG_FLAGS_WRCH=0,C_HAS_PROG_FLAGS_RACH=0,C_HAS_PROG_FLAGS_RDCH=0,C_HAS_PROG_FLAGS_AXIS=0,C_PROG_FULL_TYPE_WACH=0,C_PROG_FULL_TYPE_WDCH=0,C_PROG_FULL_TYPE_WRCH=0,C_PROG_FULL_TYPE_RACH=0,C_PROG_FULL_TYPE_RDCH=0,C_PROG_FULL_TYPE_AXIS=0,C_PROG_FULL_THRESH_ASSERT_VAL_WACH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_WDCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_WRCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_RACH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_RDCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_AXIS=1023,C_PROG_EMPTY_TYPE_WACH=0,C_PROG_EMPTY_TYPE_WDCH=0,C_PROG_EMPTY_TYPE_WRCH=0,C_PROG_EMPTY_TYPE_RACH=0,C_PROG_EMPTY_TYPE_RDCH=0,C_PROG_EMPTY_TYPE_AXIS=0,C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS=1022,C_REG_SLICE_MODE_WACH=0,C_REG_SLICE_MODE_WDCH=0,C_REG_SLICE_MODE_WRCH=0,C_REG_SLICE_MODE_RACH=0,C_REG_SLICE_MODE_RDCH=0,C_REG_SLICE_MODE_AXIS=0}";
 end fei4_data_fifo;
 
 architecture STRUCTURE of fei4_data_fifo is
@@ -3855,7 +3859,7 @@ architecture STRUCTURE of fei4_data_fifo is
   attribute C_DEFAULT_VALUE : string;
   attribute C_DEFAULT_VALUE of U0 : label is "BlankString";
   attribute C_DIN_WIDTH : integer;
-  attribute C_DIN_WIDTH of U0 : label is 10;
+  attribute C_DIN_WIDTH of U0 : label is 8;
   attribute C_DIN_WIDTH_AXIS : integer;
   attribute C_DIN_WIDTH_AXIS of U0 : label is 1;
   attribute C_DIN_WIDTH_RACH : integer;
@@ -3871,7 +3875,7 @@ architecture STRUCTURE of fei4_data_fifo is
   attribute C_DOUT_RST_VAL : string;
   attribute C_DOUT_RST_VAL of U0 : label is "0";
   attribute C_DOUT_WIDTH : integer;
-  attribute C_DOUT_WIDTH of U0 : label is 5;
+  attribute C_DOUT_WIDTH of U0 : label is 4;
   attribute C_ENABLE_RLOCS : integer;
   attribute C_ENABLE_RLOCS of U0 : label is 0;
   attribute C_ENABLE_RST_SYNC : integer;
@@ -4356,8 +4360,8 @@ U0: entity work.\fei4_data_fifo_fifo_generator_v12_0__parameterized0\
       clk => '0',
       data_count(3 downto 0) => NLW_U0_data_count_UNCONNECTED(3 downto 0),
       dbiterr => NLW_U0_dbiterr_UNCONNECTED,
-      din(9 downto 0) => din(9 downto 0),
-      dout(4 downto 0) => dout(4 downto 0),
+      din(7 downto 0) => din(7 downto 0),
+      dout(3 downto 0) => dout(3 downto 0),
       empty => empty,
       full => full,
       injectdbiterr => '0',

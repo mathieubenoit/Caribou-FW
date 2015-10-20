@@ -57,10 +57,10 @@ COMPONENT fei4_data_fifo
     rst : IN STD_LOGIC;
     wr_clk : IN STD_LOGIC;
     rd_clk : IN STD_LOGIC;
-    din : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+    din : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     wr_en : IN STD_LOGIC;
     rd_en : IN STD_LOGIC;
-    dout : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
+    dout : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
     full : OUT STD_LOGIC;
     empty : OUT STD_LOGIC;
     rd_data_count : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
@@ -69,7 +69,7 @@ END COMPONENT;
 ATTRIBUTE SYN_BLACK_BOX : BOOLEAN;
 ATTRIBUTE SYN_BLACK_BOX OF fei4_data_fifo : COMPONENT IS TRUE;
 ATTRIBUTE BLACK_BOX_PAD_PIN : STRING;
-ATTRIBUTE BLACK_BOX_PAD_PIN OF fei4_data_fifo : COMPONENT IS "rst,wr_clk,rd_clk,din[9:0],wr_en,rd_en,dout[4:0],full,empty,rd_data_count[4:0]";
+ATTRIBUTE BLACK_BOX_PAD_PIN OF fei4_data_fifo : COMPONENT IS "rst,wr_clk,rd_clk,din[7:0],wr_en,rd_en,dout[3:0],full,empty,rd_data_count[4:0]";
 
 -- COMP_TAG_END ------ End COMPONENT Declaration ------------
 

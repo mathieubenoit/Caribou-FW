@@ -61,10 +61,10 @@ ENTITY fei4_data_fifo IS
     rst : IN STD_LOGIC;
     wr_clk : IN STD_LOGIC;
     rd_clk : IN STD_LOGIC;
-    din : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+    din : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     wr_en : IN STD_LOGIC;
     rd_en : IN STD_LOGIC;
-    dout : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
+    dout : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
     full : OUT STD_LOGIC;
     empty : OUT STD_LOGIC;
     rd_data_count : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
@@ -288,7 +288,7 @@ ARCHITECTURE fei4_data_fifo_arch OF fei4_data_fifo IS
       wr_rst : IN STD_LOGIC;
       rd_clk : IN STD_LOGIC;
       rd_rst : IN STD_LOGIC;
-      din : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+      din : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       wr_en : IN STD_LOGIC;
       rd_en : IN STD_LOGIC;
       prog_empty_thresh : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
@@ -301,7 +301,7 @@ ARCHITECTURE fei4_data_fifo_arch OF fei4_data_fifo IS
       injectdbiterr : IN STD_LOGIC;
       injectsbiterr : IN STD_LOGIC;
       sleep : IN STD_LOGIC;
-      dout : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
+      dout : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
       full : OUT STD_LOGIC;
       almost_full : OUT STD_LOGIC;
       wr_ack : OUT STD_LOGIC;
@@ -526,9 +526,9 @@ BEGIN
       C_COUNT_TYPE => 0,
       C_DATA_COUNT_WIDTH => 4,
       C_DEFAULT_VALUE => "BlankString",
-      C_DIN_WIDTH => 10,
+      C_DIN_WIDTH => 8,
       C_DOUT_RST_VAL => "0",
-      C_DOUT_WIDTH => 5,
+      C_DOUT_WIDTH => 4,
       C_ENABLE_RLOCS => 0,
       C_FAMILY => "zynq",
       C_FULL_FLAGS_RST_VAL => 1,

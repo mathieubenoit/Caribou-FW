@@ -1,10 +1,10 @@
 // Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2014.2 (win64) Build 932637 Wed Jun 11 13:33:10 MDT 2014
-// Date        : Mon Oct 19 17:25:16 2015
+// Date        : Tue Oct 20 10:49:08 2015
 // Host        : WPO-148239 running 64-bit Service Pack 1  (build 7601)
 // Command     : write_verilog -force -mode funcsim
-//               c:/Hongbin/ITK/firmware_git/source/ip/fei4_data_fifo/fei4_data_fifo_funcsim.v
+//               C:/Hongbin/ITK/firmware_git/source/ip/fei4_data_fifo/fei4_data_fifo_funcsim.v
 // Design      : fei4_data_fifo
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -13,7 +13,7 @@
 `timescale 1 ps / 1 ps
 
 (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v12_0,Vivado 2014.2" *) (* CHECK_LICENSE_TYPE = "fei4_data_fifo,fifo_generator_v12_0,{}" *) 
-(* core_generation_info = "fei4_data_fifo,fifo_generator_v12_0,{x_ipProduct=Vivado 2014.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=fifo_generator,x_ipVersion=12.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,C_COMMON_CLOCK=0,C_COUNT_TYPE=0,C_DATA_COUNT_WIDTH=4,C_DEFAULT_VALUE=BlankString,C_DIN_WIDTH=10,C_DOUT_RST_VAL=0,C_DOUT_WIDTH=5,C_ENABLE_RLOCS=0,C_FAMILY=zynq,C_FULL_FLAGS_RST_VAL=1,C_HAS_ALMOST_EMPTY=0,C_HAS_ALMOST_FULL=0,C_HAS_BACKUP=0,C_HAS_DATA_COUNT=0,C_HAS_INT_CLK=0,C_HAS_MEMINIT_FILE=0,C_HAS_OVERFLOW=0,C_HAS_RD_DATA_COUNT=1,C_HAS_RD_RST=0,C_HAS_RST=1,C_HAS_SRST=0,C_HAS_UNDERFLOW=0,C_HAS_VALID=0,C_HAS_WR_ACK=0,C_HAS_WR_DATA_COUNT=0,C_HAS_WR_RST=0,C_IMPLEMENTATION_TYPE=2,C_INIT_WR_PNTR_VAL=0,C_MEMORY_TYPE=1,C_MIF_FILE_NAME=BlankString,C_OPTIMIZATION_MODE=0,C_OVERFLOW_LOW=0,C_PRELOAD_LATENCY=1,C_PRELOAD_REGS=0,C_PRIM_FIFO_TYPE=512x36,C_PROG_EMPTY_THRESH_ASSERT_VAL=2,C_PROG_EMPTY_THRESH_NEGATE_VAL=3,C_PROG_EMPTY_TYPE=0,C_PROG_FULL_THRESH_ASSERT_VAL=13,C_PROG_FULL_THRESH_NEGATE_VAL=12,C_PROG_FULL_TYPE=0,C_RD_DATA_COUNT_WIDTH=5,C_RD_DEPTH=32,C_RD_FREQ=1,C_RD_PNTR_WIDTH=5,C_UNDERFLOW_LOW=0,C_USE_DOUT_RST=1,C_USE_ECC=0,C_USE_EMBEDDED_REG=0,C_USE_PIPELINE_REG=0,C_POWER_SAVING_MODE=0,C_USE_FIFO16_FLAGS=0,C_USE_FWFT_DATA_COUNT=0,C_VALID_LOW=0,C_WR_ACK_LOW=0,C_WR_DATA_COUNT_WIDTH=4,C_WR_DEPTH=16,C_WR_FREQ=1,C_WR_PNTR_WIDTH=4,C_WR_RESPONSE_LATENCY=1,C_MSGON_VAL=1,C_ENABLE_RST_SYNC=1,C_ERROR_INJECTION_TYPE=0,C_SYNCHRONIZER_STAGE=2,C_INTERFACE_TYPE=0,C_AXI_TYPE=1,C_HAS_AXI_WR_CHANNEL=1,C_HAS_AXI_RD_CHANNEL=1,C_HAS_SLAVE_CE=0,C_HAS_MASTER_CE=0,C_ADD_NGC_CONSTRAINT=0,C_USE_COMMON_OVERFLOW=0,C_USE_COMMON_UNDERFLOW=0,C_USE_DEFAULT_SETTINGS=0,C_AXI_ID_WIDTH=1,C_AXI_ADDR_WIDTH=32,C_AXI_DATA_WIDTH=64,C_AXI_LEN_WIDTH=8,C_AXI_LOCK_WIDTH=1,C_HAS_AXI_ID=0,C_HAS_AXI_AWUSER=0,C_HAS_AXI_WUSER=0,C_HAS_AXI_BUSER=0,C_HAS_AXI_ARUSER=0,C_HAS_AXI_RUSER=0,C_AXI_ARUSER_WIDTH=1,C_AXI_AWUSER_WIDTH=1,C_AXI_WUSER_WIDTH=1,C_AXI_BUSER_WIDTH=1,C_AXI_RUSER_WIDTH=1,C_HAS_AXIS_TDATA=1,C_HAS_AXIS_TID=0,C_HAS_AXIS_TDEST=0,C_HAS_AXIS_TUSER=1,C_HAS_AXIS_TREADY=1,C_HAS_AXIS_TLAST=0,C_HAS_AXIS_TSTRB=0,C_HAS_AXIS_TKEEP=0,C_AXIS_TDATA_WIDTH=8,C_AXIS_TID_WIDTH=1,C_AXIS_TDEST_WIDTH=1,C_AXIS_TUSER_WIDTH=4,C_AXIS_TSTRB_WIDTH=1,C_AXIS_TKEEP_WIDTH=1,C_WACH_TYPE=0,C_WDCH_TYPE=0,C_WRCH_TYPE=0,C_RACH_TYPE=0,C_RDCH_TYPE=0,C_AXIS_TYPE=0,C_IMPLEMENTATION_TYPE_WACH=1,C_IMPLEMENTATION_TYPE_WDCH=1,C_IMPLEMENTATION_TYPE_WRCH=1,C_IMPLEMENTATION_TYPE_RACH=1,C_IMPLEMENTATION_TYPE_RDCH=1,C_IMPLEMENTATION_TYPE_AXIS=1,C_APPLICATION_TYPE_WACH=0,C_APPLICATION_TYPE_WDCH=0,C_APPLICATION_TYPE_WRCH=0,C_APPLICATION_TYPE_RACH=0,C_APPLICATION_TYPE_RDCH=0,C_APPLICATION_TYPE_AXIS=0,C_PRIM_FIFO_TYPE_WACH=512x36,C_PRIM_FIFO_TYPE_WDCH=1kx36,C_PRIM_FIFO_TYPE_WRCH=512x36,C_PRIM_FIFO_TYPE_RACH=512x36,C_PRIM_FIFO_TYPE_RDCH=1kx36,C_PRIM_FIFO_TYPE_AXIS=1kx18,C_USE_ECC_WACH=0,C_USE_ECC_WDCH=0,C_USE_ECC_WRCH=0,C_USE_ECC_RACH=0,C_USE_ECC_RDCH=0,C_USE_ECC_AXIS=0,C_ERROR_INJECTION_TYPE_WACH=0,C_ERROR_INJECTION_TYPE_WDCH=0,C_ERROR_INJECTION_TYPE_WRCH=0,C_ERROR_INJECTION_TYPE_RACH=0,C_ERROR_INJECTION_TYPE_RDCH=0,C_ERROR_INJECTION_TYPE_AXIS=0,C_DIN_WIDTH_WACH=32,C_DIN_WIDTH_WDCH=64,C_DIN_WIDTH_WRCH=2,C_DIN_WIDTH_RACH=32,C_DIN_WIDTH_RDCH=64,C_DIN_WIDTH_AXIS=1,C_WR_DEPTH_WACH=16,C_WR_DEPTH_WDCH=1024,C_WR_DEPTH_WRCH=16,C_WR_DEPTH_RACH=16,C_WR_DEPTH_RDCH=1024,C_WR_DEPTH_AXIS=1024,C_WR_PNTR_WIDTH_WACH=4,C_WR_PNTR_WIDTH_WDCH=10,C_WR_PNTR_WIDTH_WRCH=4,C_WR_PNTR_WIDTH_RACH=4,C_WR_PNTR_WIDTH_RDCH=10,C_WR_PNTR_WIDTH_AXIS=10,C_HAS_DATA_COUNTS_WACH=0,C_HAS_DATA_COUNTS_WDCH=0,C_HAS_DATA_COUNTS_WRCH=0,C_HAS_DATA_COUNTS_RACH=0,C_HAS_DATA_COUNTS_RDCH=0,C_HAS_DATA_COUNTS_AXIS=0,C_HAS_PROG_FLAGS_WACH=0,C_HAS_PROG_FLAGS_WDCH=0,C_HAS_PROG_FLAGS_WRCH=0,C_HAS_PROG_FLAGS_RACH=0,C_HAS_PROG_FLAGS_RDCH=0,C_HAS_PROG_FLAGS_AXIS=0,C_PROG_FULL_TYPE_WACH=0,C_PROG_FULL_TYPE_WDCH=0,C_PROG_FULL_TYPE_WRCH=0,C_PROG_FULL_TYPE_RACH=0,C_PROG_FULL_TYPE_RDCH=0,C_PROG_FULL_TYPE_AXIS=0,C_PROG_FULL_THRESH_ASSERT_VAL_WACH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_WDCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_WRCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_RACH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_RDCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_AXIS=1023,C_PROG_EMPTY_TYPE_WACH=0,C_PROG_EMPTY_TYPE_WDCH=0,C_PROG_EMPTY_TYPE_WRCH=0,C_PROG_EMPTY_TYPE_RACH=0,C_PROG_EMPTY_TYPE_RDCH=0,C_PROG_EMPTY_TYPE_AXIS=0,C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS=1022,C_REG_SLICE_MODE_WACH=0,C_REG_SLICE_MODE_WDCH=0,C_REG_SLICE_MODE_WRCH=0,C_REG_SLICE_MODE_RACH=0,C_REG_SLICE_MODE_RDCH=0,C_REG_SLICE_MODE_AXIS=0}" *) 
+(* core_generation_info = "fei4_data_fifo,fifo_generator_v12_0,{x_ipProduct=Vivado 2014.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=fifo_generator,x_ipVersion=12.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,C_COMMON_CLOCK=0,C_COUNT_TYPE=0,C_DATA_COUNT_WIDTH=4,C_DEFAULT_VALUE=BlankString,C_DIN_WIDTH=8,C_DOUT_RST_VAL=0,C_DOUT_WIDTH=4,C_ENABLE_RLOCS=0,C_FAMILY=zynq,C_FULL_FLAGS_RST_VAL=1,C_HAS_ALMOST_EMPTY=0,C_HAS_ALMOST_FULL=0,C_HAS_BACKUP=0,C_HAS_DATA_COUNT=0,C_HAS_INT_CLK=0,C_HAS_MEMINIT_FILE=0,C_HAS_OVERFLOW=0,C_HAS_RD_DATA_COUNT=1,C_HAS_RD_RST=0,C_HAS_RST=1,C_HAS_SRST=0,C_HAS_UNDERFLOW=0,C_HAS_VALID=0,C_HAS_WR_ACK=0,C_HAS_WR_DATA_COUNT=0,C_HAS_WR_RST=0,C_IMPLEMENTATION_TYPE=2,C_INIT_WR_PNTR_VAL=0,C_MEMORY_TYPE=1,C_MIF_FILE_NAME=BlankString,C_OPTIMIZATION_MODE=0,C_OVERFLOW_LOW=0,C_PRELOAD_LATENCY=1,C_PRELOAD_REGS=0,C_PRIM_FIFO_TYPE=512x36,C_PROG_EMPTY_THRESH_ASSERT_VAL=2,C_PROG_EMPTY_THRESH_NEGATE_VAL=3,C_PROG_EMPTY_TYPE=0,C_PROG_FULL_THRESH_ASSERT_VAL=13,C_PROG_FULL_THRESH_NEGATE_VAL=12,C_PROG_FULL_TYPE=0,C_RD_DATA_COUNT_WIDTH=5,C_RD_DEPTH=32,C_RD_FREQ=1,C_RD_PNTR_WIDTH=5,C_UNDERFLOW_LOW=0,C_USE_DOUT_RST=1,C_USE_ECC=0,C_USE_EMBEDDED_REG=0,C_USE_PIPELINE_REG=0,C_POWER_SAVING_MODE=0,C_USE_FIFO16_FLAGS=0,C_USE_FWFT_DATA_COUNT=0,C_VALID_LOW=0,C_WR_ACK_LOW=0,C_WR_DATA_COUNT_WIDTH=4,C_WR_DEPTH=16,C_WR_FREQ=1,C_WR_PNTR_WIDTH=4,C_WR_RESPONSE_LATENCY=1,C_MSGON_VAL=1,C_ENABLE_RST_SYNC=1,C_ERROR_INJECTION_TYPE=0,C_SYNCHRONIZER_STAGE=2,C_INTERFACE_TYPE=0,C_AXI_TYPE=1,C_HAS_AXI_WR_CHANNEL=1,C_HAS_AXI_RD_CHANNEL=1,C_HAS_SLAVE_CE=0,C_HAS_MASTER_CE=0,C_ADD_NGC_CONSTRAINT=0,C_USE_COMMON_OVERFLOW=0,C_USE_COMMON_UNDERFLOW=0,C_USE_DEFAULT_SETTINGS=0,C_AXI_ID_WIDTH=1,C_AXI_ADDR_WIDTH=32,C_AXI_DATA_WIDTH=64,C_AXI_LEN_WIDTH=8,C_AXI_LOCK_WIDTH=1,C_HAS_AXI_ID=0,C_HAS_AXI_AWUSER=0,C_HAS_AXI_WUSER=0,C_HAS_AXI_BUSER=0,C_HAS_AXI_ARUSER=0,C_HAS_AXI_RUSER=0,C_AXI_ARUSER_WIDTH=1,C_AXI_AWUSER_WIDTH=1,C_AXI_WUSER_WIDTH=1,C_AXI_BUSER_WIDTH=1,C_AXI_RUSER_WIDTH=1,C_HAS_AXIS_TDATA=1,C_HAS_AXIS_TID=0,C_HAS_AXIS_TDEST=0,C_HAS_AXIS_TUSER=1,C_HAS_AXIS_TREADY=1,C_HAS_AXIS_TLAST=0,C_HAS_AXIS_TSTRB=0,C_HAS_AXIS_TKEEP=0,C_AXIS_TDATA_WIDTH=8,C_AXIS_TID_WIDTH=1,C_AXIS_TDEST_WIDTH=1,C_AXIS_TUSER_WIDTH=4,C_AXIS_TSTRB_WIDTH=1,C_AXIS_TKEEP_WIDTH=1,C_WACH_TYPE=0,C_WDCH_TYPE=0,C_WRCH_TYPE=0,C_RACH_TYPE=0,C_RDCH_TYPE=0,C_AXIS_TYPE=0,C_IMPLEMENTATION_TYPE_WACH=1,C_IMPLEMENTATION_TYPE_WDCH=1,C_IMPLEMENTATION_TYPE_WRCH=1,C_IMPLEMENTATION_TYPE_RACH=1,C_IMPLEMENTATION_TYPE_RDCH=1,C_IMPLEMENTATION_TYPE_AXIS=1,C_APPLICATION_TYPE_WACH=0,C_APPLICATION_TYPE_WDCH=0,C_APPLICATION_TYPE_WRCH=0,C_APPLICATION_TYPE_RACH=0,C_APPLICATION_TYPE_RDCH=0,C_APPLICATION_TYPE_AXIS=0,C_PRIM_FIFO_TYPE_WACH=512x36,C_PRIM_FIFO_TYPE_WDCH=1kx36,C_PRIM_FIFO_TYPE_WRCH=512x36,C_PRIM_FIFO_TYPE_RACH=512x36,C_PRIM_FIFO_TYPE_RDCH=1kx36,C_PRIM_FIFO_TYPE_AXIS=1kx18,C_USE_ECC_WACH=0,C_USE_ECC_WDCH=0,C_USE_ECC_WRCH=0,C_USE_ECC_RACH=0,C_USE_ECC_RDCH=0,C_USE_ECC_AXIS=0,C_ERROR_INJECTION_TYPE_WACH=0,C_ERROR_INJECTION_TYPE_WDCH=0,C_ERROR_INJECTION_TYPE_WRCH=0,C_ERROR_INJECTION_TYPE_RACH=0,C_ERROR_INJECTION_TYPE_RDCH=0,C_ERROR_INJECTION_TYPE_AXIS=0,C_DIN_WIDTH_WACH=32,C_DIN_WIDTH_WDCH=64,C_DIN_WIDTH_WRCH=2,C_DIN_WIDTH_RACH=32,C_DIN_WIDTH_RDCH=64,C_DIN_WIDTH_AXIS=1,C_WR_DEPTH_WACH=16,C_WR_DEPTH_WDCH=1024,C_WR_DEPTH_WRCH=16,C_WR_DEPTH_RACH=16,C_WR_DEPTH_RDCH=1024,C_WR_DEPTH_AXIS=1024,C_WR_PNTR_WIDTH_WACH=4,C_WR_PNTR_WIDTH_WDCH=10,C_WR_PNTR_WIDTH_WRCH=4,C_WR_PNTR_WIDTH_RACH=4,C_WR_PNTR_WIDTH_RDCH=10,C_WR_PNTR_WIDTH_AXIS=10,C_HAS_DATA_COUNTS_WACH=0,C_HAS_DATA_COUNTS_WDCH=0,C_HAS_DATA_COUNTS_WRCH=0,C_HAS_DATA_COUNTS_RACH=0,C_HAS_DATA_COUNTS_RDCH=0,C_HAS_DATA_COUNTS_AXIS=0,C_HAS_PROG_FLAGS_WACH=0,C_HAS_PROG_FLAGS_WDCH=0,C_HAS_PROG_FLAGS_WRCH=0,C_HAS_PROG_FLAGS_RACH=0,C_HAS_PROG_FLAGS_RDCH=0,C_HAS_PROG_FLAGS_AXIS=0,C_PROG_FULL_TYPE_WACH=0,C_PROG_FULL_TYPE_WDCH=0,C_PROG_FULL_TYPE_WRCH=0,C_PROG_FULL_TYPE_RACH=0,C_PROG_FULL_TYPE_RDCH=0,C_PROG_FULL_TYPE_AXIS=0,C_PROG_FULL_THRESH_ASSERT_VAL_WACH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_WDCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_WRCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_RACH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_RDCH=1023,C_PROG_FULL_THRESH_ASSERT_VAL_AXIS=1023,C_PROG_EMPTY_TYPE_WACH=0,C_PROG_EMPTY_TYPE_WDCH=0,C_PROG_EMPTY_TYPE_WRCH=0,C_PROG_EMPTY_TYPE_RACH=0,C_PROG_EMPTY_TYPE_RDCH=0,C_PROG_EMPTY_TYPE_AXIS=0,C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH=1022,C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS=1022,C_REG_SLICE_MODE_WACH=0,C_REG_SLICE_MODE_WDCH=0,C_REG_SLICE_MODE_WRCH=0,C_REG_SLICE_MODE_RACH=0,C_REG_SLICE_MODE_RDCH=0,C_REG_SLICE_MODE_AXIS=0}" *) 
 (* NotValidForBitStream *)
 module fei4_data_fifo
    (rst,
@@ -29,16 +29,16 @@ module fei4_data_fifo
   input rst;
   input wr_clk;
   input rd_clk;
-  input [9:0]din;
+  input [7:0]din;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *) input wr_en;
   (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *) input rd_en;
-  output [4:0]dout;
+  output [3:0]dout;
   (* x_interface_info = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE FULL" *) output full;
   (* x_interface_info = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *) output empty;
   output [4:0]rd_data_count;
 
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire empty;
   wire full;
   wire rd_clk;
@@ -199,7 +199,7 @@ module fei4_data_fifo
    (* C_COUNT_TYPE = "0" *) 
    (* C_DATA_COUNT_WIDTH = "4" *) 
    (* C_DEFAULT_VALUE = "BlankString" *) 
-   (* C_DIN_WIDTH = "10" *) 
+   (* C_DIN_WIDTH = "8" *) 
    (* C_DIN_WIDTH_AXIS = "1" *) 
    (* C_DIN_WIDTH_RACH = "32" *) 
    (* C_DIN_WIDTH_RDCH = "64" *) 
@@ -207,7 +207,7 @@ module fei4_data_fifo
    (* C_DIN_WIDTH_WDCH = "64" *) 
    (* C_DIN_WIDTH_WRCH = "2" *) 
    (* C_DOUT_RST_VAL = "0" *) 
-   (* C_DOUT_WIDTH = "5" *) 
+   (* C_DOUT_WIDTH = "4" *) 
    (* C_ENABLE_RLOCS = "0" *) 
    (* C_ENABLE_RST_SYNC = "1" *) 
    (* C_ERROR_INJECTION_TYPE = "0" *) 
@@ -615,7 +615,7 @@ module fei4_data_fifo_blk_mem_gen_generic_cstr
     O1,
     I1,
     din);
-  output [4:0]dout;
+  output [3:0]dout;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
@@ -623,14 +623,14 @@ module fei4_data_fifo_blk_mem_gen_generic_cstr
   input [0:0]Q;
   input [3:0]O1;
   input [4:0]I1;
-  input [9:0]din;
+  input [7:0]din;
 
   wire [0:0]E;
   wire [4:0]I1;
   wire [3:0]O1;
   wire [0:0]Q;
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -658,7 +658,7 @@ module fei4_data_fifo_blk_mem_gen_prim_width
     O1,
     I1,
     din);
-  output [4:0]dout;
+  output [3:0]dout;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
@@ -666,14 +666,14 @@ module fei4_data_fifo_blk_mem_gen_prim_width
   input [0:0]Q;
   input [3:0]O1;
   input [4:0]I1;
-  input [9:0]din;
+  input [7:0]din;
 
   wire [0:0]E;
   wire [4:0]I1;
   wire [3:0]O1;
   wire [0:0]Q;
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -701,7 +701,7 @@ module fei4_data_fifo_blk_mem_gen_prim_wrapper
     O1,
     I1,
     din);
-  output [4:0]dout;
+  output [3:0]dout;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
@@ -709,17 +709,18 @@ module fei4_data_fifo_blk_mem_gen_prim_wrapper
   input [0:0]Q;
   input [3:0]O1;
   input [4:0]I1;
-  input [9:0]din;
+  input [7:0]din;
 
   wire [0:0]E;
   wire [4:0]I1;
   wire [3:0]O1;
   wire [0:0]Q;
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire \n_24_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ;
   wire \n_25_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ;
   wire \n_26_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ;
+  wire \n_27_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ;
   wire \n_35_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ;
   wire rd_clk;
   wire tmp_ram_rd_en;
@@ -835,12 +836,12 @@ module fei4_data_fifo_blk_mem_gen_prim_wrapper
         .ADDRBWRADDR({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,I1,1'b0,1'b0,1'b0}),
         .CLKARDCLK(wr_clk),
         .CLKBWRCLK(rd_clk),
-        .DIADI({1'b0,1'b0,1'b0,din[4:0],1'b0,1'b0,1'b0,din[9:5]}),
+        .DIADI({1'b0,1'b0,1'b0,1'b0,din[3:0],1'b0,1'b0,1'b0,1'b0,din[7:4]}),
         .DIBDI({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
         .DIPADIP({1'b0,1'b0}),
         .DIPBDIP({1'b0,1'b0}),
         .DOADO(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram_DOADO_UNCONNECTED [15:0]),
-        .DOBDO({\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram_DOBDO_UNCONNECTED [15:8],\n_24_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ,\n_25_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ,\n_26_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ,dout}),
+        .DOBDO({\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram_DOBDO_UNCONNECTED [15:8],\n_24_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ,\n_25_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ,\n_26_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ,\n_27_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram ,dout}),
         .DOPADOP(\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram_DOPADOP_UNCONNECTED [1:0]),
         .DOPBDOP({\NLW_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram_DOPBDOP_UNCONNECTED [1],\n_35_DEVICE_7SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM18.ram }),
         .ENARDEN(E),
@@ -866,7 +867,7 @@ module fei4_data_fifo_blk_mem_gen_top
     O1,
     I1,
     din);
-  output [4:0]dout;
+  output [3:0]dout;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
@@ -874,14 +875,14 @@ module fei4_data_fifo_blk_mem_gen_top
   input [0:0]Q;
   input [3:0]O1;
   input [4:0]I1;
-  input [9:0]din;
+  input [7:0]din;
 
   wire [0:0]E;
   wire [4:0]I1;
   wire [3:0]O1;
   wire [0:0]Q;
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -909,7 +910,7 @@ module fei4_data_fifo_blk_mem_gen_v8_2__parameterized0
     O1,
     I1,
     din);
-  output [4:0]dout;
+  output [3:0]dout;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
@@ -917,14 +918,14 @@ module fei4_data_fifo_blk_mem_gen_v8_2__parameterized0
   input [0:0]Q;
   input [3:0]O1;
   input [4:0]I1;
-  input [9:0]din;
+  input [7:0]din;
 
   wire [0:0]E;
   wire [4:0]I1;
   wire [3:0]O1;
   wire [0:0]Q;
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -952,7 +953,7 @@ module fei4_data_fifo_blk_mem_gen_v8_2_synth
     O1,
     I1,
     din);
-  output [4:0]dout;
+  output [3:0]dout;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
@@ -960,14 +961,14 @@ module fei4_data_fifo_blk_mem_gen_v8_2_synth
   input [0:0]Q;
   input [3:0]O1;
   input [4:0]I1;
-  input [9:0]din;
+  input [7:0]din;
 
   wire [0:0]E;
   wire [4:0]I1;
   wire [3:0]O1;
   wire [0:0]Q;
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;
@@ -1331,7 +1332,7 @@ module fei4_data_fifo_fifo_generator_ramfifo
     rd_clk,
     din,
     rst);
-  output [4:0]dout;
+  output [3:0]dout;
   output empty;
   output full;
   output [4:0]rd_data_count;
@@ -1339,12 +1340,12 @@ module fei4_data_fifo_fifo_generator_ramfifo
   input rd_en;
   input wr_clk;
   input rd_clk;
-  input [9:0]din;
+  input [7:0]din;
   input rst;
 
   wire RST;
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire empty;
   wire full;
   wire \n_0_gntv_or_sync_fifo.gcx.clkx ;
@@ -1448,7 +1449,7 @@ module fei4_data_fifo_fifo_generator_top
     rd_clk,
     din,
     rst);
-  output [4:0]dout;
+  output [3:0]dout;
   output empty;
   output full;
   output [4:0]rd_data_count;
@@ -1456,11 +1457,11 @@ module fei4_data_fifo_fifo_generator_top
   input rd_en;
   input wr_clk;
   input rd_clk;
-  input [9:0]din;
+  input [7:0]din;
   input rst;
 
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire empty;
   wire full;
   wire rd_clk;
@@ -1484,8 +1485,8 @@ fei4_data_fifo_fifo_generator_ramfifo \grf.rf
 endmodule
 
 (* ORIG_REF_NAME = "fifo_generator_v12_0" *) (* C_COMMON_CLOCK = "0" *) (* C_COUNT_TYPE = "0" *) 
-(* C_DATA_COUNT_WIDTH = "4" *) (* C_DEFAULT_VALUE = "BlankString" *) (* C_DIN_WIDTH = "10" *) 
-(* C_DOUT_RST_VAL = "0" *) (* C_DOUT_WIDTH = "5" *) (* C_ENABLE_RLOCS = "0" *) 
+(* C_DATA_COUNT_WIDTH = "4" *) (* C_DEFAULT_VALUE = "BlankString" *) (* C_DIN_WIDTH = "8" *) 
+(* C_DOUT_RST_VAL = "0" *) (* C_DOUT_WIDTH = "4" *) (* C_ENABLE_RLOCS = "0" *) 
 (* C_FAMILY = "zynq" *) (* C_FULL_FLAGS_RST_VAL = "1" *) (* C_HAS_ALMOST_EMPTY = "0" *) 
 (* C_HAS_ALMOST_FULL = "0" *) (* C_HAS_BACKUP = "0" *) (* C_HAS_DATA_COUNT = "0" *) 
 (* C_HAS_INT_CLK = "0" *) (* C_HAS_MEMINIT_FILE = "0" *) (* C_HAS_OVERFLOW = "0" *) 
@@ -1791,7 +1792,7 @@ module fei4_data_fifo_fifo_generator_v12_0__parameterized0
   input wr_rst;
   input rd_clk;
   input rd_rst;
-  input [9:0]din;
+  input [7:0]din;
   input wr_en;
   input rd_en;
   input [4:0]prog_empty_thresh;
@@ -1804,7 +1805,7 @@ module fei4_data_fifo_fifo_generator_v12_0__parameterized0
   input injectdbiterr;
   input injectsbiterr;
   input sleep;
-  output [4:0]dout;
+  output [3:0]dout;
   output full;
   output almost_full;
   output wr_ack;
@@ -2043,8 +2044,8 @@ module fei4_data_fifo_fifo_generator_v12_0__parameterized0
   wire backup;
   wire backup_marker;
   wire clk;
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire empty;
   wire full;
   wire injectdbiterr;
@@ -2657,7 +2658,7 @@ module fei4_data_fifo_fifo_generator_v12_0_synth
     rd_clk,
     din,
     rst);
-  output [4:0]dout;
+  output [3:0]dout;
   output empty;
   output full;
   output [4:0]rd_data_count;
@@ -2665,11 +2666,11 @@ module fei4_data_fifo_fifo_generator_v12_0_synth
   input rd_en;
   input wr_clk;
   input rd_clk;
-  input [9:0]din;
+  input [7:0]din;
   input rst;
 
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire empty;
   wire full;
   wire rd_clk;
@@ -2703,7 +2704,7 @@ module fei4_data_fifo_memory
     O1,
     I1,
     din);
-  output [4:0]dout;
+  output [3:0]dout;
   input wr_clk;
   input rd_clk;
   input [0:0]E;
@@ -2711,14 +2712,14 @@ module fei4_data_fifo_memory
   input [0:0]Q;
   input [3:0]O1;
   input [4:0]I1;
-  input [9:0]din;
+  input [7:0]din;
 
   wire [0:0]E;
   wire [4:0]I1;
   wire [3:0]O1;
   wire [0:0]Q;
-  wire [9:0]din;
-  wire [4:0]dout;
+  wire [7:0]din;
+  wire [3:0]dout;
   wire rd_clk;
   wire tmp_ram_rd_en;
   wire wr_clk;

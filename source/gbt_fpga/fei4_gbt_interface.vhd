@@ -34,7 +34,6 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity fei4_gbt_interface is
     Port (
     RST               : in std_logic;
-    SYSCLK            : in std_logic;
     
     FEI4_DAT_CLK      : in std_logic;
     FEI4_A1_RX_DAT_IN : in std_logic_vector(7 downto 0);
@@ -60,10 +59,16 @@ signal fei4_a1_data_valid :std_logic;
 signal fei4_a2_data_2_gbt :std_logic_vector(3 downto 0);
 signal fei4_a2_data_valid :std_logic;
 
+attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of fei4_a1_data_2_gbt,fei4_a1_data_valid: signal is "TRUE";
+attribute MARK_DEBUG of fei4_a2_data_2_gbt,fei4_a2_data_valid: signal is "TRUE";
+
 begin
 
-fei4_a1_fifo:entity fei4_fifo_wrapper
+fei4_a1_fifo:entity work.fei4_fifo_wrapper
     Port map( 
+    RST         => RST,
+    
     WR_CLK      => FEI4_DAT_CLK,
     DATA_IN     => FEI4_A1_RX_DAT_IN,
     IS_DAT_IN   => FEI4_A1_RX_IS_PIX,
@@ -73,8 +78,10 @@ fei4_a1_fifo:entity fei4_fifo_wrapper
     DAT_OUT     => fei4_a1_data_2_gbt
     );
 
-fei4_a2_fifo:entity fei4_fifo_wrapper
+fei4_a2_fifo:entity work.fei4_fifo_wrapper
     Port map( 
+    RST         => RST,
+    
     WR_CLK      => FEI4_DAT_CLK,
     DATA_IN     => FEI4_A2_RX_DAT_IN,
     IS_DAT_IN   => FEI4_A2_RX_IS_PIX,
