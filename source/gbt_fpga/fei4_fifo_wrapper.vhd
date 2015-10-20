@@ -98,6 +98,7 @@ begin
   if RST = '1' then
     fei4_fifo_rd_en <= '0';
     is_dat_in_flg_pre <= '0';
+    fifo_data_valid <= '0';
   elsif rising_edge(RD_CLK) then
   is_dat_in_flg_pre <= is_dat_in_flg;
     case state is

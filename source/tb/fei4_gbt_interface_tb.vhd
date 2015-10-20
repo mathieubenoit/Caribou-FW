@@ -48,6 +48,10 @@ signal fei4_a2_data_is_pix_dat :std_logic;
 
 signal data_counter :integer range 0 to 255:= 0;
 signal data_valid   :std_logic;
+signal data_valid2  :std_logic;
+
+signal gbt_fei4_tx_is_data :std_logic;
+signal gbt_fei4_tx_data    :std_logic_vector(31 downto 0);
 
 begin
 
@@ -85,28 +89,45 @@ elsif rising_edge(clk16m) then
   else
     data_valid <= '0';
   end if;
+
+  if data_counter >= 130 and data_counter <= 252 then
+    data_valid2 <= '1';
+  else
+    data_valid2 <= '0';
+  end if;
+  
 end if;
 end process;
 
 fei4_a1_data_gen:process(global_reset,clk16m)
 begin
+
 if global_reset = '1' then
     fei4_a1_data_out <= (others => '0');
     fei4_a1_data_is_pix_dat <= '0';
+    fei4_a2_data_out <= (others => '0');
+    fei4_a2_data_is_pix_dat <= '0';
+    
 elsif rising_edge(clk16m) then
     if data_valid = '1' then
       fei4_a1_data_is_pix_dat <= '1';
       fei4_a1_data_out <= std_logic_vector(to_unsigned(data_counter, 8));
     else
-      fei4_a1_data_is_pix_dat <= '0';
       fei4_a1_data_out <= x"3C";
+      fei4_a1_data_is_pix_dat <= '0';
     end if;
+
+    if data_valid2 = '1' then
+      fei4_a2_data_is_pix_dat <= '1';
+      fei4_a2_data_out <= std_logic_vector(to_unsigned(data_counter, 8));
+    else
+      fei4_a2_data_out <= x"3C";
+      fei4_a2_data_is_pix_dat <= '0';
+    end if;
+    
 end if;
 end process;
-
-fei4_a2_data_out <= (others => '0');
-fei4_a2_data_is_pix_dat <= '0';
-    
+ 
 fei4_to_gbt: entity work.fei4_gbt_interface
 Port map (
     RST               => global_reset,
@@ -121,7 +142,11 @@ Port map (
     --    FEI4_B2_RX_DAT_IN : in std_logic_vector(7 downto 0);
     --    FEI4_B2_RX_IS_PIX : in std_logic;
 
-    GBT_WR_WORD_CLK   => clk40m
+    
+    GBT_TX_FRAME_CLK  => clk40m,
+    GBT_FEI4_TX_DATA     => gbt_fei4_tx_data,
+    GBT_FEI4_TX_IS_DATA  => gbt_fei4_tx_is_data
+    
     --    GBT_TX_IS_DAT     : out std_logic;
     --    GBT_TX_DAT        : out std_logic_vector(83 downto 0)
 );

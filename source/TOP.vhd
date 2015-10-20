@@ -215,7 +215,7 @@ signal  rdack_t                :std_logic;
 signal  wrack_t                :std_logic;
 signal  ip2bus_error_t         :std_logic;
 signal  bus2ip_be_t            :std_logic_vector(3 downto 0);
-attribute MARK_DEBUG of bus2ip_addr_t,bus2ip_rd_t,bus2ip_wr_t,bus2ip_data_t,ip2bus_data_t,rdack_t,wrack_t,ip2bus_error_t,bus2ip_be_t: signal is "TRUE";
+--attribute MARK_DEBUG of bus2ip_addr_t,bus2ip_rd_t,bus2ip_wr_t,bus2ip_data_t,ip2bus_data_t,rdack_t,wrack_t,ip2bus_error_t,bus2ip_be_t: signal is "TRUE";
   
 signal hp_data_gen_softreset   :std_logic_vector(3 downto 0);
 signal hp_data_gen_softtrig    :std_logic_vector(3 downto 0);
@@ -326,6 +326,10 @@ signal ccpd_sin                :std_logic;
 signal ccpd_ld                 :std_logic;
 signal ccpd_ckc                :std_logic;
 signal ccpd_ckd                :std_logic;
+
+signal gbt_tx_frame_clk        :std_logic;
+signal gbt_fei4_tx_data        :std_logic_vector(31 downto 0);
+signal gbt_fei4_tx_is_data     :std_logic;
 
 COMPONENT ps7_wrapper 
 port (
@@ -992,7 +996,7 @@ Port map (
     
     FEI4_DAT_CLK      => clk16m,
     FEI4_A1_RX_DAT_IN => fei4_a1_data_out,
-    FEI4_A1_RX_IS_PIX => fei4_a2_data_is_pix_dat,
+    FEI4_A1_RX_IS_PIX => fei4_a1_data_is_pix_dat,
     FEI4_A2_RX_DAT_IN => fei4_a2_data_out,
     FEI4_A2_RX_IS_PIX => fei4_a2_data_is_pix_dat,
     --    FEI4_B1_RX_DAT_IN : in std_logic_vector(7 downto 0);
@@ -1000,11 +1004,10 @@ Port map (
     --    FEI4_B2_RX_DAT_IN : in std_logic_vector(7 downto 0);
     --    FEI4_B2_RX_IS_PIX : in std_logic;
 
-    GBT_WR_WORD_CLK   => clk40m
-    --    GBT_TX_IS_DAT     : out std_logic;
-    --    GBT_TX_DAT        : out std_logic_vector(83 downto 0)
+    GBT_TX_FRAME_CLK      => gbt_tx_frame_clk,
+    GBT_FEI4_TX_DATA      => gbt_fei4_tx_data,
+    GBT_FEI4_TX_IS_DATA   => gbt_fei4_tx_is_data
 );
-
 
 gbt_link:entity work.gbt_fpga_wrapper
  port map (                 
