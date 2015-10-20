@@ -353,23 +353,23 @@ vio: vio_0
     probe_out0 => sync_from_vio
   );
 
-tx_ila: ila_0
-PORT MAP (
-    clk => txframeclk_from_gbtexmpldsgn,
-    probe0 => txdata_from_gbtexmpldsgn,
-    probe1 => txextradatawidebus_from_gbtexmpldsgn,    
-    probe2 => txextradatagbt8b10b_from_gbtexmpldsgn,
-    probe3 => txisdatasel_from_user
-);
+--tx_ila: ila_0
+--PORT MAP (
+--    clk => txframeclk_from_gbtexmpldsgn,
+--    probe0 => txdata_from_gbtexmpldsgn,
+--    probe1 => txextradatawidebus_from_gbtexmpldsgn,    
+--    probe2 => txextradatagbt8b10b_from_gbtexmpldsgn,
+--    probe3 => txisdatasel_from_user
+--);
      
-rx_ila: ila_0
-  PORT MAP (
-    clk => rxframeclk_from_gbtexmpldsgn,
-    probe1 => rxextradatawidebus_from_gbtexmpldsgn,
-    probe0 => rxdata_from_gbtexmpldsgn,
-    probe2 => rxextradatagbt8b10b_from_gbtexmpldsgn,
-    probe3 => rxisdata_from_gbtexmpldsgn
-  );
+--rx_ila: ila_0
+--  PORT MAP (
+--    clk => rxframeclk_from_gbtexmpldsgn,
+--    probe1 => rxextradatawidebus_from_gbtexmpldsgn,
+--    probe0 => rxdata_from_gbtexmpldsgn,
+--    probe2 => rxextradatagbt8b10b_from_gbtexmpldsgn,
+--    probe3 => rxisdata_from_gbtexmpldsgn
+--  );
    
    -- on-board leds:                   
    -----------------    
