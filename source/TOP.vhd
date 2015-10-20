@@ -327,9 +327,24 @@ signal ccpd_ld                 :std_logic;
 signal ccpd_ckc                :std_logic;
 signal ccpd_ckd                :std_logic;
 
-signal gbt_tx_frame_clk        :std_logic;
+
 signal gbt_fei4_tx_data        :std_logic_vector(31 downto 0);
 signal gbt_fei4_tx_is_data     :std_logic;
+
+signal gbt_fpga_tx_frame_clk          :std_logic;
+signal gbt_fpga_tx_is_data            :std_logic;
+signal gbt_fpga_tx_data               :std_logic_vector(83 downto 0);
+signal gbt_fpga_tx_extra_data_widebus :std_logic_vector(31 downto 0);
+signal gbt_fpga_tx_extra_data_gbt8b10b:std_logic_vector(3 downto 0);
+
+signal gbt_fpga_rx_frame_clk          :std_logic;
+signal gbt_fpga_rx_is_data            :std_logic;
+signal gbt_fpga_rx_data               :std_logic_vector(83 downto 0);
+signal gbt_fpga_rx_extra_data_widebus :std_logic_vector(31 downto 0);
+signal gbt_fpga_rx_extra_data_gbt8b10b:std_logic_vector(3 downto 0);
+
+attribute MARK_DEBUG of gbt_fpga_tx_is_data,gbt_fpga_tx_data: signal is "TRUE";
+attribute MARK_DEBUG of gbt_fpga_rx_is_data,gbt_fpga_rx_data: signal is "TRUE";
 
 COMPONENT ps7_wrapper 
 port (
@@ -1004,33 +1019,52 @@ Port map (
     --    FEI4_B2_RX_DAT_IN : in std_logic_vector(7 downto 0);
     --    FEI4_B2_RX_IS_PIX : in std_logic;
 
-    GBT_TX_FRAME_CLK      => gbt_tx_frame_clk,
+    GBT_TX_FRAME_CLK      => gbt_fpga_tx_frame_clk,
     GBT_FEI4_TX_DATA      => gbt_fei4_tx_data,
     GBT_FEI4_TX_IS_DATA   => gbt_fei4_tx_is_data
 );
 
+gbt_fpga_tx_is_data           <= gbt_fei4_tx_is_data;
+gbt_fpga_tx_data(83 downto 32)<= (others => '0');
+gbt_fpga_tx_data(31 downto 0) <= gbt_fei4_tx_data;
+gbt_fpga_tx_extra_data_widebus   <= (others => '0');
+gbt_fpga_tx_extra_data_gbt8b10b  <= (others => '0');
+
 gbt_link:entity work.gbt_fpga_wrapper
  port map (                 
-    CPU_RESET           =>  CPU_RESET,
+    CPU_RESET                   =>  CPU_RESET,
     
-    USER_CLOCK_P        =>  USER_CLOCK_P,
-    USER_CLOCK_N        =>  USER_CLOCK_N,    
+    USER_CLOCK_P                =>  USER_CLOCK_P,
+    USER_CLOCK_N                =>  USER_CLOCK_N,    
     
-    SMA_MGT_REFCLK_P    =>  SMA_MGT_REFCLK_P,
-    SMA_MGT_REFCLK_N    =>  SMA_MGT_REFCLK_N,
+    SMA_MGT_REFCLK_P            =>  SMA_MGT_REFCLK_P,
+    SMA_MGT_REFCLK_N            =>  SMA_MGT_REFCLK_N,
     
-    SFP_TX_P            =>  SFP_TX_P,
-    SFP_TX_N            =>  SFP_TX_N,
-    SFP_RX_P            =>  SFP_RX_P,
-    SFP_RX_N            =>  SFP_RX_N,                 
-    SFP_TX_DISABLE      =>  SFP_TX_DISABLE,
-    
-    GPIO_LED_LEFT       =>  GPIO_LED_LEFT,
-    GPIO_LED_CENTER     =>  GPIO_LED_CENTER,
-    GPIO_LED_RIGHT      =>  GPIO_LED_RIGHT,
-    GPIO_LED_0          =>  GPIO_LED_0
+    SFP_TX_P                    =>  SFP_TX_P,
+    SFP_TX_N                    =>  SFP_TX_N,
+    SFP_RX_P                    =>  SFP_RX_P,
+    SFP_RX_N                    =>  SFP_RX_N,                 
+    SFP_TX_DISABLE              =>  SFP_TX_DISABLE,
+
+    TX_IS_DATA_I                => gbt_fpga_tx_is_data,
+    TX_DATA_I                   => gbt_fpga_tx_data,
+    TX_EXTRA_DATA_WIDEBUS_I     => gbt_fpga_tx_extra_data_widebus,     
+    TX_EXTRA_DATA_GBT8B10B_I    => gbt_fpga_tx_extra_data_gbt8b10b,
+
+    RX_IS_DATA_O                => gbt_fpga_rx_is_data,
+    RX_DATA_O                   => gbt_fpga_rx_data,
+    RX_EXTRA_DATA_WIDEBUS_O     => gbt_fpga_rx_extra_data_widebus,     
+    RX_EXTRA_DATA_GBT8B10B_O    => gbt_fpga_rx_extra_data_gbt8b10b,
+        
+    TX_FRAME_CLK_O              => gbt_fpga_tx_frame_clk,
+    RX_FRAME_CLK_O              => gbt_fpga_rx_frame_clk,
+            
+    GPIO_LED_LEFT               =>  GPIO_LED_LEFT,
+    GPIO_LED_CENTER             =>  GPIO_LED_CENTER,
+    GPIO_LED_RIGHT              =>  GPIO_LED_RIGHT,
+    GPIO_LED_0                  =>  GPIO_LED_0
 );  
-  
+
 REFCLK_OUT_BUF:OBUFDS
 generic map (
     IOSTANDARD => "DEFAULT",  

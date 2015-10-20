@@ -44,7 +44,24 @@ entity gbt_fpga_wrapper is
     SFP_RX_P                                       : in  std_logic;
     SFP_RX_N                                       : in  std_logic;                  
     SFP_TX_DISABLE                                 : out std_logic;
-    
+
+    -- TX data:
+    -----------     
+    TX_IS_DATA_I                                   : in  std_logic;
+    TX_DATA_I                                      : in  std_logic_vector(83 downto 0); 
+    TX_EXTRA_DATA_WIDEBUS_I                        : in  std_logic_vector(31 downto 0);     
+    TX_EXTRA_DATA_GBT8B10B_I                       : in  std_logic_vector( 3 downto 0);
+
+    -- TX data:
+    -----------     
+    RX_IS_DATA_O                                   : out  std_logic;
+    RX_DATA_O                                      : out  std_logic_vector(83 downto 0); 
+    RX_EXTRA_DATA_WIDEBUS_O                        : out  std_logic_vector(31 downto 0);     
+    RX_EXTRA_DATA_GBT8B10B_O                       : out  std_logic_vector( 3 downto 0);
+        
+    TX_FRAME_CLK_O                                 : out std_logic;
+    RX_FRAME_CLK_O                                 : out std_logic;
+          
     GPIO_LED_LEFT                                  : out std_logic;
     GPIO_LED_CENTER                                : out std_logic;
     GPIO_LED_RIGHT                                 : out std_logic;
@@ -105,9 +122,9 @@ signal resetdataerrorseenflag_from_user           : std_logic;
 signal resetgbtrxreadylostflag_from_user          : std_logic; 
 signal txisdatasel_from_user                      : std_logic;   --debug    
 
-attribute MARK_DEBUG of generalreset_from_user,clkmuxsel_from_user, testpattersel_from_user : signal is "TRUE";   
-attribute MARK_DEBUG of loopback_from_user,resetdataerrorseenflag_from_user, resetgbtrxreadylostflag_from_user : signal is "TRUE"; 
-attribute MARK_DEBUG of txisdatasel_from_user,manualresettx_from_user, manualresetrx_from_user : signal is "TRUE";  
+--attribute MARK_DEBUG of generalreset_from_user,clkmuxsel_from_user, testpattersel_from_user : signal is "TRUE";   
+--attribute MARK_DEBUG of loopback_from_user,resetdataerrorseenflag_from_user, resetgbtrxreadylostflag_from_user : signal is "TRUE"; 
+--attribute MARK_DEBUG of txisdatasel_from_user,manualresettx_from_user, manualresetrx_from_user : signal is "TRUE";  
 --------------------------------------------------      
 signal latoptgbtbanktx_from_gbtexmpldsgn          : std_logic;
 signal latoptgbtbankrx_from_gbtexmpldsgn          : std_logic;
@@ -123,25 +140,25 @@ signal rxdataerrorseen_from_gbtexmpldsgn          : std_logic;
 signal rxextrdatawidebuserseen_from_gbtexmpldsgn  : std_logic; 
 signal rxextrdatagbt8b10berseen_from_gbtexmpldsgn : std_logic;
 
-attribute MARK_DEBUG of rxisdata_from_gbtexmpldsgn,txframeclkplllocked_from_gbtexmpldsgn,latoptgbtbanktx_from_gbtexmpldsgn : signal is "TRUE";  
-attribute MARK_DEBUG of mgtready_from_gbtexmpldsgn,rxwordclkready_from_gbtexmpldsgn,rxbitslipnbr_from_gbtexmpldsgn : signal is "TRUE"; 
-attribute MARK_DEBUG of rxframeclkready_from_gbtexmpldsgn, gbtrxready_from_gbtexmpldsgn, gbtrxreadylostflag_from_gbtexmpldsgn : signal is "TRUE";  
-attribute MARK_DEBUG of rxdataerrorseen_from_gbtexmpldsgn, rxextrdatawidebuserseen_from_gbtexmpldsgn  : signal is "TRUE";  
-attribute MARK_DEBUG of rxextrdatagbt8b10berseen_from_gbtexmpldsgn,latoptgbtbankrx_from_gbtexmpldsgn  : signal is "TRUE";  
+--attribute MARK_DEBUG of rxisdata_from_gbtexmpldsgn,txframeclkplllocked_from_gbtexmpldsgn,latoptgbtbanktx_from_gbtexmpldsgn : signal is "TRUE";  
+--attribute MARK_DEBUG of mgtready_from_gbtexmpldsgn,rxwordclkready_from_gbtexmpldsgn,rxbitslipnbr_from_gbtexmpldsgn : signal is "TRUE"; 
+--attribute MARK_DEBUG of rxframeclkready_from_gbtexmpldsgn, gbtrxready_from_gbtexmpldsgn, gbtrxreadylostflag_from_gbtexmpldsgn : signal is "TRUE";  
+--attribute MARK_DEBUG of rxdataerrorseen_from_gbtexmpldsgn, rxextrdatawidebuserseen_from_gbtexmpldsgn  : signal is "TRUE";  
+--attribute MARK_DEBUG of rxextrdatagbt8b10berseen_from_gbtexmpldsgn,latoptgbtbankrx_from_gbtexmpldsgn  : signal is "TRUE";  
 
 -- data:
 --------
 signal txdata_from_gbtexmpldsgn                   : std_logic_vector(83 downto 0);
 signal rxdata_from_gbtexmpldsgn                   : std_logic_vector(83 downto 0);
-attribute MARK_DEBUG of txdata_from_gbtexmpldsgn,rxdata_from_gbtexmpldsgn : signal is "TRUE";
+--attribute MARK_DEBUG of txdata_from_gbtexmpldsgn,rxdata_from_gbtexmpldsgn : signal is "TRUE";
 --------------------------------------------------      
 signal txextradatawidebus_from_gbtexmpldsgn       : std_logic_vector(31 downto 0);
 signal rxextradatawidebus_from_gbtexmpldsgn       : std_logic_vector(31 downto 0);
-attribute MARK_DEBUG of txextradatawidebus_from_gbtexmpldsgn,rxextradatawidebus_from_gbtexmpldsgn : signal is "TRUE";
+--attribute MARK_DEBUG of txextradatawidebus_from_gbtexmpldsgn,rxextradatawidebus_from_gbtexmpldsgn : signal is "TRUE";
 --------------------------------------------------
 signal txextradatagbt8b10b_from_gbtexmpldsgn      : std_logic_vector( 3 downto 0);
 signal rxextradatagbt8b10b_from_gbtexmpldsgn      : std_logic_vector( 3 downto 0); 
-attribute MARK_DEBUG of txextradatagbt8b10b_from_gbtexmpldsgn,rxextradatagbt8b10b_from_gbtexmpldsgn : signal is "TRUE";
+--attribute MARK_DEBUG of txextradatagbt8b10b_from_gbtexmpldsgn,rxextradatagbt8b10b_from_gbtexmpldsgn : signal is "TRUE";
 
 --===========--
 -- VIO --
@@ -265,7 +282,7 @@ begin
       mgt_rx_n                                    => sfp_rx_n,
       -- general control:                       
       loopback_i                                  => loopback_from_user,  
-      tx_isdata_sel_i                             => txisdatasel_from_user,                 
+      tx_isdata_sel_i                             => TX_IS_DATA_I,                 
       --------------------------------------------      
       latopt_gbtbank_tx_o                         => latoptgbtbanktx_from_gbtexmpldsgn,             
       latopt_gbtbank_rx_o                         => latoptgbtbankrx_from_gbtexmpldsgn,             
@@ -277,9 +294,9 @@ begin
       gbt_rx_ready_o                              => gbtrxready_from_gbtexmpldsgn,
       rx_isdata_flag_o                            => rxisdata_from_gbtexmpldsgn,            
       -- gbt bank data:                           
-      tx_data_o                                   => txdata_from_gbtexmpldsgn,            
-      tx_extra_data_widebus_o                     => txextradatawidebus_from_gbtexmpldsgn,
-      tx_extra_data_gbt8b10b_o                    => txextradatagbt8b10b_from_gbtexmpldsgn,
+      tx_data_i                                   => TX_DATA_I,            
+      tx_extra_data_widebus_i                     => TX_EXTRA_DATA_WIDEBUS_I,
+      tx_extra_data_gbt8b10b_i                    => TX_EXTRA_DATA_GBT8B10B_I,
       --------------------------------------------      
       rx_data_o                                   => rxdata_from_gbtexmpldsgn,           
       rx_extra_data_widebus_o                     => rxextradatawidebus_from_gbtexmpldsgn,
@@ -381,5 +398,9 @@ vio: vio_0
 --   gpio_led_5_ls                                 <= rxdataerrorseen_from_gbtexmpldsgn;
 --   gpio_led_6_ls                                 <= rxextrdatawidebuserseen_from_gbtexmpldsgn;
   -- gpio_led_7_ls                                 <= rxextrdatagbt8b10berseen_from_gbtexmpldsgn;
-      
+   TX_FRAME_CLK_O <= txframeclk_from_gbtexmpldsgn;
+   RX_FRAME_CLK_O <= rxframeclk_from_gbtexmpldsgn;
+   RX_IS_DATA_O   <= rxisdata_from_gbtexmpldsgn;
+   RX_DATA_O      <= rxdata_from_gbtexmpldsgn;
+   
 end behavioral;

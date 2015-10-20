@@ -127,9 +127,9 @@ entity gbt_fpga_core is
       --===============--     
       -- TX data:
       -----------     
-      TX_DATA_O                                 : out std_logic_vector(83 downto 0); 
-      TX_EXTRA_DATA_WIDEBUS_O                   : out std_logic_vector(31 downto 0);     
-      TX_EXTRA_DATA_GBT8B10B_O                  : out std_logic_vector( 3 downto 0);
+      TX_DATA_I                                 : in  std_logic_vector(83 downto 0); 
+      TX_EXTRA_DATA_WIDEBUS_I                   : in  std_logic_vector(31 downto 0);     
+      TX_EXTRA_DATA_GBT8B10B_I                  : in  std_logic_vector( 3 downto 0);
       
       -- RX data:
       -----------     
@@ -304,9 +304,9 @@ if txFrameClk_from_txPll'event and txFrameClk_from_txPll='1' then
  -- txData_from_pattGen <= not txData_from_pattGen;
 end if;
 end process;
-   TX_DATA_O                                    <= txData_from_pattGen;
-   TX_EXTRA_DATA_WIDEBUS_O                      <= txExtraDataWidebus_from_pattGen;
-   TX_EXTRA_DATA_GBT8B10B_O                     <= txExtraDataGbt8b10b_from_pattGen;   -- Comment: Note!! Not implemented yet.
+--   TX_DATA_O                                    <= txData_from_pattGen;
+--   TX_EXTRA_DATA_WIDEBUS_O                      <= txExtraDataWidebus_from_pattGen;
+--   TX_EXTRA_DATA_GBT8B10B_O                     <= txExtraDataGbt8b10b_from_pattGen;   -- Comment: Note!! Not implemented yet.
    
    --========================--
    -- GBT Bank resets scheme --
@@ -503,9 +503,9 @@ end process;
    to_gbtBank_1_gbtTx(1).isDataSel              <= TX_ISDATA_SEL_I;  
    RX_ISDATA_FLAG_O                             <= from_gbtBank_1_gbtRx(1).isDataFlag;  
    
-   to_gbtBank_1_gbtTx(1).data                   <= txData_from_pattGen_adjusted;--from_gbtBank_1_gbtRx(1).data;--txData_from_pattGen;   
-   to_gbtBank_1_gbtTx(1).extraData_wideBus      <= txExtraDataWidebus_from_pattGen;
-   to_gbtBank_1_gbtTx(1).extraData_gbt8b10b     <= txExtraDataGbt8b10b_from_pattGen;   -- Comment: Note!! Not implemented yet.
+   to_gbtBank_1_gbtTx(1).data                   <= TX_DATA_I;--from_gbtBank_1_gbtRx(1).data;--txData_from_pattGen;   
+   to_gbtBank_1_gbtTx(1).extraData_wideBus      <= TX_EXTRA_DATA_WIDEBUS_I;
+   to_gbtBank_1_gbtTx(1).extraData_gbt8b10b     <= TX_EXTRA_DATA_GBT8B10B_I;   -- Comment: Note!! Not implemented yet.
    
 	
 	
