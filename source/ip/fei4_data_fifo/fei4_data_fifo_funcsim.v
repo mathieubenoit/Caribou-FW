@@ -1,10 +1,10 @@
 // Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2014.2 (win64) Build 932637 Wed Jun 11 13:33:10 MDT 2014
-// Date        : Tue Oct 20 10:49:08 2015
+// Date        : Tue Oct 20 12:47:10 2015
 // Host        : WPO-148239 running 64-bit Service Pack 1  (build 7601)
 // Command     : write_verilog -force -mode funcsim
-//               C:/Hongbin/ITK/firmware_git/source/ip/fei4_data_fifo/fei4_data_fifo_funcsim.v
+//               c:/Hongbin/ITK/firmware_git/source/ip/fei4_data_fifo/fei4_data_fifo_funcsim.v
 // Design      : fei4_data_fifo
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
