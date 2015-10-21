@@ -101,6 +101,18 @@ entity TOP is
     CLK40_OUT_P                                  : out STD_LOGIC;
     CLK40_OUT_N                                  : out STD_LOGIC;
     
+    --TLU trigger signals
+    TLU_TRIGGER_I_P                              : in STD_LOGIC;
+    TLU_TRIGGER_I_N                              : in STD_LOGIC;
+    TLU_BUSY_O_P                                 : out STD_LOGIC;
+    TLU_BUSY_O_N                                 : out STD_LOGIC;
+    
+    --TLU simulator signals
+    TLU_TRIGGER_O_P                              : out STD_LOGIC;
+    TLU_TRIGGER_O_N                              : out STD_LOGIC;
+    TLU_BUSY_I_P                                 : in  STD_LOGIC;
+    TLU_BUSY_I_N                                 : in  STD_LOGIC;    
+    
     --GBT FPGA IOs
     CPU_RESET                                    : in  std_logic;     
     
@@ -346,6 +358,12 @@ signal gbt_fpga_rx_extra_data_gbt8b10b:std_logic_vector(3 downto 0);
 
 attribute MARK_DEBUG of gbt_fpga_tx_is_data,gbt_fpga_tx_data: signal is "TRUE";
 attribute MARK_DEBUG of gbt_fpga_rx_is_data,gbt_fpga_rx_data: signal is "TRUE";
+
+signal tlu_trigger_in                  :std_logic;
+signal tlu_busy_out                    :std_logic;
+
+signal tlu_trigger_out                 :std_logic;
+signal tlu_busy_in                     :std_logic;
 
 COMPONENT ps7_wrapper 
 port (
@@ -935,8 +953,13 @@ Port map(
     CFG_REG         => fei4_cfg_reg,
     WR_REG_DAT      => fei4_wr_reg_dat,
     
-    CMD_OUT         => fei4_cmd_out
+    CMD_OUT         => fei4_cmd_out,
+
+    EXT_TRI         => tlu_trigger_in,
+    BUSY            => tlu_busy_out  
 );
+
+
 
 --fei4_a2_cfg:FEI4B_CFG
 --      Port map(
@@ -1066,6 +1089,28 @@ gbt_link:entity work.gbt_fpga_wrapper
     GPIO_LED_0                  =>  GPIO_LED_0
 );  
 
+tlu_simulator:entity work.tlu_simulator_wrapper
+Generic map(
+  BASE_ADDR => x"43c00400"
+  )
+Port map (
+    sysclk           => ps7_aclk,
+    rst              => global_reset,
+
+    --IP BUS
+    Bus2IP_Addr      => bus2ip_addr_t,
+    Bus2IP_RD        => bus2ip_rd_t,
+    Bus2IP_WR        => bus2ip_wr_t,
+    Bus2IP_Data      => bus2ip_data_t,
+    IP2Bus_Data      => ip2bus_data_t,
+    RDACK            => rdack_t,
+    WRACK            => wrack_t,  
+           
+    --TLU signals
+    TLU_TRIGGER_OUT  => tlu_trigger_out,
+    TLU_BUSY_IN      => tlu_busy_in
+ );    
+ 
 REFCLK_OUT_BUF:OBUFDS
 generic map (
     IOSTANDARD => "DEFAULT",  
@@ -1188,6 +1233,55 @@ port map(
   -- Since the Positive output is connected to the negative input of the A2 FEI4, the cmd out is \
   -- reversed.
   I => not fei4_cmd_out  -- Buffer input
+);
+
+--TLU signals
+TLU_TRIGGER_IN_BUF:IBUFDS
+generic map (
+    DIFF_TERM => TRUE, 
+    IBUF_LOW_PWR => FALSE, 
+    IOSTANDARD => "LVDS_25"
+)
+port map (
+O =>  tlu_trigger_in, 
+I  => TLU_TRIGGER_I_P, 
+IB => TLU_TRIGGER_I_N 
+);
+
+TLU_BUSY_OUT_BUF:OBUFDS
+generic map (
+  IOSTANDARD => "DEFAULT",  
+  SLEW => "SLOW" 
+  ) 
+port map(
+  O  => TLU_BUSY_O_P,  
+  OB => TLU_BUSY_O_N,  
+
+  I => tlu_busy_out  
+);
+
+--TLU simulator signals 
+TLU_TRIGGER_OUT_BUF:OBUFDS
+generic map (
+  IOSTANDARD => "DEFAULT",  
+  SLEW => "SLOW" 
+  ) 
+port map(
+  O  => TLU_TRIGGER_O_P,  
+  OB => TLU_TRIGGER_O_N,  
+  I => tlu_trigger_out  
+);
+
+TLU_BUSY_IN_BUF:IBUFDS
+generic map (
+    DIFF_TERM => TRUE, 
+    IBUF_LOW_PWR => FALSE, 
+    IOSTANDARD => "LVDS_25"
+)
+port map (
+O =>  tlu_busy_in, 
+I  => TLU_BUSY_I_P, 
+IB => TLU_BUSY_I_N 
 );
 
 IIC_BUFFER_EN <= '1';
