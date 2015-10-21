@@ -50,7 +50,10 @@ entity fei4b_cfg is
     CFG_REG        : in std_logic_vector(31 downto 0);
     WR_REG_DAT     : in std_logic_vector(15 downto 0);
     
-    CMD_OUT        : out std_logic
+    CMD_OUT        : out std_logic;
+    
+    EXT_TRI        : in std_logic;
+    BUSY           : out std_logic  
     );    
 end fei4b_cfg;
 architecture Behavioral of fei4b_cfg is
@@ -90,6 +93,9 @@ signal cfg_state : state_type := IDLE ;
 signal fr_addr_i   :std_logic_vector(5 downto 0);
 signal fr_addr_ii  :std_logic_vector(5 downto 0); 
 signal fr_addr_iii :std_logic_vector(5 downto 0); 
+
+signal ext_tri_prev :std_logic;
+signal busy_i       :std_logic;
 
 begin
 
@@ -138,14 +144,25 @@ begin
     reg_dat  <= (others => '0');
     cfg_state <= IDLE;
     cfg_error <= '0';
+    busy_i <= '0';
    elsif rising_edge(cmd_clk_r) then
-  
+   ext_tri_prev <= EXT_TRI;
+   
     case cfg_state is  
       when IDLE =>
+      busy_i <= '0';
         if CFG_FLG = '1' then 
           cfg_state <= START; 
+          busy_i <= '1';
         end if;
-        
+        if ext_tri_prev = '0' and EXT_TRI = '1' then 
+          cfg_state <= FILED1_SHIFT; 
+          cmd_field_1 <= "11101";
+          shift_out_reg(22 downto 18) <= "11101";
+          busy_i <= '1';
+          shift_cnt <= 0;
+        end if;      
+      
       when START =>
         if CFG_FLG ='0' then
           shift_cnt <= 0;
@@ -174,7 +191,7 @@ begin
           cmd_out_r <= shift_out_reg(18);
           -- LV1 trigger command only have filed 1
           if cmd_field_1 = "11101" then 
-            cfg_state <= FINISH;
+            cfg_state <= FINISH;           
           else
             cfg_state <= FILED2_SHIFT;
             shift_cnt <= shift_cnt + 1;
@@ -292,5 +309,7 @@ if rising_edge(CLK160) then
    CMD_OUT <= cmd_out_shift(conv_integer(CMD_OUT_PH_SEL));
 end if;
 end process;
+
+BUSY <= busy_i;
 
 end Behavioral;
