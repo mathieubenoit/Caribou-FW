@@ -79,6 +79,7 @@ entity TOP is
     
     IIC2_SDA                                     : INOUT STD_LOGIC;
     IIC2_SCL                                     : INOUT STD_LOGIC;
+    IIC_BUFFER_EN                                : OUT STD_LOGIC;
     
     --FEI4 A1 IOs
     FEI4_A1_DOB_P                                : IN STD_LOGIC;
@@ -1188,5 +1189,7 @@ port map(
   -- reversed.
   I => not fei4_cmd_out  -- Buffer input
 );
+
+IIC_BUFFER_EN <= '1';
                                
 end Behavioral;
