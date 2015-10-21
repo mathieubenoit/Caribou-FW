@@ -1,14 +1,14 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: BNL
+-- Engineer: Hongbin                
 -- 
 -- Create Date: 10/21/2015 02:13:43 PM
 -- Design Name: 
 -- Module Name: tlu_master - Behavioral
--- Project Name: 
+-- Project Name: CaRIBOU firmware
 -- Target Devices: 
 -- Tool Versions: 
--- Description: 
+-- Description: Simulate a simple TLU device to send out trigger to the DUTs
 -- 
 -- Dependencies: 
 -- 
@@ -117,6 +117,7 @@ elsif rising_edge(SYSCLK) then
     if BUSY_I = '1' and busy_pre = '0' then
       state <= idle;
       wait_cnt <= 0;
+    -- If can't receive response from DUT, de-assert the trigger
     elsif wait_cnt = divider then 
       state <= idle;     
     else
