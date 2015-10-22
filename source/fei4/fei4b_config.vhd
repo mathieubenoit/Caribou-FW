@@ -69,7 +69,6 @@ signal cmd_field_5 : std_logic_vector(5 downto 0);
 signal reg_dat : std_logic_vector(15 downto 0);
 signal cmd_out_r : std_logic;
 signal cmd_out_shift :std_logic_vector(3 downto 0);
-signal cmd_out_r_o :std_logic;
 signal shift_cnt  : integer range 0 to 31 := 0;  
 signal fr_reg_cnt : integer range 0 to 31 := 0;  
 signal delay_cnt  : integer range 0 to 255:= 0;
@@ -88,8 +87,8 @@ signal FR_RAM :ram_type := (others => (others => '0'));
 type state_type is (IDLE, START, FILED1_SHIFT, FILED2_SHIFT, FILED34_SHIFT, FILED5_SHIFT, DELAY, WR_REG_DAT_SHIFT, WR_FR_DAT_SHIFT, FINISH);
 signal cfg_state : state_type := IDLE ;
 
---attribute MARK_DEBUG : string;
---attribute MARK_DEBUG of cfg_state,cmd_out_r_o: signal is "TRUE";
+attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of cfg_state: signal is "TRUE";
 signal fr_addr_i   :std_logic_vector(5 downto 0);
 signal fr_addr_ii  :std_logic_vector(5 downto 0); 
 signal fr_addr_iii :std_logic_vector(5 downto 0); 

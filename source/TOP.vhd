@@ -307,7 +307,7 @@ signal fei4_a1_data_out        :std_logic_vector(7 downto 0);
 signal fei4_a1_data_is_pix_dat :std_logic;
 signal fei4_a2_data_out        :std_logic_vector(7 downto 0);
 signal fei4_a2_data_is_pix_dat :std_logic;
-attribute MARK_DEBUG of fei4_a1_data_is_pix_dat,fei4_a2_data_is_pix_dat : signal is "TRUE";
+attribute MARK_DEBUG of fei4_cmd_out, fei4_a1_data_is_pix_dat,fei4_a2_data_is_pix_dat : signal is "TRUE";
 
 signal fei4_a2_cfg_flg         :std_logic;
 signal fei4_a2_cfg_reg         :std_logic_vector(31 downto 0);
