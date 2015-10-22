@@ -707,7 +707,7 @@ begin
         RXELECIDLE                      =>      open,
         RXELECIDLEMODE                  =>      "11",
         ----------------- Receive Ports - RX Polarity Control Ports ----------------
-        RXPOLARITY                      =>      '1',--RXPOLARITY_IN,
+        RXPOLARITY                      =>      '0',--RXPOLARITY_IN,
         ---------------------- Receive Ports - RX gearbox ports --------------------
         RXSLIDE                         =>      tied_to_ground_i,
         ------------------- Receive Ports - RX8B/10B Decoder Ports -----------------
@@ -806,7 +806,7 @@ begin
         TXCOMWAKE                       =>      tied_to_ground_i,
         TXPDELECIDLEMODE                =>      tied_to_ground_i,
         ----------------- Transmit Ports - TX Polarity Control Ports ---------------
-        TXPOLARITY                      =>      '1',--TXPOLARITY_IN,
+        TXPOLARITY                      =>      '0',--TXPOLARITY_IN,
         --------------- Transmit Ports - TX Receiver Detection Ports  --------------
         TXDETECTRX                      =>      tied_to_ground_i,
         ------------------ Transmit Ports - TX8b/10b Encoder Ports -----------------
