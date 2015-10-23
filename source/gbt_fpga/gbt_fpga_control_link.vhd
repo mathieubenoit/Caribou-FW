@@ -48,9 +48,12 @@ end gbt_fpga_control_link;
 architecture Behavioral of gbt_fpga_control_link is
 
 signal reg0            :std_logic_vector(31 downto 0);
-signal reg1            :std_logic_vector(31 downto 0) := x"a1b2c3d4";
+signal reg1            :std_logic_vector(31 downto 0); --:= x"a1b2c3d4";
 signal reg2            :std_logic_vector(31 downto 0);
 signal reg3            :std_logic_vector(31 downto 0);
+
+attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of reg0,reg1: signal is "TRUE";
 
 signal addr_in         :std_logic_vector(15 downto 0);
 signal data_in         :std_logic_vector(31 downto 0);
@@ -74,8 +77,7 @@ process(GBT_RX_FRAME_CLK, RST)
 begin
 if RST = '1' then
   reg0           <= (others => '0');
-  -- todo, revise back to zeros
-  --reg1           <= (others => '0');
+  reg1           <= (others => '0');
   reg2           <= (others => '0');
   reg3           <= (others => '0');
   addr_out       <= (others => '0');

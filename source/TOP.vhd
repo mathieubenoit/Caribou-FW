@@ -359,6 +359,12 @@ signal gbt_fpga_rx_extra_data_gbt8b10b:std_logic_vector(3 downto 0);
 attribute MARK_DEBUG of gbt_fpga_tx_is_data,gbt_fpga_tx_data: signal is "TRUE";
 attribute MARK_DEBUG of gbt_fpga_rx_is_data,gbt_fpga_rx_data: signal is "TRUE";
 
+signal gbt_ctrl_data_valid_o           :std_logic;
+signal gbt_ctrl_addr_o                 :std_logic_vector(14 downto 0);
+signal gbt_ctrl_data_o                 :std_logic_vector(31 downto 0);
+attribute MARK_DEBUG of gbt_ctrl_data_valid_o,gbt_ctrl_addr_o,gbt_ctrl_data_o : signal is "TRUE";
+
+
 signal tlu_trigger_in                  :std_logic;
 signal tlu_busy_out                    :std_logic;
 
@@ -1049,7 +1055,6 @@ Port map (
 );
 
 gbt_fpga_tx_is_data           <= gbt_fei4_tx_is_data;
-gbt_fpga_tx_data(83 downto 32)<= (others => '0');
 gbt_fpga_tx_data(31 downto 0) <= gbt_fei4_tx_data;
 gbt_fpga_tx_extra_data_widebus   <= (others => '0');
 gbt_fpga_tx_extra_data_gbt8b10b  <= (others => '0');
@@ -1088,6 +1093,25 @@ gbt_link:entity work.gbt_fpga_wrapper
     GPIO_LED_RIGHT              =>  GPIO_LED_RIGHT,
     GPIO_LED_0                  =>  GPIO_LED_0
 );  
+
+gbt_fpga_tx_data(83 downto 80) <= x"1";
+gbt_fpga_tx_data(79)           <= gbt_ctrl_data_valid_o;
+gbt_fpga_tx_data(78 downto 64) <= gbt_ctrl_addr_o;
+gbt_fpga_tx_data(63 downto 32) <= gbt_ctrl_data_o;
+
+gbt_slow_ctronl: entity work.gbt_fpga_control_link
+    Port map(
+    RST              =>  global_reset,
+    
+    GBT_RX_FRAME_CLK =>  gbt_fpga_rx_frame_clk,
+    GBT_RX_IS_DATA   =>  gbt_fpga_rx_is_data,
+    GBT_RX_DATA      =>  gbt_fpga_rx_data,
+    
+    DATA_VALID_O     =>  gbt_ctrl_data_valid_o,
+    REG_ADDRESS_O    =>  gbt_ctrl_addr_o,
+    REG_VALUE_O      =>  gbt_ctrl_data_o
+    );
+
 
 tlu_simulator:entity work.tlu_simulator_wrapper
 Generic map(
