@@ -41,7 +41,8 @@ entity gbt_fpga_control_link is
     
     DATA_VALID_O     :out std_logic;
     REG_ADDRESS_O    :out std_logic_vector(14 downto 0);
-    REG_VALUE_O      :out std_logic_vector(31 downto 0)    
+    REG_VALUE_O      :out std_logic_vector(31 downto 0);
+    FE_NUMBER_O      :out std_logic_vector(3  downto 0)    
     );
 end gbt_fpga_control_link;
 
@@ -59,10 +60,12 @@ signal addr_in         :std_logic_vector(15 downto 0);
 signal data_in         :std_logic_vector(31 downto 0);
 signal rw              :std_logic;
 signal data_valid_in   :std_logic;
+signal fe_num_in       :std_logic_vector(3  downto 0);
 
 signal addr_out        :std_logic_vector(15 downto 0);
 signal data_out        :std_logic_vector(31 downto 0);
 signal data_valid_out  :std_logic;
+signal fe_num_out      :std_logic_vector(3  downto 0);
 
 begin
 
@@ -71,7 +74,7 @@ rw                         <= GBT_RX_DATA(47);
 addr_in(15)                <= '0';
 addr_in(14 downto 0)       <= GBT_RX_DATA(46 downto 32);
 data_in                    <= GBT_RX_DATA(31 downto 0);
-
+fe_num_in                  <= GBT_RX_DATA(83 downto 80);
 
 process(GBT_RX_FRAME_CLK, RST)
 begin
@@ -82,9 +85,11 @@ if RST = '1' then
   reg3           <= (others => '0');
   addr_out       <= (others => '0');
   data_out       <= (others => '0');
-  data_valid_out <='0';
+  data_valid_out <= '0';
+  fe_num_out     <= (others => '0');
 elsif rising_edge(GBT_RX_FRAME_CLK) then
   if data_valid_in = '1' then
+  fe_num_out <= fe_num_in;
   case addr_in is 
   when x"4000" =>
     if rw = '1' then 

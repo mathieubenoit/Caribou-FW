@@ -362,7 +362,8 @@ attribute MARK_DEBUG of gbt_fpga_rx_is_data,gbt_fpga_rx_data: signal is "TRUE";
 signal gbt_ctrl_data_valid_o           :std_logic;
 signal gbt_ctrl_addr_o                 :std_logic_vector(14 downto 0);
 signal gbt_ctrl_data_o                 :std_logic_vector(31 downto 0);
-attribute MARK_DEBUG of gbt_ctrl_data_valid_o,gbt_ctrl_addr_o,gbt_ctrl_data_o : signal is "TRUE";
+signal gbt_ctrl_fe_num_o               :std_logic_vector( 3 downto 0);
+attribute MARK_DEBUG of gbt_ctrl_data_valid_o,gbt_ctrl_addr_o,gbt_ctrl_data_o,gbt_ctrl_fe_num_o : signal is "TRUE";
 
 
 signal tlu_trigger_in                  :std_logic;
@@ -1094,7 +1095,7 @@ gbt_link:entity work.gbt_fpga_wrapper
     GPIO_LED_0                  =>  GPIO_LED_0
 );  
 
-gbt_fpga_tx_data(83 downto 80) <= x"1";
+gbt_fpga_tx_data(83 downto 80) <= gbt_ctrl_fe_num_o;
 gbt_fpga_tx_data(79)           <= gbt_ctrl_data_valid_o;
 gbt_fpga_tx_data(78 downto 64) <= gbt_ctrl_addr_o;
 gbt_fpga_tx_data(63 downto 32) <= gbt_ctrl_data_o;
@@ -1109,7 +1110,8 @@ gbt_slow_ctronl: entity work.gbt_fpga_control_link
     
     DATA_VALID_O     =>  gbt_ctrl_data_valid_o,
     REG_ADDRESS_O    =>  gbt_ctrl_addr_o,
-    REG_VALUE_O      =>  gbt_ctrl_data_o
+    REG_VALUE_O      =>  gbt_ctrl_data_o,
+    FE_NUMBER_O      =>  gbt_ctrl_fe_num_o
     );
 
 
