@@ -37,7 +37,7 @@ entity gbt_fpga_control_link is
     
     GBT_RX_FRAME_CLK :in std_logic;
     GBT_RX_IS_DATA   :in std_logic;
-    GBT_RX_DATA      :in std_logic_vector(47 downto 0);  
+    GBT_RX_DATA      :in std_logic_vector(83 downto 0);  
     
     DATA_VALID_O     :out std_logic;
     REG_ADDRESS_O    :out std_logic_vector(14 downto 0);

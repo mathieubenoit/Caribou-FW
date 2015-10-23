@@ -39,7 +39,8 @@ architecture Behavioral of gbt_fpga_ctrl_link_tb is
 signal clk40m :std_logic;
 signal rst    :std_logic;
 
-signal gbt_rx_data    :std_logic_vector(47 downto 0);
+signal gbt_rx_data    :std_logic_vector(83 downto 0);
+signal gbt_rx_contrl  :std_logic_vector(47 downto 0);
 signal gbt_rx_is_data :std_logic;
 
 signal data_valid_o   :std_logic;
@@ -59,9 +60,11 @@ end process;
 
 rst <= '0', '1' after 50 ns, '0' after 100 ns;
 
-gbt_rx_data <= x"000000000000", x"c00411223344" after 1000 ns, x"400811222644" after 1025 ns;
-gbt_rx_is_data <= '0', '1' after 1000 ns, '0' after 1025 ns;
+gbt_rx_contrl <= x"000000000000", x"c00411223344" after 998 ns, x"400811222644" after 1023 ns;
+gbt_rx_is_data <= '0', '1' after 998 ns, '0' after 1023 ns;
 
+gbt_rx_data(47 downto 0) <= gbt_rx_contrl;
+gbt_rx_data(83 downto 48) <= (others => '0');
 gbt_slow_ctrl:entity work.gbt_fpga_control_link
 Port map (
 RST              => rst, 
