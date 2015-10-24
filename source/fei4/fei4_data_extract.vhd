@@ -61,8 +61,8 @@ signal state          : state_type := START ;
 
 signal is_pixel_data  :std_logic;  -- current data is pixel data
 
---attribute MARK_DEBUG : string;
---attribute MARK_DEBUG of reg_value,reg_addr : signal is "TRUE";
+attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of state,reg_value,reg_addr : signal is "TRUE";
 
 begin
 

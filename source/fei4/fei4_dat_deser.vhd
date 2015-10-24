@@ -104,6 +104,8 @@ constant VCC :std_logic:='1';
 type state_type is (START, FRAM_SYNC, DELAY, FINISH);
 signal rx_state : state_type := START ;
 
+attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of rx_state,fei4_data,fram_is_synced : signal is "TRUE";
 
 begin
          
