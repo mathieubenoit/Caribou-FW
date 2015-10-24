@@ -76,9 +76,7 @@ end axi_mburst1;
 
 architecture Behavioral of axi_mburst1 is
 
-
-------------- Begin Cut here for COMPONENT Declaration ------ COMP_TAG
-COMPONENT fifo_generator_0
+COMPONENT axi_fei4_fifo
   PORT (
     rst : IN STD_LOGIC;
     wr_clk : IN STD_LOGIC;
@@ -93,11 +91,6 @@ COMPONENT fifo_generator_0
     wr_data_count : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
   );
 END COMPONENT;
-ATTRIBUTE SYN_BLACK_BOX : BOOLEAN;
-ATTRIBUTE SYN_BLACK_BOX OF fifo_generator_0 : COMPONENT IS TRUE;
-ATTRIBUTE BLACK_BOX_PAD_PIN : STRING;
-ATTRIBUTE BLACK_BOX_PAD_PIN OF fifo_generator_0 : COMPONENT IS "rst,wr_clk,rd_clk,din[31:0],wr_en,rd_en,dout[31:0],full,empty,rd_data_count[6:0],wr_data_count[6:0]";
-
 
 type  state_type is (IDLE, ADDR_ACTIVE, DATA_ACTIVE, DELAY, BURST, HOLD);  
 signal state: state_type;
@@ -146,7 +139,7 @@ axi_wlast <= axi_wlast_i;
 
 fifo_rd_clk <= axi_clk;
 
-fei4_data_fifo: fifo_generator_0
+fei4_data_fifo:axi_fei4_fifo
   PORT MAP (
     rst => fifo_reset,
     wr_clk => fifo_wrclk,
