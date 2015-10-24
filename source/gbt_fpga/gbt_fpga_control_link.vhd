@@ -136,5 +136,6 @@ end process;
 DATA_VALID_O     <= data_valid_out;
 REG_ADDRESS_O    <= addr_out(14 downto 0);
 REG_VALUE_O      <= data_out;
+FE_NUMBER_O      <= fe_num_out;
               
 end Behavioral;
