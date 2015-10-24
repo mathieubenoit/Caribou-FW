@@ -1,16 +1,16 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: BNL
+-- Engineer: Hongbin Liu hliu2@bnl.gov
 -- 
 -- Create Date: 08/17/2015 02:26:56 PM
 -- Design Name: 
 -- Module Name: fei4_dat_deser - Behavioral
--- Project Name: 
--- Target Devices: 
+-- Project Name: CaRIBOU Firmware
+-- Target Devices: None
 -- Tool Versions: 
 -- Description: 
 -- 
--- Dependencies: 
+-- Dependencies: None
 -- 
 -- Revision:
 -- Revision 0.01 - File Created
