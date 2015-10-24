@@ -1,12 +1,12 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: BNL 
+-- Engineer: Hongbin Liu hliu2@bnl.gov
 -- 
 -- Create Date: 08/10/2015 10:30:31 AM
 -- Design Name: 
 -- Module Name: fei4b_config - Behavioral
--- Project Name: 
--- Target Devices: 
+-- Project Name: CaRIBOU Firmware
+-- Target Devices: None
 -- Tool Versions: 
 -- Description: 
 -- 
@@ -34,64 +34,61 @@ use UNISIM.VComponents.all;
 
 entity fei4b_cfg is
     Port ( 
-    RST            : in std_logic;
+    RST            : in  std_logic;
     
-    CLK160         : in std_logic;
-    CMD_OUT_PH_SEL : in std_logic_vector(1 downto 0);
+    CLK160         : in  std_logic;
+    CMD_OUT_PH_SEL : in  std_logic_vector(1  downto 0);
     --FR_RAM_ADDR, Bit5 is write enable, bit[4:0] is address;
-    FR_CFG_CLK     : in std_logic;
-    FR_RAM_ADDR    : in std_logic_vector(5 downto 0);
-    FR_RAM_DAT_IN  : in std_logic_vector(31 downto 0);
+    FR_CFG_CLK     : in  std_logic;
+    FR_RAM_ADDR    : in  std_logic_vector(5  downto 0);
+    FR_RAM_DAT_IN  : in  std_logic_vector(31 downto 0);
     FR_RAM_DAT_OUT : out std_logic_vector(31 downto 0);
 
-    CMD_CLK        : in std_logic;
+    CMD_CLK        : in  std_logic;
     
-    CFG_FLG        : in std_logic;                              
-    CFG_REG        : in std_logic_vector(31 downto 0);
-    WR_REG_DAT     : in std_logic_vector(15 downto 0);
+    CFG_FLG        : in  std_logic;                              
+    CFG_REG        : in  std_logic_vector(31 downto 0);
+    WR_REG_DAT     : in  std_logic_vector(15 downto 0);
     
     CMD_OUT        : out std_logic;
     
-    EXT_TRI        : in std_logic;
+    EXT_TRI        : in  std_logic;
     BUSY           : out std_logic  
     );    
 end fei4b_cfg;
 architecture Behavioral of fei4b_cfg is
 
-signal cmd_clk_r :std_logic;
-signal shift_out_reg : std_logic_vector(22 downto 0);
-signal shift_out_fr_reg : std_logic_vector(31 downto 0);
-signal cmd_field_1 : std_logic_vector(4 downto 0);
-signal cmd_field_2 : std_logic_vector(3 downto 0);
-signal cmd_field_3 : std_logic_vector(3 downto 0);
-signal cmd_field_4 : std_logic_vector(3 downto 0);
-signal cmd_field_5 : std_logic_vector(5 downto 0);
-signal reg_dat : std_logic_vector(15 downto 0);
-signal cmd_out_r : std_logic;
-signal cmd_out_shift :std_logic_vector(3 downto 0);
-signal shift_cnt  : integer range 0 to 31 := 0;  
-signal fr_reg_cnt : integer range 0 to 31 := 0;  
-signal delay_cnt  : integer range 0 to 255:= 0;
-signal delay_cnt_latch : std_logic_vector(7 downto 0);
-signal glb_pls_lv1_en :std_logic := '0';
-signal cfg_error :std_logic;
-signal fr_ram_wr_en :std_logic;
+signal cmd_clk_r        :std_logic;
+signal shift_out_reg    :std_logic_vector(22 downto 0);
+signal shift_out_fr_reg :std_logic_vector(31 downto 0);
+signal cmd_field_1      :std_logic_vector(4  downto 0);
+signal cmd_field_2      :std_logic_vector(3  downto 0);
+signal cmd_field_3      :std_logic_vector(3  downto 0);
+signal cmd_field_4      :std_logic_vector(3  downto 0);
+signal cmd_field_5      :std_logic_vector(5  downto 0);
+signal reg_dat          :std_logic_vector(15 downto 0);
+signal cmd_out_r        :std_logic;
+signal cmd_out_shift    :std_logic_vector(3  downto 0);
+signal shift_cnt        :integer range 0 to 31 := 0;  
+signal fr_reg_cnt       :integer range 0 to 31 := 0;  
+signal delay_cnt        :integer range 0 to 255:= 0;
+signal delay_cnt_latch  :std_logic_vector(7  downto 0);
+signal glb_pls_lv1_en   :std_logic := '0';
+signal cfg_error        :std_logic;
+signal fr_ram_wr_en     :std_logic;
 type ram_type is array(0 to 20) of std_logic_vector(31 downto 0);
 signal FR_RAM :ram_type := (others => (others => '0'));
---(
---X"a1234565",X"a789abc5",X"adef0125",X"a3456785",X"a9abcdef",
---X"00000000",X"00000000",X"00000000",X"00000000",X"00000000",
---X"00000000",X"00000000",X"00000000",X"00000000",X"00000000",
---X"00000000",X"00000000",X"0fedcba9",X"87654321",X"0fedcba9",X"87654321");
 
 type state_type is (IDLE, START, FILED1_SHIFT, FILED2_SHIFT, FILED34_SHIFT, FILED5_SHIFT, DELAY, WR_REG_DAT_SHIFT, WR_FR_DAT_SHIFT, FINISH);
+
 signal cfg_state : state_type := IDLE ;
 
 attribute MARK_DEBUG : string;
 attribute MARK_DEBUG of cfg_state: signal is "TRUE";
-signal fr_addr_i   :std_logic_vector(5 downto 0);
-signal fr_addr_ii  :std_logic_vector(5 downto 0); 
-signal fr_addr_iii :std_logic_vector(5 downto 0); 
+
+signal fr_addr_i    :std_logic_vector(5 downto 0);
+signal fr_addr_ii   :std_logic_vector(5 downto 0); 
+signal fr_addr_iii  :std_logic_vector(5 downto 0); 
 
 signal ext_tri_prev :std_logic;
 signal busy_i       :std_logic;
@@ -130,66 +127,71 @@ cmd_clk_r <= CMD_CLK;
 fei4_cfg_fsm:process(cmd_clk_r,RST)
 begin
   if (RST = '1') then
-    cmd_out_r <='0';
-    shift_cnt <= 0;
-    fr_reg_cnt <= 0;
-    delay_cnt <= 0;
+    cmd_out_r        <='0';
+    shift_cnt        <= 0;
+    fr_reg_cnt       <= 0;
+    delay_cnt        <= 0;
     shift_out_fr_reg <= (others => '0');
-    shift_out_reg <= (others => '0');
-    cmd_field_1 <= (others => '0');
-    cmd_field_2 <= (others => '0');
-    cmd_field_3 <= (others => '0');
-    cmd_field_4 <= (others => '0');
-    reg_dat  <= (others => '0');
-    cfg_state <= IDLE;
-    cfg_error <= '0';
-    busy_i <= '0';
-   elsif rising_edge(cmd_clk_r) then
+    shift_out_reg    <= (others => '0');
+    cmd_field_1      <= (others => '0');
+    cmd_field_2      <= (others => '0');
+    cmd_field_3      <= (others => '0');
+    cmd_field_4      <= (others => '0');
+    reg_dat          <= (others => '0');
+    cfg_state        <= IDLE;
+    cfg_error        <= '0';
+    busy_i           <= '0';
+    
+  elsif rising_edge(cmd_clk_r) then
+    
    ext_tri_prev <= EXT_TRI;
    
-    case cfg_state is  
+   case cfg_state is
+     
       when IDLE =>
-      busy_i <= '0';
-        if CFG_FLG = '1' then 
+        busy_i <= '0';
+        
+        if CFG_FLG = '1' then -- Start Configuration
           cfg_state <= START; 
-          busy_i <= '1';
+          busy_i    <= '1';
         end if;
-        if ext_tri_prev = '0' and EXT_TRI = '1' then 
-          cfg_state <= FILED1_SHIFT; 
-          cmd_field_1 <= "11101";
+        
+        if ext_tri_prev = '0' and EXT_TRI = '1' then -- External Trigger
+          cfg_state                   <= FILED1_SHIFT; 
+          cmd_field_1                 <= "11101";
           shift_out_reg(22 downto 18) <= "11101";
-          busy_i <= '1';
-          shift_cnt <= 0;
+          busy_i                      <= '1';
+          shift_cnt                   <= 0;
         end if;      
       
       when START =>
         if CFG_FLG ='0' then
-          shift_cnt <= 0;
-          fr_reg_cnt <= 0;
-          delay_cnt <= 0;
-          cfg_state <= FILED1_SHIFT;
+          shift_cnt     <= 0;
+          fr_reg_cnt    <= 0;
+          delay_cnt     <= 0;
+          cfg_state     <= FILED1_SHIFT;
           shift_out_reg <= CFG_REG(22 downto 0);     
           -- 5 bit
-          cmd_field_1 <= CFG_REG(22 downto 18);
+          cmd_field_1   <= CFG_REG(22 downto 18);
           -- 4 bit
-          cmd_field_2 <= CFG_REG(17 DOWNTO 14);
+          cmd_field_2   <= CFG_REG(17 DOWNTO 14);
           -- 4 bit
-          cmd_field_3 <= CFG_REG(13 DOWNTO 10);
+          cmd_field_3   <= CFG_REG(13 DOWNTO 10);
           -- 4 bit
-          cmd_field_4 <= CFG_REG(9 downto 6);
+          cmd_field_4   <= CFG_REG(9 downto 6);
           -- 6 bit
-          cmd_field_5 <= CFG_REG(5 downto 0);
+          cmd_field_5   <= CFG_REG(5 downto 0);
           
           delay_cnt_latch <= CFG_REG(30 DOWNTO 23);
-          glb_pls_lv1_en <= CFG_REG(31);
-          reg_dat  <= WR_REG_DAT;
+          glb_pls_lv1_en  <= CFG_REG(31);
+          reg_dat         <= WR_REG_DAT;
         end if;
-              
+
+      -- Shift Out field 1
       when FILED1_SHIFT =>
         if (shift_cnt = 4) then 
-          cmd_out_r <= shift_out_reg(18);
-          -- LV1 trigger command only have filed 1
-          if cmd_field_1 = "11101" then 
+          cmd_out_r <= shift_out_reg(18);         
+          if cmd_field_1 = "11101" then  -- LV1 trigger command only have filed 1
             cfg_state <= FINISH;           
           else
             cfg_state <= FILED2_SHIFT;
@@ -206,9 +208,10 @@ begin
           -- If LV1 fllowed by CAL is enabled, then to delay state          
           if cmd_field_2 = "0100" and glb_pls_lv1_en = '1' then          
             cfg_state <= DELAY;
-          -- Only slow command have filed 3  
-          elsif cmd_field_2 /= "1000" then 
+            
+          elsif cmd_field_2 /= "1000" then    -- Only slow command have filed 3  
             cfg_state <= FINISH;
+            
           else
             cfg_state <= FILED34_SHIFT;
             shift_cnt <= shift_cnt + 1;
@@ -221,8 +224,8 @@ begin
       when FILED34_SHIFT =>
         if (shift_cnt = 16) then 
           cmd_out_r <= shift_out_reg(6);
-          --  Global reset command doesn't have filed 5
-          if cmd_field_3 = "1000" then 
+         
+          if cmd_field_3 = "1000" then  --  Global reset command doesn't have filed 5
             cfg_state <= FINISH;
           else
             cfg_state <= FILED5_SHIFT;
@@ -235,18 +238,18 @@ begin
 
       when FILED5_SHIFT =>
         if (shift_cnt = 22) then 
-          cmd_out_r <= shift_out_reg(0);
-          --Write register
-          if cmd_field_3 = "0010" then 
+          cmd_out_r   <= shift_out_reg(0);
+         
+          if cmd_field_3 = "0010" then  --Write register
             cfg_state <= WR_REG_DAT_SHIFT;
             shift_cnt <= 0;
-          --Write Front end
-          elsif cmd_field_3 = "0100" then
-            cfg_state <= WR_FR_DAT_SHIFT;
+         
+          elsif cmd_field_3 = "0100" then  --Write front end shift registers
+            cfg_state        <= WR_FR_DAT_SHIFT;
             shift_out_fr_reg <= FR_RAM(0);
-            shift_cnt <= 0;
+            shift_cnt        <= 0;
           else
-            cfg_state <= FINISH;
+            cfg_state        <= FINISH;
           end if;
         else
           shift_cnt <= shift_cnt + 1;
