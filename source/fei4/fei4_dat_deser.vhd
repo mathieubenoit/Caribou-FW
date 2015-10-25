@@ -66,6 +66,7 @@ end component;
 --FEI4 DATA CLOCK AND FRAM CLOCK
 signal data_clk              :std_logic;
 signal data_fclk             :std_logic;
+signal data_i                :std_logic;
 
 signal fei4_data_shift       :std_logic_vector(9 downto 0);
 signal fei4_data_shift_sel   :std_logic;
@@ -104,20 +105,22 @@ constant VCC :std_logic:='1';
 type state_type is (START, FRAM_SYNC, DELAY, FINISH);
 signal rx_state : state_type := START ;
 
+signal sync_tri :std_logic;
+
 attribute MARK_DEBUG : string;
-attribute MARK_DEBUG of rx_state,fei4_data,fram_is_synced : signal is "TRUE";
+attribute MARK_DEBUG of sync_tri,idle,data_i,fei4_data_byte,rx_state,fei4_data,fram_is_synced : signal is "TRUE";
 
 begin
          
 data_clk  <= BIT_CLK;
 data_fclk <= FRAME_CLK;
-
-
+data_i    <= DATA_IN;
+sync_tri  <= FRAME_SYNC_EN;
 --RX DATA shift and raw data idle status detect
 raw_data_shift:process(data_clk)
 begin 
   if rising_edge(data_clk) then 
-    fei4_data_shift       <= fei4_data_shift(8 downto 0) & DATA_IN;   
+    fei4_data_shift       <= fei4_data_shift(8 downto 0) & data_i ;   
     fei4_data_shift_sel   <= fei4_data_shift(data_pos_sel_cnt);
     fei4_data_byte_shift  <= fei4_data_byte_shift(8 downto 0) & fei4_data_shift_sel;
     
@@ -174,7 +177,7 @@ begin
       delay_cnt        <= 0;
       data_pos_sel_cnt <= 0;
       
-      if FRAME_SYNC_EN = '1' then 
+      if sync_tri = '1' then 
         rx_state <= FRAM_SYNC;
       end if;  
            
@@ -196,7 +199,7 @@ begin
       end if;
       
     when FINISH =>
-      if FRAME_SYNC_EN = '0' then 
+      if sync_tri = '0' then 
         rx_state <= START;
       end if;
     

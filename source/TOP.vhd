@@ -363,7 +363,7 @@ signal gbt_ctrl_data_valid_o           :std_logic;
 signal gbt_ctrl_addr_o                 :std_logic_vector(14 downto 0);
 signal gbt_ctrl_data_o                 :std_logic_vector(31 downto 0);
 signal gbt_ctrl_fe_num_o               :std_logic_vector( 3 downto 0);
-attribute MARK_DEBUG of gbt_ctrl_data_valid_o,gbt_ctrl_addr_o,gbt_ctrl_data_o,gbt_ctrl_fe_num_o : signal is "TRUE";
+--attribute MARK_DEBUG of gbt_ctrl_data_valid_o,gbt_ctrl_addr_o,gbt_ctrl_data_o,gbt_ctrl_fe_num_o : signal is "TRUE";
 
 
 signal tlu_trigger_in                  :std_logic;
