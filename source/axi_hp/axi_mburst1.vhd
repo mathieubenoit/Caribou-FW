@@ -114,7 +114,8 @@ signal last_rd_tri_delay :std_logic;
 
 signal last_burst :std_logic;
 
---attribute MARK_DEBUG : string;
+attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of axi_awaddr_i :signal is "TRUE";
 --attribute MARK_DEBUG of last_rd_tri_i,state,fifo_rden ,fifo_rdcnt_i,fifo_empty,fifo_full:signal is "TRUE";
 --attribute MARK_DEBUG of axi_awaddr,axi_awready,axi_awvalid,axi_wready :signal is "TRUE";
 --attribute MARK_DEBUG of axi_wdata,axi_wvalid,axi_wlast :signal is "TRUE";
