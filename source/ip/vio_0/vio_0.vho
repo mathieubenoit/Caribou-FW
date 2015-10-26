@@ -47,7 +47,7 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:vio:3.0
--- IP Revision: 3
+-- IP Revision: 5
 
 -- The following code must appear in the VHDL architecture header.
 
@@ -59,11 +59,6 @@ COMPONENT vio_0
     probe_out0 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
   );
 END COMPONENT;
-ATTRIBUTE SYN_BLACK_BOX : BOOLEAN;
-ATTRIBUTE SYN_BLACK_BOX OF vio_0 : COMPONENT IS TRUE;
-ATTRIBUTE BLACK_BOX_PAD_PIN : STRING;
-ATTRIBUTE BLACK_BOX_PAD_PIN OF vio_0 : COMPONENT IS "clk,probe_in0[17:0],probe_out0[11:0]";
-
 -- COMP_TAG_END ------ End COMPONENT Declaration ------------
 
 -- The following code must appear in the VHDL architecture

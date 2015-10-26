@@ -47,7 +47,7 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:fifo_generator:12.0
--- IP Revision: 1
+-- IP Revision: 3
 
 -- The following code must appear in the VHDL architecture header.
 
@@ -66,11 +66,6 @@ COMPONENT fei4_data_fifo
     rd_data_count : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
   );
 END COMPONENT;
-ATTRIBUTE SYN_BLACK_BOX : BOOLEAN;
-ATTRIBUTE SYN_BLACK_BOX OF fei4_data_fifo : COMPONENT IS TRUE;
-ATTRIBUTE BLACK_BOX_PAD_PIN : STRING;
-ATTRIBUTE BLACK_BOX_PAD_PIN OF fei4_data_fifo : COMPONENT IS "rst,wr_clk,rd_clk,din[7:0],wr_en,rd_en,dout[3:0],full,empty,rd_data_count[4:0]";
-
 -- COMP_TAG_END ------ End COMPONENT Declaration ------------
 
 -- The following code must appear in the VHDL architecture

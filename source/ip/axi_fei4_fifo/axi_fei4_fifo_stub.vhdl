@@ -1,10 +1,10 @@
 -- Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2014.2 (win64) Build 932637 Wed Jun 11 13:33:10 MDT 2014
--- Date        : Sat Oct 24 10:06:12 2015
+-- Tool Version: Vivado v.2014.4 (win64) Build 1071353 Tue Nov 18 18:29:27 MST 2014
+-- Date        : Mon Oct 26 13:47:01 2015
 -- Host        : WPO-148239 running 64-bit Service Pack 1  (build 7601)
 -- Command     : write_vhdl -force -mode synth_stub
---               c:/Hongbin/ITK/firmware_git/source/ip/axi_fei4_fifo/axi_fei4_fifo_stub.vhdl
+--               C:/Hongbin/ITK/firmware_git/source/ip/axi_fei4_fifo/axi_fei4_fifo_stub.vhdl
 -- Design      : axi_fei4_fifo
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7z045ffg900-2
@@ -35,6 +35,6 @@ attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
 attribute black_box_pad_pin of stub : architecture is "rst,wr_clk,rd_clk,din[31:0],wr_en,rd_en,dout[31:0],full,empty,rd_data_count[7:0],wr_data_count[7:0]";
 attribute x_core_info : string;
-attribute x_core_info of stub : architecture is "fifo_generator_v12_0,Vivado 2014.2";
+attribute x_core_info of stub : architecture is "fifo_generator_v12_0,Vivado 2014.4";
 begin
 end;
