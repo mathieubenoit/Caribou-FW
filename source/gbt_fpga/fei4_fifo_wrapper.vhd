@@ -71,6 +71,7 @@ signal fei4_fifo_rd_cnt  :std_logic_vector(4 downto 0);
 
 signal is_dat_in_flg     :std_logic;
 signal is_dat_in_flg_pre :std_logic;
+signal is_dat_in_flg_pre1 :std_logic;
 
 signal fifo_data_valid   :std_logic;
 TYPE machine IS(idle, read); --needed states
@@ -98,22 +99,26 @@ begin
   if RST = '1' then
     fei4_fifo_rd_en <= '0';
     is_dat_in_flg_pre <= '0';
+    is_dat_in_flg_pre1 <= '0';
     fifo_data_valid <= '0';
   elsif rising_edge(RD_CLK) then
   is_dat_in_flg_pre <= is_dat_in_flg;
+  is_dat_in_flg_pre1 <= is_dat_in_flg_pre;
     case state is
     when idle =>
-      if fei4_fifo_rd_cnt >= X"8" or (is_dat_in_flg_pre = '1' and is_dat_in_flg = '0')then
+      if fei4_fifo_rd_cnt >= X"8" or (is_dat_in_flg_pre1 = '1' and is_dat_in_flg_pre = '0')then
         state <= read;
         fei4_fifo_rd_en <= '1';     
       end if;
       
     when read =>
-      fifo_data_valid <= '1';
+      
       if fei4_fifo_empty = '1' then
         fei4_fifo_rd_en <= '0';
         fifo_data_valid <= '0';
         state <= idle;
+      else
+        fifo_data_valid <= '1';
       end if;
     end case;
   end if;
