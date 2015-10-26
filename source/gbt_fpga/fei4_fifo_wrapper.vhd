@@ -1,11 +1,11 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: BNL
+-- Engineer: Hongbin Liu hliu2@bnl.gov
 -- 
 -- Create Date: 10/19/2015 05:37:04 PM
 -- Design Name: 
 -- Module Name: fei4_fifo_wrapper - Behavioral
--- Project Name: 
+-- Project Name: CaRIBOU Firmware
 -- Target Devices: 
 -- Tool Versions: 
 -- Description: 
@@ -124,8 +124,11 @@ begin
       else
         fifo_data_valid <= '1';
       end if;
+      
     end case;
+    
   end if;
+  
 end process;
 
 IS_DAT_OUT <= fifo_data_valid;
