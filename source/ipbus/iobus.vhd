@@ -157,10 +157,11 @@ begin
                                           end if;
                         when x"0044" =>   if (wr = '1' ) then FEI4_IDELAY_CNT_IN  <= Bus2IP_Data(9 downto 0); 
                                           end if;
+                                          
                         when x"0048" =>   if (wr = '1' ) then FEI4_IDELAY_LD  <= Bus2IP_Data(1 downto 0); 
                                           end if;   
                                              
-                        when x"0048" =>   if (wr = '1' ) then FEI4_CAL_CNT_DELAY  <= Bus2IP_Data(31 downto 0); 
+                        when x"004C" =>   if (wr = '1' ) then FEI4_CAL_CNT_DELAY  <= Bus2IP_Data(31 downto 0); 
                                            end if;    
                                           
                                                                                                                                                                                  
