@@ -297,6 +297,8 @@ signal fei4_wr_reg_dat         :std_logic_vector(15 downto 0);
 signal fei4_cmd_ph_sel         :std_logic_vector(3 downto 0);
 signal fei4_bit_slip           :std_logic;
 signal fei4_cmd_out_ph_sel     :std_logic_vector(1 downto 0);
+signal fei4_cal_cnt_delay      :std_logic_vector(31 downto 0);
+
 
 signal fei4_a1_hit_or_un_sync  :std_logic;
 signal fei4_a2_hit_or_un_sync  :std_logic;
@@ -914,6 +916,7 @@ port map(
     FEI4_FR_RAM_DAT_IN    => fei4_fr_ram_dat_in,
     FEI4_FR_RAM_DAT_OUT   => fei4_fr_ram_dat_out,
     FEI4_CMD_PH_SEL       => fei4_cmd_ph_sel,
+    FEI4_CAL_CNT_DELAY    => fei4_cal_cnt_delay,
     
     --FEI4 RX module control signals  
     FEI4_FRAME_SYNC_EN    => fei4_frame_sync_en,
@@ -955,6 +958,8 @@ Port map(
     FR_RAM_ADDR     => fei4_fr_ram_addr,
     FR_RAM_DAT_IN   => fei4_fr_ram_dat_in,
     FR_RAM_DAT_OUT  => fei4_fr_ram_dat_out,
+    
+    CAL_CNT_DELAY   => fei4_cal_cnt_delay,
     
     CFG_FLG         => fei4_cfg_flg,    
     CFG_REG         => fei4_cfg_reg,

@@ -44,8 +44,9 @@ port (
     FEI4_WR_REG_DAT     :out std_logic_vector(15 downto 0);
     FEI4_FR_RAM_ADDR    :out std_logic_vector(5 downto 0);
     FEI4_FR_RAM_DAT_IN  :out std_logic_vector(31 downto 0);
-    FEI4_FR_RAM_DAT_OUT :in std_logic_vector(31 downto 0);      
+    FEI4_FR_RAM_DAT_OUT :in  std_logic_vector(31 downto 0);      
     FEI4_CMD_PH_SEL     :out std_logic_vector(3 downto 0);
+    FEI4_CAL_CNT_DELAY  :out std_logic_vector(31 downto 0);      
     
     --FEI4 RX module control signals        
     FEI4_FRAME_SYNC_EN  :out std_logic_vector(1 downto 0);
@@ -157,7 +158,11 @@ begin
                         when x"0044" =>   if (wr = '1' ) then FEI4_IDELAY_CNT_IN  <= Bus2IP_Data(9 downto 0); 
                                           end if;
                         when x"0048" =>   if (wr = '1' ) then FEI4_IDELAY_LD  <= Bus2IP_Data(1 downto 0); 
-                                          end if;      
+                                          end if;   
+                                             
+                        when x"0048" =>   if (wr = '1' ) then FEI4_CAL_CNT_DELAY  <= Bus2IP_Data(31 downto 0); 
+                                           end if;    
+                                          
                                                                                                                                                                                  
                         ------AXI HP                                                                               
                         when x"005C" =>   if (wr = '1')  then  HP_GEN_RST      <= Bus2IP_Data(3 downto 0); 

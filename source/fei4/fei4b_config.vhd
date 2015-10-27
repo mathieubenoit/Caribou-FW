@@ -43,6 +43,8 @@ entity fei4b_cfg is
     FR_RAM_ADDR    : in  std_logic_vector(5  downto 0);
     FR_RAM_DAT_IN  : in  std_logic_vector(31 downto 0);
     FR_RAM_DAT_OUT : out std_logic_vector(31 downto 0);
+    
+    CAL_CNT_DELAY  : in  std_logic_vector(31 downto 0);
 
     CMD_CLK        : in  std_logic;
     
@@ -79,19 +81,25 @@ signal fr_ram_wr_en     :std_logic;
 type ram_type is array(0 to 20) of std_logic_vector(31 downto 0);
 signal FR_RAM :ram_type := (others => (others => '0'));
 
-type state_type is (IDLE, START, FILED1_SHIFT, FILED2_SHIFT, FILED34_SHIFT, FILED5_SHIFT, DELAY, WR_REG_DAT_SHIFT, WR_FR_DAT_SHIFT, FINISH);
+type state_type is (IDLE, START, FILED1_SHIFT, FILED2_SHIFT, FILED34_SHIFT, FILED5_SHIFT, DELAY, DELAY2, WR_REG_DAT_SHIFT, WR_FR_DAT_SHIFT, FINISH);
 
 signal cfg_state : state_type := IDLE ;
 
 attribute MARK_DEBUG : string;
 attribute MARK_DEBUG of cfg_state: signal is "TRUE";
 
-signal fr_addr_i    :std_logic_vector(5 downto 0);
-signal fr_addr_ii   :std_logic_vector(5 downto 0); 
-signal fr_addr_iii  :std_logic_vector(5 downto 0); 
+signal fr_addr_i         :std_logic_vector(5 downto 0);
+signal fr_addr_ii        :std_logic_vector(5 downto 0); 
+signal fr_addr_iii       :std_logic_vector(5 downto 0); 
 
-signal ext_tri_prev :std_logic;
-signal busy_i       :std_logic;
+signal ext_tri_prev      :std_logic;
+signal busy_i            :std_logic;
+
+-- cal cmd counter
+signal cal_cmd_cnt       :integer range 0 to 1024 := 0;
+
+-- delay between two cal cmd in cmd_clk cycle, defalut is 1ms;
+signal cal_cmd_delay_cnt :integer := 40000;
 
 begin
 
@@ -183,16 +191,25 @@ begin
           cmd_field_5   <= CFG_REG(5 downto 0);
           
           delay_cnt_latch <= CFG_REG(30 DOWNTO 23);
-          glb_pls_lv1_en  <= CFG_REG(31);
+--          glb_pls_lv1_en  <= CFG_REG(31);
           reg_dat         <= WR_REG_DAT;
+          
+          cal_cmd_cnt     <= conv_integer(CAL_CNT_DELAY(9 downto 0));
+          cal_cmd_delay_cnt <= conv_integer(CAL_CNT_DELAY(31 downto 16));
+          
         end if;
 
       -- Shift Out field 1
       when FILED1_SHIFT =>
         if (shift_cnt = 4) then 
-          cmd_out_r <= shift_out_reg(18);         
+          cmd_out_r <= shift_out_reg(18);-- 22~18       
           if cmd_field_1 = "11101" then  -- LV1 trigger command only have filed 1
-            cfg_state <= FINISH;           
+            if cal_cmd_cnt /= 0 then
+              cfg_state <= DELAY2;
+              cal_cmd_cnt <= cal_cmd_cnt - 1;
+            else
+              cfg_state <= FINISH;
+            end if;           
           else
             cfg_state <= FILED2_SHIFT;
             shift_cnt <= shift_cnt + 1;
@@ -205,17 +222,15 @@ begin
       when FILED2_SHIFT =>
         if (shift_cnt = 8) then 
           cmd_out_r <= shift_out_reg(14);
-          -- If LV1 fllowed by CAL is enabled, then to delay state          
-          if cmd_field_2 = "0100" and glb_pls_lv1_en = '1' then          
-            cfg_state <= DELAY;
-            
+          -- Alwasys there should be a LV1 fllowed by CAL    
+          if cmd_field_2 = "0100" then          
+            cfg_state <= DELAY;           
           elsif cmd_field_2 /= "1000" then    -- Only slow command have filed 3  
-            cfg_state <= FINISH;
-            
+            cfg_state <= FINISH;         
           else
             cfg_state <= FILED34_SHIFT;
             shift_cnt <= shift_cnt + 1;
-          end if;
+          end if;        
         else
           shift_cnt <= shift_cnt + 1;
           cmd_out_r <= shift_out_reg(22-shift_cnt);
@@ -231,6 +246,7 @@ begin
             cfg_state <= FILED5_SHIFT;
             shift_cnt <= shift_cnt + 1;
           end if;
+          
         else
           shift_cnt <= shift_cnt + 1;
           cmd_out_r <= shift_out_reg(22-shift_cnt);
@@ -258,6 +274,7 @@ begin
         
       -- Delay control for the command LV1 followed by cammand CAL  
       when DELAY =>
+          cmd_out_r <= '0';
           if delay_cnt = conv_integer(delay_cnt_latch) then
             cfg_state <= FILED1_SHIFT;
             cmd_field_1 <= "11101";
@@ -265,7 +282,21 @@ begin
             shift_cnt <= 0;
           else
             delay_cnt <= delay_cnt + 1;
-          end if;    
+          end if;  
+      
+      when DELAY2 =>
+          cmd_out_r <= '0';
+          if delay_cnt = cal_cmd_delay_cnt then
+            cfg_state <= FILED1_SHIFT;
+            cmd_field_1 <= "10110";
+            cmd_field_2 <= "0100";
+            shift_out_reg(22 downto 18) <= "11101";
+            shift_out_reg(17 downto 14) <= "0100";
+            shift_cnt <= 0;
+            delay_cnt <= 0;
+          else
+            delay_cnt <= delay_cnt + 1;
+          end if;         
             
       when WR_REG_DAT_SHIFT =>
         if (shift_cnt = 15) then 
