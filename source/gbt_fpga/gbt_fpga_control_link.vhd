@@ -76,6 +76,8 @@ addr_in(14 downto 0)       <= GBT_RX_DATA(46 downto 32);
 data_in                    <= GBT_RX_DATA(31 downto 0);
 fe_num_in                  <= GBT_RX_DATA(83 downto 80);
 
+fe_num_out <= x"8";
+
 process(GBT_RX_FRAME_CLK, RST)
 begin
 if RST = '1' then
@@ -89,7 +91,6 @@ if RST = '1' then
   fe_num_out     <= (others => '0');
 elsif rising_edge(GBT_RX_FRAME_CLK) then
   if data_valid_in = '1' then
-  fe_num_out <= fe_num_in;
   case addr_in is 
   when x"4000" =>
     if rw = '1' then 

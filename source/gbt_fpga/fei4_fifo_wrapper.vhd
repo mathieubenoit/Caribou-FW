@@ -1,11 +1,11 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: BNL
+-- Engineer: Hongbin Liu hliu2@bnl.gov
 -- 
 -- Create Date: 10/19/2015 05:37:04 PM
 -- Design Name: 
 -- Module Name: fei4_fifo_wrapper - Behavioral
--- Project Name: 
+-- Project Name: CaRIBOU Firmware
 -- Target Devices: 
 -- Tool Versions: 
 -- Description: 
@@ -71,6 +71,7 @@ signal fei4_fifo_rd_cnt  :std_logic_vector(4 downto 0);
 
 signal is_dat_in_flg     :std_logic;
 signal is_dat_in_flg_pre :std_logic;
+signal is_dat_in_flg_pre1 :std_logic;
 
 signal fifo_data_valid   :std_logic;
 TYPE machine IS(idle, read); --needed states
@@ -95,28 +96,39 @@ PORT MAP (
 is_dat_in_flg <= IS_DAT_IN;
 fei4_a1_fifo_rd_ctr:process(RST, RD_CLK)
 begin
+
   if RST = '1' then
     fei4_fifo_rd_en <= '0';
     is_dat_in_flg_pre <= '0';
+    is_dat_in_flg_pre1 <= '0';
     fifo_data_valid <= '0';
+    
   elsif rising_edge(RD_CLK) then
+  
   is_dat_in_flg_pre <= is_dat_in_flg;
+  is_dat_in_flg_pre1 <= is_dat_in_flg_pre;
+  
     case state is
+    
     when idle =>
-      if fei4_fifo_rd_cnt >= X"8" or (is_dat_in_flg_pre = '1' and is_dat_in_flg = '0')then
+      if fei4_fifo_rd_cnt >= X"8" or (is_dat_in_flg_pre1 = '1' and is_dat_in_flg_pre = '0')then
         state <= read;
         fei4_fifo_rd_en <= '1';     
       end if;
       
     when read =>
-      fifo_data_valid <= '1';
       if fei4_fifo_empty = '1' then
         fei4_fifo_rd_en <= '0';
         fifo_data_valid <= '0';
         state <= idle;
+      else
+        fifo_data_valid <= '1';
       end if;
+      
     end case;
+    
   end if;
+  
 end process;
 
 IS_DAT_OUT <= fifo_data_valid;
