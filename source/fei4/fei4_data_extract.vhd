@@ -89,11 +89,12 @@ elsif rising_edge(fclk) then
          reg_value <= (others => '0');
          reg_addr  <= (others => '0');     
          ar_cnt    <= 0;
-         vr_cnt    <= 0;          
+         vr_cnt    <= 0;  
+         is_pixel_data <= '0';        
        end if;
-
-    
+   
      when IDLE =>   
+       is_pixel_data <= '0';
        if FRAME_IS_SYNCED = '0' then -- lost synchronization, move to start state
          state <= START;
        elsif DATA_IN = x"FC" then    -- x"FC" indicates the start of an frame
