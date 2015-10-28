@@ -12,6 +12,9 @@ entity TOP is
   port(
     CLK200_IN_P                                  : IN   STD_LOGIC;
     CLK200_IN_N                                  : IN   STD_LOGIC;
+    
+    USER_SMA_P                                   : OUT  STD_LOGIC;
+    USER_SMA_N                                   : OUT  STD_LOGIC;
 
     HPC_LVDS6_P                                  : OUT  STD_LOGIC;
     HPC_LVDS6_N                                  : OUT  STD_LOGIC;       
@@ -1376,5 +1379,8 @@ port map(
   OB => SI5324_CLK_IN_N,  
   I => si570_clk  
 );
+
+USER_SMA_P <= gbt_fpga_tx_frame_clk;
+USER_SMA_N <= gbt_fpga_rx_frame_clk;
                              
 end Behavioral;
