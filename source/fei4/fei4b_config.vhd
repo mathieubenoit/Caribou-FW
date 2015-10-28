@@ -56,7 +56,7 @@ entity fei4b_cfg is
     
     EXT_TRI        : in  std_logic;
     BUSY           : out std_logic  
-    );    
+    );   
 end fei4b_cfg;
 architecture Behavioral of fei4b_cfg is
 
@@ -73,7 +73,7 @@ signal cmd_out_r        :std_logic;
 signal cmd_out_shift    :std_logic_vector(3  downto 0);
 signal shift_cnt        :integer range 0 to 31 := 0;  
 signal fr_reg_cnt       :integer range 0 to 31 := 0;  
-signal delay_cnt        :integer range 0 to 255:= 0;
+signal delay_cnt        :integer := 0;
 signal delay_cnt_latch  :std_logic_vector(7  downto 0);
 signal glb_pls_lv1_en   :std_logic := '0';
 signal cfg_error        :std_logic;
@@ -85,8 +85,7 @@ type state_type is (IDLE, START, FILED1_SHIFT, FILED2_SHIFT, FILED34_SHIFT, FILE
 
 signal cfg_state : state_type := IDLE ;
 
-attribute MARK_DEBUG : string;
-attribute MARK_DEBUG of cfg_state: signal is "TRUE";
+
 
 signal fr_addr_i         :std_logic_vector(5 downto 0);
 signal fr_addr_ii        :std_logic_vector(5 downto 0); 
@@ -100,6 +99,9 @@ signal cal_cmd_cnt       :integer range 0 to 1024 := 0;
 
 -- delay between two cal cmd in cmd_clk cycle, defalut is 1ms;
 signal cal_cmd_delay_cnt :integer := 40000;
+
+attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of cfg_state, delay_cnt, cal_cmd_delay_cnt, cal_cmd_cnt: signal is "TRUE";
 
 begin
 
@@ -287,7 +289,7 @@ begin
       
       when DELAY2 =>
           cmd_out_r <= '0';
-          if delay_cnt > cal_cmd_delay_cnt then
+          if delay_cnt >= cal_cmd_delay_cnt then
             cfg_state <= FILED1_SHIFT;
             cmd_field_1 <= "10110";
             cmd_field_2 <= "0100";
