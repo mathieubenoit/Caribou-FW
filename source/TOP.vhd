@@ -131,8 +131,8 @@ entity TOP is
     GPIO_LED_LEFT                                : out std_logic;
     GPIO_LED_CENTER                              : out std_logic;
     GPIO_LED_RIGHT                               : out std_logic;
-    GPIO_LED_0                                   : out std_logic                                 
-
+    GPIO_LED_0                                   : out std_logic
+                            
 );
 end TOP;
 
@@ -374,6 +374,18 @@ signal tlu_busy_out                    :std_logic;
 signal tlu_trigger_out                 :std_logic;
 signal tlu_busy_in                     :std_logic;
 
+signal si570_clk_freq                  :std_logic_vector(19 downto 0);
+signal si570_clk                       :std_logic;
+
+attribute MARK_DEBUG of si570_clk_freq :signal is "TRUE";
+
+COMPONENT vio_1
+  PORT (
+    clk : IN STD_LOGIC;
+    probe_in0 : IN STD_LOGIC_VECTOR(19 DOWNTO 0)
+  );
+end component;
+  
 COMPONENT ps7_wrapper 
 port (
     ACLK : out STD_LOGIC;
@@ -489,6 +501,11 @@ begin
 tied_to_ground <= '0';
 tied_to_vcc <= '1';
 
+si570_freq_vio : vio_1
+  PORT MAP (
+    clk => clk100m,
+    probe_in0 => si570_clk_freq
+  );
 --LVDS Input Buffer 
 FEI4_A1_HITOR_BUF :IBUFDS
 generic map (
@@ -513,6 +530,19 @@ port map (
 O => fei4_a2_hit_or_un_sync, 
 I  => FEI4_A2_HIT_OR_P, 
 IB => FEI4_A2_HIT_OR_N 
+);
+
+--LVDS Input Buffer 
+SI570_BUFFER:IBUFDS
+generic map (
+    DIFF_TERM => TRUE, 
+    IBUF_LOW_PWR => FALSE, 
+    IOSTANDARD => "LVDS_25"
+)
+port map (
+O => si570_clk, 
+I  => USER_CLOCK_P, 
+IB => USER_CLOCK_N 
 );
 
 process(clk160m)
@@ -1069,8 +1099,9 @@ gbt_link:entity work.gbt_fpga_wrapper
  port map (                 
     CPU_RESET                   =>  CPU_RESET,
     
-    USER_CLOCK_P                =>  USER_CLOCK_P,
-    USER_CLOCK_N                =>  USER_CLOCK_N,    
+--    USER_CLOCK_P                =>  USER_CLOCK_P,
+--    USER_CLOCK_N                =>  USER_CLOCK_N,  
+    SYSCLK                      => clk100m,  
     
     SMA_MGT_REFCLK_P            =>  SMA_MGT_REFCLK_P,
     SMA_MGT_REFCLK_N            =>  SMA_MGT_REFCLK_N,
@@ -1118,6 +1149,31 @@ gbt_slow_ctronl: entity work.gbt_fpga_control_link
     REG_VALUE_O      =>  gbt_ctrl_data_o,
     FE_NUMBER_O      =>  gbt_ctrl_fe_num_o
     );
+
+si570_controller:entity work.iic_controller2 
+port map(
+  reset   => global_reset,
+  clk100  => clk100m,
+
+  iic_sda => IIC2_SDA,
+  iic_scl => IIC2_SCL,
+
+  done    => open
+ );
+
+fclk_counter:entity work.frequency_counter 
+generic map
+(
+  SYS_CLOCK_PERIOD => 10 
+)
+port map 
+( 
+  CLOCK_PROBE => si570_clk,
+  SYSCLK      => clk100m,
+  RESET       => global_reset,
+  FREQUENCY   => si570_clk_freq
+); 
+
 
 
 tlu_simulator:entity work.tlu_simulator_wrapper

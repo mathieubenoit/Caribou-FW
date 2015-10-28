@@ -206,6 +206,7 @@ begin
           if cmd_field_1 = "11101" then  -- LV1 trigger command only have filed 1
             if cal_cmd_cnt /= 0 then
               cfg_state <= DELAY2;
+              delay_cnt <= 0;
               cal_cmd_cnt <= cal_cmd_cnt - 1;
             else
               cfg_state <= FINISH;
@@ -286,7 +287,7 @@ begin
       
       when DELAY2 =>
           cmd_out_r <= '0';
-          if delay_cnt = cal_cmd_delay_cnt then
+          if delay_cnt > cal_cmd_delay_cnt then
             cfg_state <= FILED1_SHIFT;
             cmd_field_1 <= "10110";
             cmd_field_2 <= "0100";
