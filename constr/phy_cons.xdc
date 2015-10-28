@@ -48,6 +48,11 @@ set_property IOSTANDARD LVCMOS25 [get_ports IIC2_SCL]
 set_property PACKAGE_PIN AC14 [get_ports IIC_BUFFER_EN]
 set_property IOSTANDARD LVCMOS25 [get_ports IIC_BUFFER_EN]
 
+# USER SMA
+set_property PACKAGE_PIN AD18 [get_ports USER_SMA_P]
+set_property IOSTANDARD LVCMOS25 [get_ports USER_SMA_P]
+set_property PACKAGE_PIN AD19 [get_ports USER_SMA_N]
+set_property IOSTANDARD LVCMOS25 [get_ports USER_SMA_N]
 
 # FMC HPC LVDS OUTPUT
 #set_property PACKAGE_PIN AJ16 [get_ports FMC_LVDS1_P]
