@@ -145,9 +145,9 @@ fei4_data_fifo:axi_fei4_fifo
     rst => fifo_reset,
     wr_clk => fifo_wrclk,
     rd_clk => axi_clk,
-    din => fifo_data,
-    wr_en => fifo_wren,
-    rd_en => fifo_rden,
+    din    => fifo_data,
+    wr_en  => fifo_wren,
+    rd_en  => fifo_rden,
     dout => fifo_rddata,
     full => fifo_full,
     empty => fifo_empty,
@@ -161,27 +161,14 @@ if (addr_rst = '1') then
    axi_awaddr_i <= start_addr; --(others => '0');
 elsif rising_edge(axi_wlast_i) then
    if (axi_awaddr_i < end_addr) then --128M Adress Space
-       axi_awaddr_i <= axi_awaddr_i +  64;  --16Bursts*4Bytes
+       axi_awaddr_i <= axi_awaddr_i +  512;  --16Bursts*4Bytes
    else
        axi_awaddr_i <= X"0000000";
    end if;
 end if;
 end process;
    
-process(axi_clk, axi_reset_i)
-begin
-  if(axi_reset_i = '1') then
-    last_rd_tri_i <= '0';
-  elsif rising_edge(axi_clk) then 
-    last_rd_tri_delay <= last_rd_tri;
-    if last_rd_tri = '1' and last_rd_tri_delay = '0' then
-      last_rd_tri_i <= '1';
-    else
-      last_rd_tri_i <= '0';
-    end if;
-  end if;
-  
-end process;
+
 
 
     
@@ -208,38 +195,25 @@ process (axi_clk, axi_reset_i)
 		   burstcnt_latch <= 0;	
 		   
 	       state <= idle;
-	       
-	       last_burst <= '0';
-
-			
+	       	
     elsif rising_edge(axi_clk) then
         case state is
             when IDLE => 
                  burstcnt <= 0;
 				 axi_bready <= '1';					--response always ready				 					
-				 if(fifo_rdcnt_i >= X"10")  then      --fifo read counter lager than 16 * 4Byte
+				 if(fifo_rdcnt_i >= X"80")  then      --fifo read counter lager than 16 * 4Byte
 					axi_awvalid <= '1';
 				    axi_awburst <= "01"; 			-- incrementing address type
-					axi_awlen <= X"0F";   			-- 16 transfer per burst
-					axi_awsize <= "010";            -- burst size, 010 - 4 bytes per beat					
-					burstcnt <= 0;			
-					axi_wstrb <= X"F";			    --control which byte can write, total 32 Bits - 4 bytes
+					axi_awlen   <= X"7F";   			-- 16 transfer per burst
+					axi_awsize  <= "010";            -- burst size, 010 - 4 bytes per beat					
+					burstcnt    <= 0;			
+					axi_wstrb   <= X"F";			    --control which byte can write, total 32 Bits - 4 bytes
 					state <= addr_active;
 					burstcnt_latch <= 15;	
 					fifo_rden <= '1'; 
-				elsif(last_rd_tri_i = '1') and fifo_rdcnt_i /= X"00"  then
-					axi_awvalid <= '1';
-                    axi_awburst <= "01";             -- incrementing address type
-                    axi_awlen <= fifo_rdcnt_i;       -- 16 transfer per burst
-                    axi_awsize <= "010";            -- burst size, 010 - 4 bytes per beat                    
-                    burstcnt <= 0;            
-                    axi_wstrb <= X"F";                --control which byte can write, total 32 Bits - 4 bytes
-                    state <= addr_active;
-                    last_burst <= '1';	
-                    burstcnt_latch <=  to_integer(unsigned(fifo_rdcnt_i)) - 1;	
-                    fifo_rden <= '1'; 			
-				end if;
-				
+			     else
+			        fifo_rden <= '0'; 
+			     end if;
 				
 			when ADDR_ACTIVE =>
 				--address transaction
