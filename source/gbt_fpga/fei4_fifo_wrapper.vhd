@@ -58,7 +58,7 @@ COMPONENT fei4_data_fifo
     dout : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
     full : OUT STD_LOGIC;
     empty : OUT STD_LOGIC;
-    rd_data_count : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
+    rd_data_count : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
   );
 END COMPONENT; 
 
@@ -67,7 +67,7 @@ signal fei4_fifo_out     :std_logic_vector(3 downto 0);
 signal fei4_fifo_empty   :std_logic;
 signal fei4_fifo_full    :std_logic;
 signal fei4_fifo_rd_en   :std_logic;
-signal fei4_fifo_rd_cnt  :std_logic_vector(4 downto 0);
+signal fei4_fifo_rd_cnt  :std_logic_vector(6 downto 0);
 
 signal is_dat_in_flg     :std_logic;
 signal is_dat_in_flg_pre :std_logic;
@@ -111,7 +111,7 @@ begin
     case state is
     
     when idle =>
-      if fei4_fifo_rd_cnt >= X"8" or (is_dat_in_flg_pre1 = '1' and is_dat_in_flg_pre = '0')then
+      if fei4_fifo_rd_cnt >= "0100000" or (is_dat_in_flg_pre1 = '1' and is_dat_in_flg_pre = '0')then
         state <= read;
         fei4_fifo_rd_en <= '1';     
       end if;
