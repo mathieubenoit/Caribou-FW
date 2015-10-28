@@ -293,7 +293,7 @@ begin
             cfg_state <= FILED1_SHIFT;
             cmd_field_1 <= "10110";
             cmd_field_2 <= "0100";
-            shift_out_reg(22 downto 18) <= "11101";
+            shift_out_reg(22 downto 18) <= "10110";
             shift_out_reg(17 downto 14) <= "0100";
             shift_cnt <= 0;
             delay_cnt <= 0;
