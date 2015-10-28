@@ -111,6 +111,8 @@ Port map(
     FR_RAM_DAT_IN   => (others => '0'),
     FR_RAM_DAT_OUT  => open,
     
+    CAL_CNT_DELAY   => (others => '0'),
+    
     CFG_FLG         => '0',    
     CFG_REG         => (others => '0'),
     WR_REG_DAT      => (others => '0'),
