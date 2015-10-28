@@ -140,7 +140,12 @@ architecture Behavioral of TOP is
 --signal declaration
 signal tied_to_ground          :std_logic;
 signal tied_to_vcc             :std_logic;
+signal reset_reg      :std_logic_vector(31 downto 0);
 signal global_reset            :std_logic;
+signal reset_fei4_rx1 :std_logic;
+signal reset_fei4_rx2 :std_logic;
+signal reset_fei4_cfg :std_logic;
+
 
 --mmcm clocks 
 signal clk200m                 :std_logic; --Idelay reference clock
@@ -936,7 +941,7 @@ port map(
     RDACK                 => rdack_t,
     WRACK                 => wrack_t,
         
-    GLB_RST               => global_reset,
+    RST_CTRL              => reset_reg,
     
     --FEI4 configure module control signals  
     FEI4_CFG_FLG          => fei4_cfg_flg,
@@ -975,10 +980,15 @@ port map(
     HP0_BURST_ADDR        => hp0_burst_addr_t,
     HP2_BURST_ADDR        => hp2_burst_addr_t
 );	  
- 
+
+global_reset   <= reset_reg(0);
+reset_fei4_cfg <= reset_reg(1);
+reset_fei4_rx1 <= reset_reg(2);
+reset_fei4_rx2 <= reset_reg(3);
+
 fei4_a1_cfg:entity work.FEI4B_CFG
 Port map(     
-    RST             => global_reset,
+    RST             => global_reset or reset_fei4_cfg,
     
     CLK160          => clk160m,
     CMD_OUT_PH_SEL  =>   fei4_cmd_ph_sel(1 downto 0),
@@ -1021,7 +1031,7 @@ hp2_burst_fifo_wrdata_t(31 downto 16) <= (others => '0');
 hp2_burst_fifo_wren_t <= fei4_a1_data_is_pix_dat;
 fei4_a1_rx_1: entity work.FEI4_RX 
 Port MAP(
-   RESET => global_reset,
+   RESET => global_reset or reset_fei4_rx1,
    
    DATA_IN_P        => FEI4_A1_DOB_P,
    DATA_IN_N        => FEI4_A1_DOB_N,
@@ -1047,7 +1057,7 @@ hp2_burst_fifo_wrdata_t(7 downto 0) <= fei4_a1_data_out;
 
 fei4_a2_rx_1: entity work.FEI4_RX2 
 Port MAP(
-   RESET => global_reset,
+   RESET => global_reset or reset_fei4_rx2,
    
    DATA_IN_P        => FEI4_A2_DOB_P,
    DATA_IN_N        => FEI4_A2_DOB_N,
