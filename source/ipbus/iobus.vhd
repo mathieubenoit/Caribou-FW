@@ -20,7 +20,7 @@ port (
     RDACK               :out std_logic;
     WRACK               :out std_logic;	
     
-    GLB_RST             :out std_logic;
+    RST_CTRL            :out std_logic_vector(31 downto 0);
     
     HP_GEN_RST          :out std_logic_vector(3 downto 0);
     HP_TRIGER           :out std_logic_vector(3 downto 0);
@@ -100,7 +100,7 @@ begin
 				if  (addr(31 downto 8) = BASE_ADDR(31 downto 8)) then
 					case addr(15 downto 0) is
 
-                        when x"0004" =>   if (wr = '1') then GLB_RST <= Bus2IP_Data(0); 
+                        when x"0004" =>   if (wr = '1') then RST_CTRL <= Bus2IP_Data; 
                                           end if;
                                           
                         --ADC FCLK frequency readout                                       						
