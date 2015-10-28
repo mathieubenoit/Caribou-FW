@@ -131,7 +131,11 @@ entity TOP is
     GPIO_LED_LEFT                                : out std_logic;
     GPIO_LED_CENTER                              : out std_logic;
     GPIO_LED_RIGHT                               : out std_logic;
-    GPIO_LED_0                                   : out std_logic
+    GPIO_LED_0                                   : out std_logic;
+    
+    SI5324_RST_N                                 : out std_logic;
+    SI5324_CLK_IN_P                              : out std_logic;
+    SI5324_CLK_IN_N                              : out std_logic
                             
 );
 end TOP;
@@ -309,6 +313,7 @@ signal fei4_a1_hit_or_un_sync  :std_logic;
 signal fei4_a2_hit_or_un_sync  :std_logic;
 signal fei4_a1_hit_or_sync     :std_logic;
 signal fei4_a2_hit_or_sync     :std_logic;
+attribute MARK_DEBUG of fei4_a1_hit_or_sync, fei4_a2_hit_or_sync :signal is "TURE";
 
 signal fei4_a1_data_out        :std_logic_vector(7 downto 0);
 signal fei4_a1_data_is_pix_dat :std_logic;
@@ -379,10 +384,7 @@ signal tlu_busy_out                    :std_logic;
 signal tlu_trigger_out                 :std_logic;
 signal tlu_busy_in                     :std_logic;
 
-signal si570_clk_freq                  :std_logic_vector(19 downto 0);
 signal si570_clk                       :std_logic;
-
-attribute MARK_DEBUG of si570_clk_freq :signal is "TRUE";
 
 COMPONENT vio_1
   PORT (
@@ -506,11 +508,6 @@ begin
 tied_to_ground <= '0';
 tied_to_vcc <= '1';
 
-si570_freq_vio : vio_1
-  PORT MAP (
-    clk => clk100m,
-    probe_in0 => si570_clk_freq
-  );
 --LVDS Input Buffer 
 FEI4_A1_HITOR_BUF :IBUFDS
 generic map (
@@ -1171,21 +1168,6 @@ port map(
   done    => open
  );
 
-fclk_counter:entity work.frequency_counter 
-generic map
-(
-  SYS_CLOCK_PERIOD => 10 
-)
-port map 
-( 
-  CLOCK_PROBE => si570_clk,
-  SYSCLK      => clk100m,
-  RESET       => global_reset,
-  FREQUENCY   => si570_clk_freq
-); 
-
-
-
 tlu_simulator:entity work.tlu_simulator_wrapper
 Generic map(
   BASE_ADDR => x"43c00400"
@@ -1382,5 +1364,17 @@ IB => TLU_BUSY_I_N
 );
 
 IIC_BUFFER_EN <= '1';
-                               
+SI5324_RST_N  <= '1';
+
+SI5324_CLK_OUT_BUF:OBUFDS
+generic map (
+  IOSTANDARD => "DEFAULT",  
+  SLEW => "SLOW" 
+  ) 
+port map(
+  O  => SI5324_CLK_IN_P,  
+  OB => SI5324_CLK_IN_N,  
+  I => si570_clk  
+);
+                             
 end Behavioral;
