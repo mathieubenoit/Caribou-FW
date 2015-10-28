@@ -33,8 +33,9 @@ entity gbt_fpga_wrapper is
  port (                 
     CPU_RESET                                      : in  std_logic;     
     
-    USER_CLOCK_P                                   : in  std_logic;
-    USER_CLOCK_N                                   : in  std_logic;      
+--    USER_CLOCK_P                                   : in  std_logic;
+--    USER_CLOCK_N                                   : in  std_logic;   
+    SYSCLK                               : in  std_logic;
     
     SMA_MGT_REFCLK_P                               : in  std_logic;
     SMA_MGT_REFCLK_N                               : in  std_logic; 
@@ -199,10 +200,10 @@ begin
    --===============--
  genrst: entity work.gen_reset
     generic map (
-       clk_freq                                    => 156e6
+       clk_freq                                    => 100e6
     )
     port map (     
-       clk_i                                       => fabricclk_from_userclockibufgds,
+       clk_i                                       => sysclk,
        reset1_b_i                                  => not cpu_reset, 
        reset2_b_i                                  => not generalreset_from_user,
        reset_o                                     => reset_from_genrst 
@@ -212,18 +213,18 @@ begin
    -- clocks scheme -- 
    --===============--   
 
-   -- fabric clock:
-   ----------------
-   -- comment: user_clock frequency: 156mhz 
-   userclockibufgds: ibufgds
-      generic map (
-         ibuf_low_pwr                                => false,      
-         iostandard                                  => "lvds_25")
-      port map (     
-         o                                           => fabricclk_from_userclockibufgds,   
-         i                                           => user_clock_p,  
-         ib                                          => user_clock_n 
-      );
+--   -- fabric clock:
+--   ----------------
+--   -- comment: user_clock frequency: 156mhz 
+--   userclockibufgds: ibufgds
+--      generic map (
+--         ibuf_low_pwr                                => false,      
+--         iostandard                                  => "lvds_25")
+--      port map (     
+--         o                                           => fabricclk_from_userclockibufgds,   
+--         i                                           => user_clock_p,  
+--         ib                                          => user_clock_n 
+--      );
    
    -- mgt(gtx) reference clock:
    ----------------------------
