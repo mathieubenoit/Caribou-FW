@@ -168,6 +168,20 @@ elsif rising_edge(axi_wlast_i) then
 end if;
 end process;
    
+process(axi_clk, axi_reset_i)
+begin
+  if(axi_reset_i = '1') then
+    last_rd_tri_i <= '0';
+  elsif rising_edge(axi_clk) then 
+    last_rd_tri_delay <= last_rd_tri;
+    if last_rd_tri = '1' and last_rd_tri_delay = '0' then
+      last_rd_tri_i <= '1';
+    else
+      last_rd_tri_i <= '0';
+    end if;
+  end if;
+  
+end process;
 
 
 
@@ -195,6 +209,10 @@ process (axi_clk, axi_reset_i)
 		   burstcnt_latch <= 0;	
 		   
 	       state <= idle;
+	       
+	       last_burst <= '0';
+
+			
 	       	
     elsif rising_edge(axi_clk) then
         case state is
@@ -211,6 +229,17 @@ process (axi_clk, axi_reset_i)
 					state <= addr_active;
 					burstcnt_latch <= 15;	
 					fifo_rden <= '1'; 
+			     elsif(last_rd_tri_i = '1') and fifo_rdcnt_i /= X"00"  then
+                    axi_awvalid <= '1';
+                    axi_awburst <= "01";             -- incrementing address type
+                    axi_awlen <= fifo_rdcnt_i;       -- 16 transfer per burst
+                    axi_awsize <= "010";            -- burst size, 010 - 4 bytes per beat                    
+                    burstcnt <= 0;            
+                    axi_wstrb <= X"F";                --control which byte can write, total 32 Bits - 4 bytes
+                    state <= addr_active;
+                    last_burst <= '1';    
+                    burstcnt_latch <=  to_integer(unsigned(fifo_rdcnt_i)) - 1;    
+                    fifo_rden <= '1';             
 			     else
 			        fifo_rden <= '0'; 
 			     end if;
