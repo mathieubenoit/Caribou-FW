@@ -35,18 +35,18 @@ set_property IOSTANDARD LVDS_25 [get_ports CLK40_OUT_P]
 set_property IOSTANDARD LVDS_25 [get_ports CLK40_OUT_N]
 
 # Xilinx IIC Controller
-set_property PACKAGE_PIN AF27 [get_ports PS7_IIC_SDA]
-set_property PACKAGE_PIN AJ29 [get_ports PS7_IIC_SCL]
-set_property IOSTANDARD LVCMOS25 [get_ports PS7_IIC_SDA]
-set_property IOSTANDARD LVCMOS25 [get_ports PS7_IIC_SCL]
+set_property PACKAGE_PIN AF27 [get_ports PL_IIC1_SDA]
+set_property PACKAGE_PIN AJ29 [get_ports PL_IIC1_SCL]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_IIC1_SDA]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_IIC1_SCL]
 
-set_property PACKAGE_PIN AJ18 [get_ports IIC2_SDA]
-set_property IOSTANDARD LVCMOS25 [get_ports IIC2_SDA]
-set_property PACKAGE_PIN AJ14 [get_ports IIC2_SCL]
-set_property IOSTANDARD LVCMOS25 [get_ports IIC2_SCL]
+set_property PACKAGE_PIN AJ18 [get_ports PL_IIC2_SDA]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_IIC2_SDA]
+set_property PACKAGE_PIN AJ14 [get_ports PL_IIC2_SCL]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_IIC2_SCL]
 
-set_property PACKAGE_PIN AC14 [get_ports IIC_BUFFER_EN]
-set_property IOSTANDARD LVCMOS25 [get_ports IIC_BUFFER_EN]
+set_property PACKAGE_PIN AC14 [get_ports PL_IIC_BUFFER_EN]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_IIC_BUFFER_EN]
 
 # USER SMA
 set_property PACKAGE_PIN AD18 [get_ports USER_SMA_P]

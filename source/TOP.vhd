@@ -77,12 +77,16 @@ entity TOP is
     PS7_DDR_DQ                                   : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0);
     PS7_DDR_DQS_N                                : INOUT STD_LOGIC_VECTOR(3 DOWNTO 0);
     PS7_DDR_DQS_P                                : INOUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    
     PS7_IIC_SDA                                  : INOUT STD_LOGIC;
     PS7_IIC_SCL                                  : INOUT STD_LOGIC;
     
-    IIC2_SDA                                     : INOUT STD_LOGIC;
-    IIC2_SCL                                     : INOUT STD_LOGIC;
-    IIC_BUFFER_EN                                : OUT STD_LOGIC;
+    PL_IIC1_SDA                                     : INOUT STD_LOGIC;
+    PL_IIC1_SCL                                     : INOUT STD_LOGIC;
+    
+    PL_IIC2_SDA                                     : INOUT STD_LOGIC;
+    PL_IIC2_SCL                                     : INOUT STD_LOGIC;
+    PL_IIC_BUFFER_EN                                : OUT STD_LOGIC;
     
     --FEI4 A1 IOs
     FEI4_A1_DOB_P                                : IN STD_LOGIC;
@@ -874,8 +878,8 @@ port map(
     RDACK          => rdack_t,
     WRACK          => wrack_t,
     
-    SCL            => IIC2_SCL,
-    SDA            => IIC2_SDA
+    SCL            => PL_IIC1_SCL,
+    SDA            => PL_IIC1_SDA
 );
 
 ccpd_inj_gen:entity work.pulse_gen
@@ -1366,7 +1370,7 @@ I  => TLU_BUSY_I_P,
 IB => TLU_BUSY_I_N 
 );
 
-IIC_BUFFER_EN <= '1';
+PL_IIC_BUFFER_EN <= '1';
 SI5324_RST_N  <= '1';
 
 SI5324_CLK_OUT_BUF:OBUFDS
