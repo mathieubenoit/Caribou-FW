@@ -76,7 +76,13 @@ signal fei4_rx_data_sof           : std_logic;
 signal fei4_rx_data_eof           : std_logic;
 signal fei4_data_is_pixel_dat     : std_logic;
 
+signal service_dat_out :std_logic_vector(15 downto 0);
+signal dat_extrac_error_flg :std_logic;
+signal dat_extrac_error_code :std_logic_vector(3 downto 0);
+signal dat_extrac_state :std_logic_vector(3 downto 0);
+
 attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of dat_extrac_error_flg,dat_extrac_state: signal is "TRUE";
 --attribute MARK_DEBUG of fei4_frame_is_synced,fei4_rx_data_out,fei4_rx_data_isk,fei4_rx_data_idle,fei4_rx_data_sof,fei4_rx_data_eof : signal is "TRUE";
 --attribute MARK_DEBUG of fei4_rx_data_out,fei4_data_is_pixel_dat: signal is "TRUE";
 
@@ -142,9 +148,15 @@ Port map (
     IS_PIX_DAT       => fei4_data_is_pixel_dat,
     
     REG_ADDR_OUT     => REG_ADDR_OUT,
-    REG_VALUE_OUT    => REG_VALUE_OUT
+    REG_VALUE_OUT    => REG_VALUE_OUT,
+    SER_DAT_OUT      => service_dat_out,
+    
+    ERROR_FLG        => dat_extrac_error_flg,
+    ERROR_COD        => dat_extrac_error_code,
+    STATE_OUT        => dat_extrac_state
 );
 
+    
 -- Delay FEI4 data for one clock to align with the FIFO write data enable
 fei4_data_delay:process(data_fclock)
 begin
