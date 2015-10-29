@@ -76,7 +76,9 @@ end axi_mburst1;
 
 architecture Behavioral of axi_mburst1 is
 
-COMPONENT axi_fei4_fifo
+
+------------- Begin Cut here for COMPONENT Declaration ------ COMP_TAG
+COMPONENT fifo_generator_0
   PORT (
     rst : IN STD_LOGIC;
     wr_clk : IN STD_LOGIC;
@@ -91,6 +93,11 @@ COMPONENT axi_fei4_fifo
     wr_data_count : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
   );
 END COMPONENT;
+ATTRIBUTE SYN_BLACK_BOX : BOOLEAN;
+ATTRIBUTE SYN_BLACK_BOX OF fifo_generator_0 : COMPONENT IS TRUE;
+ATTRIBUTE BLACK_BOX_PAD_PIN : STRING;
+ATTRIBUTE BLACK_BOX_PAD_PIN OF fifo_generator_0 : COMPONENT IS "rst,wr_clk,rd_clk,din[31:0],wr_en,rd_en,dout[31:0],full,empty,rd_data_count[6:0],wr_data_count[6:0]";
+
 
 type  state_type is (IDLE, ADDR_ACTIVE, DATA_ACTIVE, DELAY, BURST, HOLD);  
 signal state: state_type;
@@ -114,8 +121,7 @@ signal last_rd_tri_delay :std_logic;
 
 signal last_burst :std_logic;
 
-attribute MARK_DEBUG : string;
-attribute MARK_DEBUG of axi_awaddr_i :signal is "TRUE";
+--attribute MARK_DEBUG : string;
 --attribute MARK_DEBUG of last_rd_tri_i,state,fifo_rden ,fifo_rdcnt_i,fifo_empty,fifo_full:signal is "TRUE";
 --attribute MARK_DEBUG of axi_awaddr,axi_awready,axi_awvalid,axi_wready :signal is "TRUE";
 --attribute MARK_DEBUG of axi_wdata,axi_wvalid,axi_wlast :signal is "TRUE";
@@ -140,14 +146,14 @@ axi_wlast <= axi_wlast_i;
 
 fifo_rd_clk <= axi_clk;
 
-fei4_data_fifo:axi_fei4_fifo
+fei4_data_fifo: fifo_generator_0
   PORT MAP (
     rst => fifo_reset,
     wr_clk => fifo_wrclk,
     rd_clk => axi_clk,
-    din    => fifo_data,
-    wr_en  => fifo_wren,
-    rd_en  => fifo_rden,
+    din => fifo_data,
+    wr_en => fifo_wren,
+    rd_en => fifo_rden,
     dout => fifo_rddata,
     full => fifo_full,
     empty => fifo_empty,
@@ -161,7 +167,7 @@ if (addr_rst = '1') then
    axi_awaddr_i <= start_addr; --(others => '0');
 elsif rising_edge(axi_wlast_i) then
    if (axi_awaddr_i < end_addr) then --128M Adress Space
-       axi_awaddr_i <= axi_awaddr_i +  512;  --16Bursts*4Bytes
+       axi_awaddr_i <= axi_awaddr_i +  64;  --16Bursts*4Bytes
    else
        axi_awaddr_i <= X"0000000";
    end if;
@@ -182,7 +188,6 @@ begin
   end if;
   
 end process;
-
 
 
     
@@ -213,36 +218,34 @@ process (axi_clk, axi_reset_i)
 	       last_burst <= '0';
 
 			
-	       	
     elsif rising_edge(axi_clk) then
         case state is
             when IDLE => 
                  burstcnt <= 0;
 				 axi_bready <= '1';					--response always ready				 					
-				 if(fifo_rdcnt_i >= X"80")  then      --fifo read counter lager than 16 * 4Byte
+				 if(fifo_rdcnt_i >= X"10")  then      --fifo read counter lager than 16 * 4Byte
 					axi_awvalid <= '1';
 				    axi_awburst <= "01"; 			-- incrementing address type
-					axi_awlen   <= X"7F";   			-- 16 transfer per burst
-					axi_awsize  <= "010";            -- burst size, 010 - 4 bytes per beat					
-					burstcnt    <= 0;			
-					axi_wstrb   <= X"F";			    --control which byte can write, total 32 Bits - 4 bytes
+					axi_awlen <= X"0F";   			-- 16 transfer per burst
+					axi_awsize <= "010";            -- burst size, 010 - 4 bytes per beat					
+					burstcnt <= 0;			
+					axi_wstrb <= X"F";			    --control which byte can write, total 32 Bits - 4 bytes
 					state <= addr_active;
 					burstcnt_latch <= 15;	
 					fifo_rden <= '1'; 
-			     elsif(last_rd_tri_i = '1') and fifo_rdcnt_i /= X"00"  then
-                    axi_awvalid <= '1';
+				elsif(last_rd_tri_i = '1') and fifo_rdcnt_i /= X"00"  then
+					axi_awvalid <= '1';
                     axi_awburst <= "01";             -- incrementing address type
                     axi_awlen <= fifo_rdcnt_i;       -- 16 transfer per burst
                     axi_awsize <= "010";            -- burst size, 010 - 4 bytes per beat                    
                     burstcnt <= 0;            
                     axi_wstrb <= X"F";                --control which byte can write, total 32 Bits - 4 bytes
                     state <= addr_active;
-                    last_burst <= '1';    
-                    burstcnt_latch <=  to_integer(unsigned(fifo_rdcnt_i)) - 1;    
-                    fifo_rden <= '1';             
-			     else
-			        fifo_rden <= '0'; 
-			     end if;
+                    last_burst <= '1';	
+                    burstcnt_latch <=  to_integer(unsigned(fifo_rdcnt_i)) - 1;	
+                    fifo_rden <= '1'; 			
+				end if;
+				
 				
 			when ADDR_ACTIVE =>
 				--address transaction
