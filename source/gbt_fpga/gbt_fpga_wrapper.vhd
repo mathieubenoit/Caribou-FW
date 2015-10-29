@@ -259,7 +259,7 @@ begin
 
    gbtexmpldsgn: entity work.gbt_fpga_core
       generic map (
-      gbtbank_reset_clk_freq                      => 156e6
+      gbtbank_reset_clk_freq                      => 100e6
       )      
       port map (
   
@@ -274,7 +274,7 @@ begin
       manual_reset_tx_i                           => manualresettx_from_user,
       manual_reset_rx_i                           => manualresetrx_from_user,
       -- clocks scheme:                           
-      fabric_clk_i                                => fabricclk_from_userclockibufgds,
+      fabric_clk_i                                => sysclk,
       mgt_refclk_i                                => mgtrefclk_from_smamgtrefclkibufdsgtxe2,             
       -- serial lanes:                            
       mgt_tx_p                                    => sfp_tx_p,                
