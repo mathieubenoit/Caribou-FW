@@ -62,12 +62,12 @@ architecture Behavioral of ccpd_cfg_core is
 
 constant divider  :  integer := (input_clk_fre/cfg_clk_freq)/2;
 type ram_type is array(0 to 15) of std_logic_vector(31 downto 0);
-signal DAT_RAM :ram_type := --(others => (others => '0'));
-(
-X"a1234565",X"a789abc6",X"adef0135",X"a3456785",
-X"00000000",X"00000000",X"00000000",X"00000000",
-X"00000000",X"00000000",X"00000000",X"00000000",
-X"00000000",X"00000000",X"0fedcba9",X"87654321");
+signal DAT_RAM :ram_type := (others => (others => '0'));
+--(
+--X"a1234565",X"a789abc6",X"adef0135",X"a3456785",
+--X"00000000",X"00000000",X"00000000",X"00000000",
+--X"00000000",X"00000000",X"00000000",X"00000000",
+--X"00000000",X"00000000",X"0fedcba9",X"87654321");
 
 
 signal start_flg_prev :std_logic;
