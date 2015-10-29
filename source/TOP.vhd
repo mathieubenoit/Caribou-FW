@@ -81,12 +81,12 @@ entity TOP is
     PS7_IIC_SDA                                  : INOUT STD_LOGIC;
     PS7_IIC_SCL                                  : INOUT STD_LOGIC;
     
-    PL_IIC1_SDA                                     : INOUT STD_LOGIC;
-    PL_IIC1_SCL                                     : INOUT STD_LOGIC;
+    PL_IIC1_SDA                                  : INOUT STD_LOGIC;
+    PL_IIC1_SCL                                  : INOUT STD_LOGIC;
     
-    PL_IIC2_SDA                                     : INOUT STD_LOGIC;
-    PL_IIC2_SCL                                     : INOUT STD_LOGIC;
-    PL_IIC_BUFFER_EN                                : OUT STD_LOGIC;
+    PL_IIC2_SDA                                  : INOUT STD_LOGIC;
+    PL_IIC2_SCL                                  : INOUT STD_LOGIC;
+    PL_IIC_BUFFER_EN                             : OUT STD_LOGIC;
     
     --FEI4 A1 IOs
     FEI4_A1_DOB_P                                : IN STD_LOGIC;

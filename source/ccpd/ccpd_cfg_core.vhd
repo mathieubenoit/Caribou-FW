@@ -151,10 +151,14 @@ begin
           state <= start;
           shift_cnt_limit <= conv_integer(shift_limit);
           reg_cnt_limit <= conv_integer(reg_limit);
-          cfg_clk_en <= '1';
+        else
+          cfg_clk_en <= '0';
+          ld_i    <= '0'; 
         end if;
-        
+       
       when start =>
+        cfg_clk_en <= '1';
+        ld_i    <= '1'; 
         if reg_cnt_limit = 0 then
             shift_out_reg <= DAT_RAM(0);
             sin_i <= DAT_RAM(0)(0);
@@ -162,15 +166,17 @@ begin
         else
             shift_out_reg <= DAT_RAM(0);
             sin_i <= DAT_RAM(0)(0);
-            state <= shift1;
+            state <= shift1;           
         end if;
-      
+  
+      -- shift the data fully filled in the data buffer reg 
       when shift1 =>
 
       if shift_cnt = 31 then
         if reg_cnt = reg_cnt_limit - 1 then
           if shift_cnt_limit = 0 then
-            state <= load;
+            state <= finish;
+            ld_i  <= '0';
             sin_i <= '0';
             cfg_clk_en <= '0';
           else
@@ -190,9 +196,11 @@ begin
         shift_cnt <= shift_cnt +1;
       end if;      
       
+      --shift out the remianed data in the last data buffer reg
       when shift2 =>
         if shift_cnt = shift_cnt_limit - 1 then
-           state <= load;
+           state <= finish;
+           ld_i  <= '0';
            sin_i <= '0';
            cfg_clk_en <= '0';
         else
@@ -200,9 +208,9 @@ begin
            sin_i <= shift_out_reg(shift_cnt+1);
         end if;
       
-      when load =>
-        ld_i    <= '1';
-        state <= finish;
+--      when load =>
+--        ld_i    <= '1';
+--        state <= finish;
         
       when finish =>
         ld_i    <= '0';
@@ -216,12 +224,12 @@ begin
   end if;
 end process;
 
-ckc_i <= cfg_clk_prev when (cfg_clk_en = '1' and clock_enable(0) = '1') else '0';
-ckd_i <= cfg_clk_prev when (cfg_clk_en = '1' and clock_enable(1) = '1') else '0';
+ckc_i <= cfg_clk_prev when (cfg_clk_en = '1' and clock_enable(0) = '1') else '1';
+ckd_i <= cfg_clk_prev when (cfg_clk_en = '1' and clock_enable(1) = '1') else '1';
 
 Sin <= sin_i;
-CkC <= ckc_i;
-CkD <= ckd_i;
+CkC <= not ckc_i;
+CkD <= not ckd_i;
 Ld  <= ld_i;
 --process(clk, rst)
 --begin
