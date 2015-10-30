@@ -108,7 +108,7 @@ signal rx_state : state_type := START ;
 signal sync_tri :std_logic;
 
 attribute MARK_DEBUG : string;
-attribute MARK_DEBUG of sync_tri,idle,data_i,fei4_data_byte,rx_state,fei4_data,fram_is_synced : signal is "TRUE";
+attribute MARK_DEBUG of sync_tri,idle,data_i,rx_state,fram_is_synced : signal is "TRUE";
 
 begin
          
