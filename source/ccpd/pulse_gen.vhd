@@ -32,9 +32,6 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity pulse_gen is
-generic (
-  BASE_ADDR: std_logic_vector(31 downto 0) := x"43c00000"
-  );
   port ( 
   RST    : in std_logic;
   SYSCLK : in std_logic;
