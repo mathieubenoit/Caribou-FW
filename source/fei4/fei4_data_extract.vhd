@@ -161,6 +161,7 @@ elsif rising_edge(fclk) then
          reg_addr(7 downto 0)  <= DATA_IN;   -- ar_cnt = 1, read 8 LSB of the reg address
          ar_cnt <= ar_cnt + 1;               
        else
+         state <= idle;
          ERROR_FLG <= '1';                
        end if;
        
@@ -176,6 +177,7 @@ elsif rising_edge(fclk) then
          reg_value(7 downto 0) <= DATA_IN;
          vr_cnt <= vr_cnt + 1; 
        else
+         state <= idle;
          ERROR_FLG <= '1';        
        end if;
                
@@ -191,6 +193,7 @@ elsif rising_edge(fclk) then
          service_dat(7 downto 0) <= DATA_IN;
          sr_cnt <= sr_cnt + 1; 
        else
+         state <= idle;
          ERROR_FLG <= '1';        
        end if;
        
@@ -211,6 +214,7 @@ elsif rising_edge(fclk) then
          state <= IDLE;
        else
          ERROR_FLG <= '1';  
+         state <= idle;
        end if;
      
      when FINISH =>
