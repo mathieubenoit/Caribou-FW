@@ -885,7 +885,7 @@ port map(
 pl_iic:entity work.iic_controller
 port map( 
     RST    => global_reset,
-    SYSCLK => ps7_aclk,   
+    SYSCLK => clk100m,   
         
     SCL            => PL_IIC1_SCL,
     SDA            => PL_IIC1_SDA,
