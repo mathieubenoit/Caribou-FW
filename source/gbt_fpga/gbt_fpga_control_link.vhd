@@ -122,7 +122,10 @@ signal data_out        :std_logic_vector(31 downto 0);
 signal data_valid_out  :std_logic;
 signal fe_num_out      :std_logic_vector(3  downto 0);
 
-signal reg49           :std_logic_vector(31  downto 0);
+signal test_reg1           :std_logic_vector(31  downto 0);
+signal test_reg2           :std_logic_vector(31  downto 0);
+signal test_reg3           :std_logic_vector(31  downto 0);
+signal test_reg4           :std_logic_vector(31  downto 0);
 
 begin
 

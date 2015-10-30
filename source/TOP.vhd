@@ -933,81 +933,81 @@ Port map (
     Ld             => ccpd_ld
  );      
     
-control_interface:entity work.iobus_interface 
-generic map (
-    BASE_ADDR => X"43c00000"
-    )
-port map( 
-    RST                   => tied_to_ground,
-    SYSCLK                => ps7_aclk,
+--control_interface:entity work.iobus_interface 
+--generic map (
+--    BASE_ADDR => X"43c00000"
+--    )
+--port map( 
+--    RST                   => tied_to_ground,
+--    SYSCLK                => ps7_aclk,
     
-    Bus2IP_Addr           => bus2ip_addr_t,
-    Bus2IP_RD             => bus2ip_rd_t,
-    Bus2IP_WR             => bus2ip_wr_t,
-    Bus2IP_Data           => bus2ip_data_t,
-    IP2Bus_Data           => ip2bus_data_t,
-    RDACK                 => rdack_t,
-    WRACK                 => wrack_t,
+--    Bus2IP_Addr           => bus2ip_addr_t,
+--    Bus2IP_RD             => bus2ip_rd_t,
+--    Bus2IP_WR             => bus2ip_wr_t,
+--    Bus2IP_Data           => bus2ip_data_t,
+--    IP2Bus_Data           => ip2bus_data_t,
+--    RDACK                 => rdack_t,
+--    WRACK                 => wrack_t,
         
-    RST_CTRL              => reset_reg,
+--    RST_CTRL              => reset_reg,
     
-    --FEI4 configure module control signals  
-    FEI4_CFG_FLG          => fei4_cfg_flg,
-    FEI4_CFG_REG          => fei4_cfg_reg,
-    FEI4_WR_REG_DAT       => fei4_wr_reg_dat,
-    FEI4_FR_RAM_ADDR      => fei4_fr_ram_addr,
-    FEI4_FR_RAM_DAT_IN    => fei4_fr_ram_dat_in,
-    FEI4_FR_RAM_DAT_OUT   => fei4_fr_ram_dat_out,
-    FEI4_CMD_PH_SEL       => fei4_cmd_ph_sel,
-    FEI4_CAL_CNT_DELAY    => fei4_cal_cnt_delay,
+--    --FEI4 configure module control signals  
+--    FEI4_CFG_FLG          => fei4_cfg_flg,
+--    FEI4_CFG_REG          => fei4_cfg_reg,
+--    FEI4_WR_REG_DAT       => fei4_wr_reg_dat,
+--    FEI4_FR_RAM_ADDR      => fei4_fr_ram_addr,
+--    FEI4_FR_RAM_DAT_IN    => fei4_fr_ram_dat_in,
+--    FEI4_FR_RAM_DAT_OUT   => fei4_fr_ram_dat_out,
+--    FEI4_CMD_PH_SEL       => fei4_cmd_ph_sel,
+--    FEI4_CAL_CNT_DELAY    => fei4_cal_cnt_delay,
     
-    --FEI4 RX module control signals  
-    FEI4_FRAME_SYNC_EN    => fei4_frame_sync_en,
-    FEI4_FE_SR_RD_EN      => fei4_fe_sr_rd_en,    
-    FEI4_REG_ADDR_OUT     => fei4_reg_addr_out,
-    FEI4_REG_VALUE_OUT    => fei4_reg_value_out,
-    --FEI4 IDELAY control signals  
-    FEI4_IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
-    FEI4_IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
-    FEI4_IDELAY_LD        => fei4_idelay_ld,
-    FEI4_IDELAY_CNT_IN    => fei4_idelay_cnt_in,
+--    --FEI4 RX module control signals  
+--    FEI4_FRAME_SYNC_EN    => fei4_frame_sync_en,
+--    FEI4_FE_SR_RD_EN      => fei4_fe_sr_rd_en,    
+--    FEI4_REG_ADDR_OUT     => fei4_reg_addr_out,
+--    FEI4_REG_VALUE_OUT    => fei4_reg_value_out,
+--    --FEI4 IDELAY control signals  
+--    FEI4_IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
+--    FEI4_IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
+--    FEI4_IDELAY_LD        => fei4_idelay_ld,
+--    FEI4_IDELAY_CNT_IN    => fei4_idelay_cnt_in,
     
-    ADC_DCLK_FREQ         => adc_dclk_freq_t,
-    ADC_FCLK_FREQ         => adc_fclk_freq_t,    
-    ADC_FCLK_POS          => adc_fclk_pos,  
+--    ADC_DCLK_FREQ         => adc_dclk_freq_t,
+--    ADC_FCLK_FREQ         => adc_fclk_freq_t,    
+--    ADC_FCLK_POS          => adc_fclk_pos,  
 
-    PL_IIC_CMD_FLG       => pl_iic_cmd_flg,
-    PL_IIC_CTRL_IN       => pl_iic_ctrl_in,
-    PL_IIC_WR_BUF        => pl_iic_wr_buf,
-    PL_IIC_RD_BUF        => pl_iic_rd_buf,
+--    PL_IIC_CMD_FLG       => pl_iic_cmd_flg,
+--    PL_IIC_CTRL_IN       => pl_iic_ctrl_in,
+--    PL_IIC_WR_BUF        => pl_iic_wr_buf,
+--    PL_IIC_RD_BUF        => pl_iic_rd_buf,
     
-    HP_GEN_RST            => hp_data_gen_softreset,
-    HP_TRIGER             => hp_data_gen_softtrig,
-    HP_FIFO_RST           => hp_fifo_rst,
-    HP_ADDR_RST           => hp_addr_rst,
-    HP_BURST_EN           => hp_data_gen_adcburstenb,
-    HP_TEST_DATA_EN       => hp_data_gen_testdata_en,
-    HP2_FIFO_CNT          => hp2_burst_fifo_rdcnt_t,
-    HP2_BURST_LAST_RD     => hp2_burst_last_rd_t,
-    HP0_BURST_LEN         => hp0_data_gen_adcburstlen,
-    HP0_BURST_ADDR        => hp0_burst_addr_t,
-    HP2_BURST_ADDR        => hp2_burst_addr_t,
+--    HP_GEN_RST            => hp_data_gen_softreset,
+--    HP_TRIGER             => hp_data_gen_softtrig,
+--    HP_FIFO_RST           => hp_fifo_rst,
+--    HP_ADDR_RST           => hp_addr_rst,
+--    HP_BURST_EN           => hp_data_gen_adcburstenb,
+--    HP_TEST_DATA_EN       => hp_data_gen_testdata_en,
+--    HP2_FIFO_CNT          => hp2_burst_fifo_rdcnt_t,
+--    HP2_BURST_LAST_RD     => hp2_burst_last_rd_t,
+--    HP0_BURST_LEN         => hp0_data_gen_adcburstlen,
+--    HP0_BURST_ADDR        => hp0_burst_addr_t,
+--    HP2_BURST_ADDR        => hp2_burst_addr_t,
     
-    CCPD_CFG_FLG          => ccpd_cfg_flg,
-    CCPD_CFG_REG_LIMIT    => ccpd_cfg_reg_limit,
-    CCPD_CFG_SHIFT_LIMIT  => ccpd_cfg_shift_limit,
-    CCPD_CFG_CLK_EN       => ccpd_cfg_clk_en,
-    CCPD_CFG_RAM_WR_EN    => ccpd_cfg_ram_wr_en,
-    CCPD_RAM_WR_DAT       => ccpd_ram_wr_dat,
-    CCPD_CFG_RAM_ADDR     => ccpd_cfg_ram_addr,
-    CCPD_CFG_RAM_RD_DAT   => ccpd_cfg_ram_rd_dat,
+--    CCPD_CFG_FLG          => ccpd_cfg_flg,
+--    CCPD_CFG_REG_LIMIT    => ccpd_cfg_reg_limit,
+--    CCPD_CFG_SHIFT_LIMIT  => ccpd_cfg_shift_limit,
+--    CCPD_CFG_CLK_EN       => ccpd_cfg_clk_en,
+--    CCPD_CFG_RAM_WR_EN    => ccpd_cfg_ram_wr_en,
+--    CCPD_RAM_WR_DAT       => ccpd_ram_wr_dat,
+--    CCPD_CFG_RAM_ADDR     => ccpd_cfg_ram_addr,
+--    CCPD_CFG_RAM_RD_DAT   => ccpd_cfg_ram_rd_dat,
     
-    CCPD_INJ_FLG      => ccpd_inj_flg,
-    CCPD_INJ_PLS_CNT  => ccpd_inj_pls_cnt,
-    CCPD_INJ_HIGH_CNT => ccpd_inj_high_cn,
-    CCPD_INJ_LOW_CNT  => ccpd_inj_low_cnt,
-    CCPD_INJ_OUT_EN   => ccpd_inj_out_en
-);	  
+--    CCPD_INJ_FLG      => ccpd_inj_flg,
+--    CCPD_INJ_PLS_CNT  => ccpd_inj_pls_cnt,
+--    CCPD_INJ_HIGH_CNT => ccpd_inj_high_cn,
+--    CCPD_INJ_LOW_CNT  => ccpd_inj_low_cnt,
+--    CCPD_INJ_OUT_EN   => ccpd_inj_out_en
+--);	  
 
 global_reset   <= reset_reg(0);
 reset_fei4_cfg <= reset_reg(1);
