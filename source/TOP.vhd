@@ -1161,7 +1161,46 @@ gbt_slow_ctronl: entity work.gbt_fpga_control_link
     DATA_VALID_O     =>  gbt_ctrl_data_valid_o,
     REG_ADDRESS_O    =>  gbt_ctrl_addr_o,
     REG_VALUE_O      =>  gbt_ctrl_data_o,
-    FE_NUMBER_O      =>  gbt_ctrl_fe_num_o
+    FE_NUMBER_O      =>  gbt_ctrl_fe_num_o,
+
+    RST_CTRL              => reset_reg,
+    
+    --FEI4 configure module control signals  
+    FEI4_CFG_FLG          => fei4_cfg_flg,
+    FEI4_CFG_REG          => fei4_cfg_reg,
+    FEI4_WR_REG_DAT       => fei4_wr_reg_dat,
+    FEI4_FR_RAM_ADDR      => fei4_fr_ram_addr,
+    FEI4_FR_RAM_DAT_IN    => fei4_fr_ram_dat_in,
+    FEI4_FR_RAM_DAT_OUT   => fei4_fr_ram_dat_out,
+    FEI4_CMD_PH_SEL       => fei4_cmd_ph_sel,
+    FEI4_CAL_CNT_DELAY    => fei4_cal_cnt_delay,
+    
+    --FEI4 RX module control signals  
+    FEI4_FRAME_SYNC_EN    => fei4_frame_sync_en,
+    FEI4_FE_SR_RD_EN      => fei4_fe_sr_rd_en,    
+    FEI4_REG_ADDR_OUT     => fei4_reg_addr_out,
+    FEI4_REG_VALUE_OUT    => fei4_reg_value_out,
+    --FEI4 IDELAY control signals  
+    FEI4_IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
+    FEI4_IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
+    FEI4_IDELAY_LD        => fei4_idelay_ld,
+    FEI4_IDELAY_CNT_IN    => fei4_idelay_cnt_in,
+    
+    ADC_DCLK_FREQ         => adc_dclk_freq_t,
+    ADC_FCLK_FREQ         => adc_fclk_freq_t,    
+    ADC_FCLK_POS          => adc_fclk_pos,  
+    
+    HP_GEN_RST            => hp_data_gen_softreset,
+    HP_TRIGER             => hp_data_gen_softtrig,
+    HP_FIFO_RST           => hp_fifo_rst,
+    HP_ADDR_RST           => hp_addr_rst,
+    HP_BURST_EN           => hp_data_gen_adcburstenb,
+    HP_TEST_DATA_EN       => hp_data_gen_testdata_en,
+    HP2_FIFO_CNT          => hp2_burst_fifo_rdcnt_t,
+    HP2_BURST_LAST_RD     => hp2_burst_last_rd_t,
+    HP0_BURST_LEN         => hp0_data_gen_adcburstlen,
+    HP0_BURST_ADDR        => hp0_burst_addr_t,
+    HP2_BURST_ADDR        => hp2_burst_addr_t
     );
 
 si570_controller:entity work.iic_controller2 
