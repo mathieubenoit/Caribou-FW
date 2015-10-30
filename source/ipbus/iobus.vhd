@@ -37,7 +37,11 @@ port (
     ADC_DCLK_FREQ       :in  std_logic_vector(19 downto 0);
     ADC_FCLK_FREQ       :in  std_logic_vector(19 downto 0);
     ADC_FCLK_POS        :out std_logic_vector( 3 downto 0);	
-    
+ 
+    PL_IIC_CMD_FLG      :out std_logic;
+    PL_IIC_CTRL_IN      :out std_logic_vector(31 downto 0);
+    PL_IIC_WR_BUF       :out std_logic_vector(31 downto 0);
+    PL_IIC_RD_BUF       :in std_logic_vector(31 downto 0);   
     --FEI4 configure module control signals        
     FEI4_CFG_FLG        :out std_logic;
     FEI4_CFG_REG        :out std_logic_vector(31 downto 0);
@@ -199,10 +203,27 @@ begin
                                           
                         when x"007c" =>   if (wr = '1') then HP2_BURST_LAST_RD <= Bus2IP_Data(0);                                         
                                           end if;   
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    											
+
+                        when x"0080" =>   if (wr = '1') then   PL_IIC_CMD_FLG  <= Bus2IP_Data(0);           
+                        end if;
+
+                      
+                        when x"0084" =>   if (wr = '1') then  PL_IIC_CTRL_IN  <= Bus2IP_Data;
+                        end if;
+
+                      
+                        when x"0088" =>   if (wr = '1') then  PL_IIC_WR_BUF  <=  Bus2IP_Data;
+                        end if;
+
+                      
+                        when x"008c" =>    if (rd = '1')then  ip2bus_data_i  <=  PL_IIC_RD_BUF;
+                        end if;
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        											
 						when others =>
-										  ip2bus_data_i(19 downto 0) <= (others => '0');
-				   end case;
+										 ip2bus_data_i(19 downto 0) <= (others => '0');
+				        end case;
 				   
 				   --read acknowlege generation
 				   if(rd = '1') then 
