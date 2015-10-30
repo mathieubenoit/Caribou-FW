@@ -21,6 +21,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -67,6 +68,7 @@ signal fei4_a2_device_num :std_logic_vector(1 downto 0) := "10";
 
 signal fei4_a1_gbt_tx_data :std_logic_vector(7 downto 0);
 signal fei4_a2_gbt_tx_data :std_logic_vector(7 downto 0);
+signal test_cnt :std_logic_vector(15 downto 0);
 
 attribute MARK_DEBUG : string;
 attribute MARK_DEBUG of fei4_a1_data_2_gbt,fei4_a1_data_valid: signal is "TRUE";
@@ -121,12 +123,21 @@ begin
   
 end process;
 
+process(GBT_TX_FRAME_CLK)
+begin
+if rising_edge(GBT_TX_FRAME_CLK) then
+  if fei4_data_valid = '1' then
+    test_cnt <= test_cnt + '1';
+  end if;
+end if;
+end process;
+
 fei4_a1_gbt_tx_data(6 downto 4) <= "001";
 fei4_a2_gbt_tx_data(6 downto 4) <= "010";
 
 GBT_FEI4_TX_DATA(7 downto 0)    <= fei4_a1_gbt_tx_data;
 GBT_FEI4_TX_DATA(15 downto 8)   <= fei4_a2_gbt_tx_data;
-GBT_FEI4_TX_DATA(31 downto 16)  <= (others => '0');
+GBT_FEI4_TX_DATA(31 downto 16)  <= test_cnt;
 GBT_FEI4_TX_IS_DATA             <= fei4_data_valid;
        
 end Behavioral;

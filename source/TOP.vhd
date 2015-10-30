@@ -78,8 +78,8 @@ entity TOP is
     PS7_DDR_DQS_N                                : INOUT STD_LOGIC_VECTOR(3 DOWNTO 0);
     PS7_DDR_DQS_P                                : INOUT STD_LOGIC_VECTOR(3 DOWNTO 0);
     
-    PS7_IIC_SDA                                  : INOUT STD_LOGIC;
-    PS7_IIC_SCL                                  : INOUT STD_LOGIC;
+--    PS7_IIC_SDA                                  : INOUT STD_LOGIC;
+--    PS7_IIC_SCL                                  : INOUT STD_LOGIC;
     
     PL_IIC1_SDA                                  : INOUT STD_LOGIC;
     PL_IIC1_SCL                                  : INOUT STD_LOGIC;
@@ -704,8 +704,8 @@ port map (
     S02_AXI_wstrb   => m_axi_hp2_wstrb_t,
     S02_AXI_wvalid  => m_axi_hp2_wvalid_t,
           
-    iic_scl_io   => PS7_IIC_SCL,
-    iic_sda_io   => PS7_IIC_SDA
+    iic_scl_io   => open,
+    iic_sda_io   => open
 );
 
 hp0_data_gen_trig <= hp_data_gen_softtrig(0);
@@ -1169,8 +1169,8 @@ port map(
   reset   => global_reset,
   clk100  => clk100m,
 
-  iic_sda => IIC2_SDA,
-  iic_scl => IIC2_SCL,
+  iic_sda => PL_IIC2_SDA,
+  iic_scl => PL_IIC2_SCL,
 
   done    => open
  );
