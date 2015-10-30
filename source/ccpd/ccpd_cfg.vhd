@@ -109,9 +109,9 @@ signal ram_rd_dat      :std_logic_vector(31 downto 0);
 signal ram_wr_en       :std_logic;
 signal ram_wr_clk      :std_logic;
 
---attribute MARK_DEBUG : string;
---attribute MARK_DEBUG of ram_addr,ram_wr_dat,ram_rd_dat,ram_wr_en : signal is "TRUE";
---attribute MARK_DEBUG of ccpd_sin,ccpd_ckc,ccpd_ckd,ccpd_ld : signal is "TRUE";
+attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of ram_addr,ram_wr_dat,ram_rd_dat,ram_wr_en : signal is "TRUE";
+attribute MARK_DEBUG of reg0,reg1,reg2,reg3,ccpd_sin,ccpd_ckc,ccpd_ckd,ccpd_ld : signal is "TRUE";
 
 begin
 
@@ -194,14 +194,21 @@ begin
                                           ipbus_data_out <= (others => '0');  
                                         end if;   
                                                
-                        when "1XXXXXXX" => if (ipbus_wr = '1') then 
-                                          
+                        when x"14" => if (ipbus_wr = '1') then                                          
                                           ram_wr_dat <= ipbus_data_in;
-                                          ram_addr <= ipbus_addr(5 downto 2);                                                                          
                                         elsif (ipbus_rd = '1') then
-                                          ram_addr <= ipbus_addr(5 downto 2);  
+                                          ipbus_data_out <= (others => '0');  
+                                        end if; 
+                                        
+                        when x"18" => if (ipbus_wr = '1') then                                          
+                                          ram_addr <= ipbus_data_in(3 downto 0);
+                                        elsif (ipbus_rd = '1') then
+                                          ipbus_data_out <= (others => '0');  
+                                        end if;                                         
+
+                        when x"1C" =>  if (ipbus_rd = '1') then
                                           ipbus_data_out <= ram_rd_dat;                                         
-                                        end if;   
+                                        end if; 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               											
 						when others =>						                
 										ipbus_data_out <= (others => '0');
