@@ -37,7 +37,7 @@ generic (
   );
 Port (
     sysclk             :in std_logic;
-    rst             :in std_logic;
+    rst                :in std_logic;
 
     --IP BUS
     Bus2IP_Addr         : in std_logic_vector(31 downto 0);
@@ -48,10 +48,10 @@ Port (
     RDACK               : out std_logic;
     WRACK               : out std_logic;    
            
-    Sin             :out std_logic;
-    CkC             :out std_logic;
-    CkD             :out std_logic;
-    Ld              :out std_logic
+    Sin                 :out std_logic;
+    CkC                 :out std_logic;
+    CkD                 :out std_logic;
+    Ld                  :out std_logic
  );
 end ccpd_cfg_tb;
 
@@ -110,8 +110,11 @@ signal ram_wr_en       :std_logic;
 signal ram_wr_clk      :std_logic;
 
 attribute MARK_DEBUG : string;
+
+attribute MARK_DEBUG of reg0,reg1,reg2,reg2 : signal is "TRUE";
 attribute MARK_DEBUG of ram_addr,ram_wr_dat,ram_rd_dat,ram_wr_en : signal is "TRUE";
-attribute MARK_DEBUG of reg0,reg1,reg2,reg3,ccpd_sin,ccpd_ckc,ccpd_ckd,ccpd_ld : signal is "TRUE";
+attribute MARK_DEBUG of ccpd_sin,ccpd_ckc,ccpd_ckd,ccpd_ld : signal is "TRUE";
+
 
 begin
 
