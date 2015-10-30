@@ -111,7 +111,7 @@ signal ram_wr_clk      :std_logic;
 
 attribute MARK_DEBUG : string;
 
-attribute MARK_DEBUG of reg0,reg1,reg2,reg2 : signal is "TRUE";
+attribute MARK_DEBUG of reg0,reg1,reg2 : signal is "TRUE";
 attribute MARK_DEBUG of ram_addr,ram_wr_dat,ram_rd_dat,ram_wr_en : signal is "TRUE";
 attribute MARK_DEBUG of ccpd_sin,ccpd_ckc,ccpd_ckd,ccpd_ld : signal is "TRUE";
 

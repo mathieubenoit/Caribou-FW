@@ -63,6 +63,10 @@ entity gbt_fpga_control_link is
     ADC_FCLK_FREQ       :in  std_logic_vector(19 downto 0);
     ADC_FCLK_POS        :out std_logic_vector( 3 downto 0);	
     
+    PL_IIC_CMD_FLG      :out std_logic;
+    PL_IIC_CTRL_IN      :out std_logic_vector(31 downto 0);
+    PL_IIC_WR_BUF       :out std_logic_vector(31 downto 0);
+    PL_IIC_RD_BUF       :in std_logic_vector(31 downto 0);  
     --FEI4 configure module control signals        
     FEI4_CFG_FLG        :out std_logic;
     FEI4_CFG_REG        :out std_logic_vector(31 downto 0);
@@ -89,8 +93,8 @@ end gbt_fpga_control_link;
 architecture Behavioral of gbt_fpga_control_link is
 
 
-attribute MARK_DEBUG : string;
-attribute MARK_DEBUG of reg0,reg1: signal is "TRUE";
+--attribute MARK_DEBUG : string;
+--attribute MARK_DEBUG of reg0,reg1: signal is "TRUE";
 
 signal addr_in         :std_logic_vector(15 downto 0);
 signal data_in         :std_logic_vector(31 downto 0);
@@ -102,6 +106,8 @@ signal addr_out        :std_logic_vector(15 downto 0);
 signal data_out        :std_logic_vector(31 downto 0);
 signal data_valid_out  :std_logic;
 signal fe_num_out      :std_logic_vector(3  downto 0);
+
+signal reg49           :std_logic_vector(31  downto 0);
 
 begin
 
@@ -117,10 +123,6 @@ fe_num_out <= x"8";
 process(GBT_RX_FRAME_CLK, RST)
 begin
 if RST = '1' then
-  reg0           <= (others => '0');
-  reg1           <= (others => '0');
-  reg2           <= (others => '0');
-  reg3           <= (others => '0');
   addr_out       <= (others => '0');
   data_out       <= (others => '0');
   data_valid_out <= '0';
@@ -237,7 +239,7 @@ elsif rising_edge(GBT_RX_FRAME_CLK) then
   
   when x"0038" =>  
     if rw = '1' then 
-       data_out       <= ip2bus_data_i;
+       data_out       <= FEI4_REG_ADDR_OUT;
     end if;
     data_valid_out <= '1';
     addr_out <= x"0038";
@@ -272,7 +274,7 @@ elsif rising_edge(GBT_RX_FRAME_CLK) then
   
   when x"0048" =>  
     if rw = '0' then
-       FEI4_IDELAY_LD18          <= data_in(1 downto 0);
+       FEI4_IDELAY_LD          <= data_in(1 downto 0);
        data_out       <= data_in;
     end if;
     data_valid_out <= '1';
@@ -374,14 +376,14 @@ elsif rising_edge(GBT_RX_FRAME_CLK) then
   
   when x"0078" =>  
     if rw = '1' then 
-       data_out(7 downto 0)       <= HP2_FIFO_CNT30;
+       data_out(7 downto 0)       <= HP2_FIFO_CNT;
     end if;
     data_valid_out <= '1';
     addr_out <= x"0078";
   
   when x"007c" =>  
     if rw = '0' then
-       reg31HP2_BURST_LAST_RD          <= data_in(0);
+       HP2_BURST_LAST_RD          <= data_in(0);
        data_out       <= data_in;
     end if;
     data_valid_out <= '1';
@@ -548,15 +550,15 @@ elsif rising_edge(GBT_RX_FRAME_CLK) then
 --    data_valid_out <= '1';
 --    addr_out <= x"00c0";
   
---  when x"00c4" =>  
---    if rw = '1' then 
---       data_out       <= reg49;
---    elsif rw = '0' then
---       reg49          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"00c4";
+  when x"00c4" =>  
+    if rw = '1' then 
+       data_out       <= reg49;
+    elsif rw = '0' then
+       reg49          <= data_in;
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00c4";
   
       
   when others =>
