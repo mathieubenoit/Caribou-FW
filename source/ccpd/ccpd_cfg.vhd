@@ -36,7 +36,7 @@ Port (
     sysclk             :in std_logic;
     rst                :in std_logic;
 
-    FLG        :in std_logic;
+    CFG_FLG        :in std_logic;
     REG_LIMIT  :in std_logic_vector(4 downto 0);
     SHIFT_LIMIT :in std_logic_vector(4 downto 0);
     CLK_EN      :in std_logic_vector(1 downto 0);
@@ -59,14 +59,14 @@ signal ccpd_ckc        :std_logic;
 signal ccpd_ckd        :std_logic;
 signal ccpd_ld         :std_logic;
 
-signal ram_addr        :std_logic_vector(3 downto 0);
-signal ram_wr_dat      :std_logic_vector(31 downto 0);
-signal ram_rd_dat      :std_logic_vector(31 downto 0);
-signal ram_wr_en       :std_logic;
-signal ram_wr_clk      :std_logic;
+--signal ram_addr        :std_logic_vector(3 downto 0);
+--signal ram_wr_dat      :std_logic_vector(31 downto 0);
+--signal ram_rd_dat      :std_logic_vector(31 downto 0);
+--signal ram_wr_en       :std_logic;
+--signal ram_wr_clk      :std_logic;
 
 attribute MARK_DEBUG : string;
-attribute MARK_DEBUG of ram_addr,ram_wr_dat,ram_rd_dat,ram_wr_en : signal is "TRUE";
+--attribute MARK_DEBUG of ram_addr,ram_wr_dat,ram_rd_dat,ram_wr_en : signal is "TRUE";
 attribute MARK_DEBUG of ccpd_sin,ccpd_ckc,ccpd_ckd,ccpd_ld : signal is "TRUE";
 
 
@@ -82,7 +82,7 @@ ccpd_cfg:entity work.ccpd_cfg_core
     rst             => rst,
     
     
-    start_flg       => FLG,
+    start_flg       => CFG_FLG,
     reg_limit       => REG_LIMIT,
     shift_limit     => SHIFT_LIMIT,
     clock_enable    => CLK_EN,

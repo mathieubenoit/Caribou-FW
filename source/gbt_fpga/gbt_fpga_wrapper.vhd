@@ -35,8 +35,12 @@ entity gbt_fpga_wrapper is
     
 --    USER_CLOCK_P                                   : in  std_logic;
 --    USER_CLOCK_N                                   : in  std_logic;   
-    SYSCLK                               : in  std_logic;
-    
+    SYSCLK                                         : in  std_logic;
+
+    -- External RESET
+    TX_RESET                                       : in  std_logic;
+    RX_RESET                                       : in  std_logic;
+        
     SMA_MGT_REFCLK_P                               : in  std_logic;
     SMA_MGT_REFCLK_N                               : in  std_logic; 
     
@@ -62,6 +66,7 @@ entity gbt_fpga_wrapper is
         
     TX_FRAME_CLK_O                                 : out std_logic;
     RX_FRAME_CLK_O                                 : out std_logic;
+    
           
     GPIO_LED_LEFT                                  : out std_logic;
     GPIO_LED_CENTER                                : out std_logic;
@@ -271,8 +276,8 @@ begin
       -- resets scheme:      
       general_reset_i                             => reset_from_genrst,                   
       --------------------------------------------
-      manual_reset_tx_i                           => manualresettx_from_user,
-      manual_reset_rx_i                           => manualresetrx_from_user,
+      manual_reset_tx_i                           => TX_RESET,
+      manual_reset_rx_i                           => RX_RESET,
       -- clocks scheme:                           
       fabric_clk_i                                => sysclk,
       mgt_refclk_i                                => mgtrefclk_from_smamgtrefclkibufdsgtxe2,             
@@ -328,29 +333,29 @@ begin
 
    -- signals mapping:
    -------------------
-    generalreset_from_user                            <= sync_from_vio( 0);          
-    clkmuxsel_from_user                               <= sync_from_vio( 1);
-    testpattersel_from_user                           <= sync_from_vio( 3 downto  2); 
-    loopback_from_user                                <= sync_from_vio( 6 downto  4);
-    resetdataerrorseenflag_from_user                  <= sync_from_vio( 7);
-    resetgbtrxreadylostflag_from_user                 <= sync_from_vio( 8);
-    txisdatasel_from_user                             <= sync_from_vio( 9);
-    manualresettx_from_user                           <= sync_from_vio(10);
-    manualresetrx_from_user                           <= sync_from_vio(11);
-    --------------------------------------------------      
-    async_to_vio( 0)                                  <= rxisdata_from_gbtexmpldsgn;
-    async_to_vio( 1)                                  <= txframeclkplllocked_from_gbtexmpldsgn;
-    async_to_vio( 2)                                  <= latoptgbtbanktx_from_gbtexmpldsgn;
-    async_to_vio( 3)                                  <= mgtready_from_gbtexmpldsgn;
-    async_to_vio( 4)                                  <= rxwordclkready_from_gbtexmpldsgn;    
-    async_to_vio(10 downto 5)                         <= rxbitslipnbr_from_gbtexmpldsgn; 
-    async_to_vio(11)                                  <= rxframeclkready_from_gbtexmpldsgn;   
-    async_to_vio(12)                                  <= gbtrxready_from_gbtexmpldsgn;          
-    async_to_vio(13)                                  <= gbtrxreadylostflag_from_gbtexmpldsgn;  
-    async_to_vio(14)                                  <= rxdataerrorseen_from_gbtexmpldsgn;   
-    async_to_vio(15)                                  <= rxextrdatawidebuserseen_from_gbtexmpldsgn;
-    async_to_vio(16)                                  <= rxextrdatagbt8b10berseen_from_gbtexmpldsgn;
-    async_to_vio(17)                                  <= latoptgbtbankrx_from_gbtexmpldsgn;
+--    generalreset_from_user                            <= sync_from_vio( 0);          
+--    clkmuxsel_from_user                               <= sync_from_vio( 1);
+--    testpattersel_from_user                           <= sync_from_vio( 3 downto  2); 
+--    loopback_from_user                                <= sync_from_vio( 6 downto  4);
+--    resetdataerrorseenflag_from_user                  <= sync_from_vio( 7);
+--    resetgbtrxreadylostflag_from_user                 <= sync_from_vio( 8);
+--    txisdatasel_from_user                             <= sync_from_vio( 9);
+--    manualresettx_from_user                           <= sync_from_vio(10);
+--    manualresetrx_from_user                           <= sync_from_vio(11);
+--    --------------------------------------------------      
+--    async_to_vio( 0)                                  <= rxisdata_from_gbtexmpldsgn;
+--    async_to_vio( 1)                                  <= txframeclkplllocked_from_gbtexmpldsgn;
+--    async_to_vio( 2)                                  <= latoptgbtbanktx_from_gbtexmpldsgn;
+--    async_to_vio( 3)                                  <= mgtready_from_gbtexmpldsgn;
+--    async_to_vio( 4)                                  <= rxwordclkready_from_gbtexmpldsgn;    
+--    async_to_vio(10 downto 5)                         <= rxbitslipnbr_from_gbtexmpldsgn; 
+--    async_to_vio(11)                                  <= rxframeclkready_from_gbtexmpldsgn;   
+--    async_to_vio(12)                                  <= gbtrxready_from_gbtexmpldsgn;          
+--    async_to_vio(13)                                  <= gbtrxreadylostflag_from_gbtexmpldsgn;  
+--    async_to_vio(14)                                  <= rxdataerrorseen_from_gbtexmpldsgn;   
+--    async_to_vio(15)                                  <= rxextrdatawidebuserseen_from_gbtexmpldsgn;
+--    async_to_vio(16)                                  <= rxextrdatagbt8b10berseen_from_gbtexmpldsgn;
+--    async_to_vio(17)                                  <= latoptgbtbankrx_from_gbtexmpldsgn;
 
    -- chipscope:
    -------------   
@@ -364,12 +369,12 @@ begin
    --            that can be found in:
    --            "..\example_designs\xilix_k7v7\kc705\chipscope_project\".  
          
-vio: vio_0
-  PORT MAP (
-    clk => txframeclk_from_gbtexmpldsgn,
-    probe_in0 => async_to_vio,
-    probe_out0 => sync_from_vio
-  );
+--vio: vio_0
+--  PORT MAP (
+--    clk => txframeclk_from_gbtexmpldsgn,
+--    probe_in0 => async_to_vio,
+--    probe_out0 => sync_from_vio
+--  );
 
 --tx_ila: ila_0
 --PORT MAP (

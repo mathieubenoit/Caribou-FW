@@ -151,12 +151,13 @@ architecture Behavioral of TOP is
 --signal declaration
 signal tied_to_ground          :std_logic;
 signal tied_to_vcc             :std_logic;
-signal reset_reg      :std_logic_vector(31 downto 0);
+signal reset_reg               :std_logic_vector(31 downto 0);
 signal global_reset            :std_logic;
-signal reset_fei4_rx1 :std_logic;
-signal reset_fei4_rx2 :std_logic;
-signal reset_fei4_cfg :std_logic;
-
+signal reset_fei4_rx1          :std_logic;
+signal reset_fei4_rx2          :std_logic;
+signal reset_fei4_cfg          :std_logic;
+signal reset_gbt_tx            :std_logic;
+signal reset_gbt_rx            :std_logic;
 
 --mmcm clocks 
 signal clk200m                 :std_logic; --Idelay reference clock
@@ -535,6 +536,19 @@ begin
 tied_to_ground <= '0';
 tied_to_vcc <= '1';
 
+global_reset   <= reset_reg(0);
+reset_fei4_cfg <= reset_reg(1);
+reset_fei4_rx1 <= reset_reg(2);
+reset_fei4_rx2 <= reset_reg(3);
+reset_gbt_tx   <= reset_reg(8);
+reset_gbt_rx   <= '0';
+
+PL_IIC_BUFFER_EN <= '1';
+SI5324_RST_N     <= '1';
+
+USER_SMA_P       <= gbt_fpga_tx_frame_clk;
+USER_SMA_N       <= gbt_fpga_rx_frame_clk;
+
 --LVDS Input Buffer 
 FEI4_A1_HITOR_BUF :IBUFDS
 generic map (
@@ -543,35 +557,35 @@ generic map (
     IOSTANDARD => "LVDS_25"
 )
 port map (
-O => fei4_a1_hit_or_un_sync, 
-I  => FEI4_A1_HIT_OR_P, 
-IB => FEI4_A1_HIT_OR_N 
+    O  => fei4_a1_hit_or_un_sync, 
+    I  => FEI4_A1_HIT_OR_P, 
+    IB => FEI4_A1_HIT_OR_N 
 );
 
 --LVDS Input Buffer 
 FEI4_A2_HITOR_BUF:IBUFDS
 generic map (
-    DIFF_TERM => TRUE, 
+    DIFF_TERM    => TRUE, 
     IBUF_LOW_PWR => FALSE, 
-    IOSTANDARD => "LVDS_25"
+    IOSTANDARD   => "LVDS_25"
 )
 port map (
-O => fei4_a2_hit_or_un_sync, 
-I  => FEI4_A2_HIT_OR_P, 
-IB => FEI4_A2_HIT_OR_N 
+    O  => fei4_a2_hit_or_un_sync, 
+    I  => FEI4_A2_HIT_OR_P, 
+    IB => FEI4_A2_HIT_OR_N 
 );
 
 --LVDS Input Buffer 
 SI570_BUFFER:IBUFDS
 generic map (
-    DIFF_TERM => TRUE, 
+    DIFF_TERM   => TRUE, 
     IBUF_LOW_PWR => FALSE, 
-    IOSTANDARD => "LVDS_25"
+    IOSTANDARD   => "LVDS_25"
 )
 port map (
-O => si570_clk, 
-I  => USER_CLOCK_P, 
-IB => USER_CLOCK_N 
+    O => si570_clk, 
+    I  => USER_CLOCK_P, 
+    IB => USER_CLOCK_N 
 );
 
 process(clk160m)
@@ -589,14 +603,14 @@ clk_gen: clk_wiz_0
    clk_in1_p => CLK200_IN_P,
    clk_in1_n => CLK200_IN_N,
    -- Clock out ports  
-   clk200 => clk200m,
-   clk100 => clk100m,
-   clk40 => clk40m,
-   clk160 => clk160m,
-   clk16 => clk16m,
+   clk200    => clk200m,
+   clk100    => clk100m,
+   clk40     => clk40m,
+   clk160    => clk160m,
+   clk16     => clk16m,
    -- Status and control signals                
-   reset => global_reset,
-   locked => mmcm_locked            
+   reset     => global_reset,
+   locked    => mmcm_locked            
  );
  
 ads5292_a_input:entity work.ads5292_lvds 
@@ -919,13 +933,13 @@ Port map (
     rst            => global_reset,
 
     CFG_FLG          => ccpd_cfg_flg,
-    CFG_REG_LIMIT    => ccpd_cfg_reg_limit,
-    CFG_SHIFT_LIMIT  => ccpd_cfg_shift_limit,
-    CFG_CLK_EN       => ccpd_cfg_clk_en,
-    CFG_RAM_WR_EN    => ccpd_cfg_ram_wr_en,
+    REG_LIMIT    => ccpd_cfg_reg_limit,
+    SHIFT_LIMIT  => ccpd_cfg_shift_limit,
+    CLK_EN       => ccpd_cfg_clk_en,
+    RAM_WR_EN    => ccpd_cfg_ram_wr_en,
     RAM_WR_DAT       => ccpd_ram_wr_dat,
-    CFG_RAM_ADDR     => ccpd_cfg_ram_addr,
-    CFG_RAM_RD_DAT   => ccpd_cfg_ram_rd_dat,
+    RAM_ADDR     => ccpd_cfg_ram_addr,
+    RAM_RD_DAT   => ccpd_cfg_ram_rd_dat,
            
     Sin            => ccpd_sin,
     CkC            => ccpd_ckc,
@@ -933,88 +947,83 @@ Port map (
     Ld             => ccpd_ld
  );      
     
---control_interface:entity work.iobus_interface 
---generic map (
---    BASE_ADDR => X"43c00000"
---    )
---port map( 
---    RST                   => tied_to_ground,
---    SYSCLK                => ps7_aclk,
+control_interface:entity work.iobus_interface 
+generic map (
+    BASE_ADDR => X"43c00000"
+    )
+port map( 
+    RST                   => tied_to_ground,
+    SYSCLK                => ps7_aclk,
     
---    Bus2IP_Addr           => bus2ip_addr_t,
---    Bus2IP_RD             => bus2ip_rd_t,
---    Bus2IP_WR             => bus2ip_wr_t,
---    Bus2IP_Data           => bus2ip_data_t,
---    IP2Bus_Data           => ip2bus_data_t,
---    RDACK                 => rdack_t,
---    WRACK                 => wrack_t,
+    Bus2IP_Addr           => bus2ip_addr_t,
+    Bus2IP_RD             => bus2ip_rd_t,
+    Bus2IP_WR             => bus2ip_wr_t,
+    Bus2IP_Data           => bus2ip_data_t,
+    IP2Bus_Data           => ip2bus_data_t,
+    RDACK                 => rdack_t,
+    WRACK                 => wrack_t,
         
---    RST_CTRL              => reset_reg,
+    RST_CTRL              => reset_reg,
     
---    --FEI4 configure module control signals  
---    FEI4_CFG_FLG          => fei4_cfg_flg,
---    FEI4_CFG_REG          => fei4_cfg_reg,
---    FEI4_WR_REG_DAT       => fei4_wr_reg_dat,
---    FEI4_FR_RAM_ADDR      => fei4_fr_ram_addr,
---    FEI4_FR_RAM_DAT_IN    => fei4_fr_ram_dat_in,
---    FEI4_FR_RAM_DAT_OUT   => fei4_fr_ram_dat_out,
---    FEI4_CMD_PH_SEL       => fei4_cmd_ph_sel,
---    FEI4_CAL_CNT_DELAY    => fei4_cal_cnt_delay,
+    --FEI4 configure module control signals  
+    FEI4_CFG_FLG          => fei4_cfg_flg,
+    FEI4_CFG_REG          => fei4_cfg_reg,
+    FEI4_WR_REG_DAT       => fei4_wr_reg_dat,
+    FEI4_FR_RAM_ADDR      => fei4_fr_ram_addr,
+    FEI4_FR_RAM_DAT_IN    => fei4_fr_ram_dat_in,
+    FEI4_FR_RAM_DAT_OUT   => fei4_fr_ram_dat_out,
+    FEI4_CMD_PH_SEL       => fei4_cmd_ph_sel,
+    FEI4_CAL_CNT_DELAY    => fei4_cal_cnt_delay,
     
---    --FEI4 RX module control signals  
---    FEI4_FRAME_SYNC_EN    => fei4_frame_sync_en,
---    FEI4_FE_SR_RD_EN      => fei4_fe_sr_rd_en,    
---    FEI4_REG_ADDR_OUT     => fei4_reg_addr_out,
---    FEI4_REG_VALUE_OUT    => fei4_reg_value_out,
---    --FEI4 IDELAY control signals  
---    FEI4_IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
---    FEI4_IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
---    FEI4_IDELAY_LD        => fei4_idelay_ld,
---    FEI4_IDELAY_CNT_IN    => fei4_idelay_cnt_in,
+    --FEI4 RX module control signals  
+    FEI4_FRAME_SYNC_EN    => fei4_frame_sync_en,
+    FEI4_FE_SR_RD_EN      => fei4_fe_sr_rd_en,    
+    FEI4_REG_ADDR_OUT     => fei4_reg_addr_out,
+    FEI4_REG_VALUE_OUT    => fei4_reg_value_out,
+    --FEI4 IDELAY control signals  
+    FEI4_IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
+    FEI4_IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
+    FEI4_IDELAY_LD        => fei4_idelay_ld,
+    FEI4_IDELAY_CNT_IN    => fei4_idelay_cnt_in,
     
---    ADC_DCLK_FREQ         => adc_dclk_freq_t,
---    ADC_FCLK_FREQ         => adc_fclk_freq_t,    
---    ADC_FCLK_POS          => adc_fclk_pos,  
+    ADC_DCLK_FREQ         => adc_dclk_freq_t,
+    ADC_FCLK_FREQ         => adc_fclk_freq_t,    
+    ADC_FCLK_POS          => adc_fclk_pos,  
 
---    PL_IIC_CMD_FLG       => pl_iic_cmd_flg,
---    PL_IIC_CTRL_IN       => pl_iic_ctrl_in,
---    PL_IIC_WR_BUF        => pl_iic_wr_buf,
---    PL_IIC_RD_BUF        => pl_iic_rd_buf,
+    PL_IIC_CMD_FLG       => pl_iic_cmd_flg,
+    PL_IIC_CTRL_IN       => pl_iic_ctrl_in,
+    PL_IIC_WR_BUF        => pl_iic_wr_buf,
+    PL_IIC_RD_BUF        => pl_iic_rd_buf,
     
---    HP_GEN_RST            => hp_data_gen_softreset,
---    HP_TRIGER             => hp_data_gen_softtrig,
---    HP_FIFO_RST           => hp_fifo_rst,
---    HP_ADDR_RST           => hp_addr_rst,
---    HP_BURST_EN           => hp_data_gen_adcburstenb,
---    HP_TEST_DATA_EN       => hp_data_gen_testdata_en,
---    HP2_FIFO_CNT          => hp2_burst_fifo_rdcnt_t,
---    HP2_BURST_LAST_RD     => hp2_burst_last_rd_t,
---    HP0_BURST_LEN         => hp0_data_gen_adcburstlen,
---    HP0_BURST_ADDR        => hp0_burst_addr_t,
---    HP2_BURST_ADDR        => hp2_burst_addr_t,
+    HP_GEN_RST            => hp_data_gen_softreset,
+    HP_TRIGER             => hp_data_gen_softtrig,
+    HP_FIFO_RST           => hp_fifo_rst,
+    HP_ADDR_RST           => hp_addr_rst,
+    HP_BURST_EN           => hp_data_gen_adcburstenb,
+    HP_TEST_DATA_EN       => hp_data_gen_testdata_en,
+    HP2_FIFO_CNT          => hp2_burst_fifo_rdcnt_t,
+    HP2_BURST_LAST_RD     => hp2_burst_last_rd_t,
+    HP0_BURST_LEN         => hp0_data_gen_adcburstlen,
+    HP0_BURST_ADDR        => hp0_burst_addr_t,
+    HP2_BURST_ADDR        => hp2_burst_addr_t,
     
---    CCPD_CFG_FLG          => ccpd_cfg_flg,
---    CCPD_CFG_REG_LIMIT    => ccpd_cfg_reg_limit,
---    CCPD_CFG_SHIFT_LIMIT  => ccpd_cfg_shift_limit,
---    CCPD_CFG_CLK_EN       => ccpd_cfg_clk_en,
---    CCPD_CFG_RAM_WR_EN    => ccpd_cfg_ram_wr_en,
---    CCPD_RAM_WR_DAT       => ccpd_ram_wr_dat,
---    CCPD_CFG_RAM_ADDR     => ccpd_cfg_ram_addr,
---    CCPD_CFG_RAM_RD_DAT   => ccpd_cfg_ram_rd_dat,
+    CCPD_CFG_FLG          => ccpd_cfg_flg,
+    CCPD_CFG_REG_LIMIT    => ccpd_cfg_reg_limit,
+    CCPD_CFG_SHIFT_LIMIT  => ccpd_cfg_shift_limit,
+    CCPD_CFG_CLK_EN       => ccpd_cfg_clk_en,
+    CCPD_CFG_RAM_WR_EN    => ccpd_cfg_ram_wr_en,
+    CCPD_RAM_WR_DAT       => ccpd_ram_wr_dat,
+    CCPD_CFG_RAM_ADDR     => ccpd_cfg_ram_addr,
+    CCPD_CFG_RAM_RD_DAT   => ccpd_cfg_ram_rd_dat,
     
---    CCPD_INJ_FLG      => ccpd_inj_flg,
---    CCPD_INJ_PLS_CNT  => ccpd_inj_pls_cnt,
---    CCPD_INJ_HIGH_CNT => ccpd_inj_high_cn,
---    CCPD_INJ_LOW_CNT  => ccpd_inj_low_cnt,
---    CCPD_INJ_OUT_EN   => ccpd_inj_out_en
---);	  
+    CCPD_INJ_FLG      => ccpd_inj_flg,
+    CCPD_INJ_PLS_CNT  => ccpd_inj_pls_cnt,
+    CCPD_INJ_HIGH_CNT => ccpd_inj_high_cn,
+    CCPD_INJ_LOW_CNT  => ccpd_inj_low_cnt,
+    CCPD_INJ_OUT_EN   => ccpd_inj_out_en
+);	  
 
-global_reset   <= reset_reg(0);
-reset_fei4_cfg <= reset_reg(1);
-reset_fei4_rx1 <= reset_reg(2);
-reset_fei4_rx2 <= reset_reg(3);
-
-fei4_a1_cfg:entity work.FEI4B_CFG
+fei4_cfg:entity work.FEI4B_CFG
 Port map(     
     RST             => global_reset or reset_fei4_cfg,
     
@@ -1038,8 +1047,6 @@ Port map(
     EXT_TRI         => tlu_trigger_in,
     BUSY            => tlu_busy_out  
 );
-
-
 
 --fei4_a2_cfg:FEI4B_CFG
 --      Port map(
@@ -1128,8 +1135,8 @@ Port map (
     GBT_FEI4_TX_IS_DATA   => gbt_fei4_tx_is_data
 );
 
-gbt_fpga_tx_is_data           <= gbt_fei4_tx_is_data;
-gbt_fpga_tx_data(31 downto 0) <= gbt_fei4_tx_data;
+gbt_fpga_tx_is_data              <= gbt_fei4_tx_is_data;
+gbt_fpga_tx_data(31 downto 0)    <= gbt_fei4_tx_data;
 gbt_fpga_tx_extra_data_widebus   <= (others => '0');
 gbt_fpga_tx_extra_data_gbt8b10b  <= (others => '0');
 
@@ -1139,16 +1146,20 @@ gbt_link:entity work.gbt_fpga_wrapper
     
 --    USER_CLOCK_P                =>  USER_CLOCK_P,
 --    USER_CLOCK_N                =>  USER_CLOCK_N,  
-    SYSCLK                      => clk100m,  
+    SYSCLK                      => clk100m, 
+
+    -- External RESET
+    TX_RESET                    => reset_gbt_tx, 
+    RX_RESET                    => reset_gbt_rx,
     
-    SMA_MGT_REFCLK_P            =>  SMA_MGT_REFCLK_P,
-    SMA_MGT_REFCLK_N            =>  SMA_MGT_REFCLK_N,
+    SMA_MGT_REFCLK_P            => SMA_MGT_REFCLK_P,
+    SMA_MGT_REFCLK_N            => SMA_MGT_REFCLK_N,
     
-    SFP_TX_P                    =>  SFP_TX_P,
-    SFP_TX_N                    =>  SFP_TX_N,
-    SFP_RX_P                    =>  SFP_RX_P,
-    SFP_RX_N                    =>  SFP_RX_N,                 
-    SFP_TX_DISABLE              =>  SFP_TX_DISABLE,
+    SFP_TX_P                    => SFP_TX_P,
+    SFP_TX_N                    => SFP_TX_N,
+    SFP_RX_P                    => SFP_RX_P,
+    SFP_RX_N                    => SFP_RX_N,                 
+    SFP_TX_DISABLE              => SFP_TX_DISABLE,
 
     TX_IS_DATA_I                => gbt_fpga_tx_is_data,
     TX_DATA_I                   => gbt_fpga_tx_data,
@@ -1174,78 +1185,78 @@ gbt_fpga_tx_data(79)           <= gbt_ctrl_data_valid_o;
 gbt_fpga_tx_data(78 downto 64) <= gbt_ctrl_addr_o;
 gbt_fpga_tx_data(63 downto 32) <= gbt_ctrl_data_o;
 
-gbt_slow_ctronl: entity work.gbt_fpga_control_link
-    Port map(
-    RST              =>  global_reset,
+--gbt_slow_ctronl: entity work.gbt_fpga_control_link
+--    Port map(
+--    RST              =>  global_reset,
     
-    GBT_RX_FRAME_CLK =>  gbt_fpga_rx_frame_clk,
-    GBT_RX_IS_DATA   =>  gbt_fpga_rx_is_data,
-    GBT_RX_DATA      =>  gbt_fpga_rx_data,
+--    GBT_RX_FRAME_CLK =>  gbt_fpga_rx_frame_clk,
+--    GBT_RX_IS_DATA   =>  gbt_fpga_rx_is_data,
+--    GBT_RX_DATA      =>  gbt_fpga_rx_data,
     
-    DATA_VALID_O     =>  gbt_ctrl_data_valid_o,
-    REG_ADDRESS_O    =>  gbt_ctrl_addr_o,
-    REG_VALUE_O      =>  gbt_ctrl_data_o,
-    FE_NUMBER_O      =>  gbt_ctrl_fe_num_o,
+--    DATA_VALID_O     =>  gbt_ctrl_data_valid_o,
+--    REG_ADDRESS_O    =>  gbt_ctrl_addr_o,
+--    REG_VALUE_O      =>  gbt_ctrl_data_o,
+--    FE_NUMBER_O      =>  gbt_ctrl_fe_num_o,
 
-    RST_CTRL              => reset_reg,
+--    RST_CTRL              => reset_reg,
     
-    --FEI4 configure module control signals  
-    FEI4_CFG_FLG          => fei4_cfg_flg,
-    FEI4_CFG_REG          => fei4_cfg_reg,
-    FEI4_WR_REG_DAT       => fei4_wr_reg_dat,
-    FEI4_FR_RAM_ADDR      => fei4_fr_ram_addr,
-    FEI4_FR_RAM_DAT_IN    => fei4_fr_ram_dat_in,
-    FEI4_FR_RAM_DAT_OUT   => fei4_fr_ram_dat_out,
-    FEI4_CMD_PH_SEL       => fei4_cmd_ph_sel,
-    FEI4_CAL_CNT_DELAY    => fei4_cal_cnt_delay,
+--    --FEI4 configure module control signals  
+--    FEI4_CFG_FLG          => fei4_cfg_flg,
+--    FEI4_CFG_REG          => fei4_cfg_reg,
+--    FEI4_WR_REG_DAT       => fei4_wr_reg_dat,
+--    FEI4_FR_RAM_ADDR      => fei4_fr_ram_addr,
+--    FEI4_FR_RAM_DAT_IN    => fei4_fr_ram_dat_in,
+--    FEI4_FR_RAM_DAT_OUT   => fei4_fr_ram_dat_out,
+--    FEI4_CMD_PH_SEL       => fei4_cmd_ph_sel,
+--    FEI4_CAL_CNT_DELAY    => fei4_cal_cnt_delay,
     
-    --FEI4 RX module control signals  
-    FEI4_FRAME_SYNC_EN    => fei4_frame_sync_en,
-    FEI4_FE_SR_RD_EN      => fei4_fe_sr_rd_en,    
-    FEI4_REG_ADDR_OUT     => fei4_reg_addr_out,
-    FEI4_REG_VALUE_OUT    => fei4_reg_value_out,
-    --FEI4 IDELAY control signals  
-    FEI4_IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
-    FEI4_IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
-    FEI4_IDELAY_LD        => fei4_idelay_ld,
-    FEI4_IDELAY_CNT_IN    => fei4_idelay_cnt_in,
+--    --FEI4 RX module control signals  
+--    FEI4_FRAME_SYNC_EN    => fei4_frame_sync_en,
+--    FEI4_FE_SR_RD_EN      => fei4_fe_sr_rd_en,    
+--    FEI4_REG_ADDR_OUT     => fei4_reg_addr_out,
+--    FEI4_REG_VALUE_OUT    => fei4_reg_value_out,
+--    --FEI4 IDELAY control signals  
+--    FEI4_IDELAY_CNT_OUT   => fei4_idelay_cnt_out,
+--    FEI4_IDELAY_CTRL_RDY  => fei4_idelay_ctrl_rdy,
+--    FEI4_IDELAY_LD        => fei4_idelay_ld,
+--    FEI4_IDELAY_CNT_IN    => fei4_idelay_cnt_in,
     
-    ADC_DCLK_FREQ         => adc_dclk_freq_t,
-    ADC_FCLK_FREQ         => adc_fclk_freq_t,    
-    ADC_FCLK_POS          => adc_fclk_pos,  
+--    ADC_DCLK_FREQ         => adc_dclk_freq_t,
+--    ADC_FCLK_FREQ         => adc_fclk_freq_t,    
+--    ADC_FCLK_POS          => adc_fclk_pos,  
 
-    PL_IIC_CMD_FLG        => pl_iic_cmd_flg,
-    PL_IIC_CTRL_IN        => pl_iic_ctrl_in,
-    PL_IIC_WR_BUF         => pl_iic_wr_buf,
-    PL_IIC_RD_BUF         => pl_iic_rd_buf,
+--    PL_IIC_CMD_FLG        => pl_iic_cmd_flg,
+--    PL_IIC_CTRL_IN        => pl_iic_ctrl_in,
+--    PL_IIC_WR_BUF         => pl_iic_wr_buf,
+--    PL_IIC_RD_BUF         => pl_iic_rd_buf,
   
-    HP_GEN_RST            => hp_data_gen_softreset,
-    HP_TRIGER             => hp_data_gen_softtrig,
-    HP_FIFO_RST           => hp_fifo_rst,
-    HP_ADDR_RST           => hp_addr_rst,
-    HP_BURST_EN           => hp_data_gen_adcburstenb,
-    HP_TEST_DATA_EN       => hp_data_gen_testdata_en,
-    HP2_FIFO_CNT          => hp2_burst_fifo_rdcnt_t,
-    HP2_BURST_LAST_RD     => hp2_burst_last_rd_t,
-    HP0_BURST_LEN         => hp0_data_gen_adcburstlen,
-    HP0_BURST_ADDR        => hp0_burst_addr_t,
-    HP2_BURST_ADDR        => hp2_burst_addr_t,
+--    HP_GEN_RST            => hp_data_gen_softreset,
+--    HP_TRIGER             => hp_data_gen_softtrig,
+--    HP_FIFO_RST           => hp_fifo_rst,
+--    HP_ADDR_RST           => hp_addr_rst,
+--    HP_BURST_EN           => hp_data_gen_adcburstenb,
+--    HP_TEST_DATA_EN       => hp_data_gen_testdata_en,
+--    HP2_FIFO_CNT          => hp2_burst_fifo_rdcnt_t,
+--    HP2_BURST_LAST_RD     => hp2_burst_last_rd_t,
+--    HP0_BURST_LEN         => hp0_data_gen_adcburstlen,
+--    HP0_BURST_ADDR        => hp0_burst_addr_t,
+--    HP2_BURST_ADDR        => hp2_burst_addr_t,
 
-    CCPD_CFG_FLG          => ccpd_cfg_flg,
-    CCPD_CFG_REG_LIMIT    => ccpd_cfg_reg_limit,
-    CCPD_CFG_SHIFT_LIMIT  => ccpd_cfg_shift_limit,
-    CCPD_CFG_CLK_EN       => ccpd_cfg_clk_en,
-    CCPD_CFG_RAM_WR_EN    => ccpd_cfg_ram_wr_en,
-    CCPD_RAM_WR_DAT       => ccpd_ram_wr_dat,
-    CCPD_CFG_RAM_ADDR     => ccpd_cfg_ram_addr,
-    CCPD_CFG_RAM_RD_DAT   => ccpd_cfg_ram_rd_dat,
+--    CCPD_CFG_FLG          => ccpd_cfg_flg,
+--    CCPD_CFG_REG_LIMIT    => ccpd_cfg_reg_limit,
+--    CCPD_CFG_SHIFT_LIMIT  => ccpd_cfg_shift_limit,
+--    CCPD_CFG_CLK_EN       => ccpd_cfg_clk_en,
+--    CCPD_CFG_RAM_WR_EN    => ccpd_cfg_ram_wr_en,
+--    CCPD_RAM_WR_DAT       => ccpd_ram_wr_dat,
+--    CCPD_CFG_RAM_ADDR     => ccpd_cfg_ram_addr,
+--    CCPD_CFG_RAM_RD_DAT   => ccpd_cfg_ram_rd_dat,
 
-    CCPD_INJ_FLG      => ccpd_inj_flg,
-    CCPD_INJ_PLS_CNT  => ccpd_inj_pls_cnt,
-    CCPD_INJ_HIGH_CNT => ccpd_inj_high_cn,
-    CCPD_INJ_LOW_CNT  => ccpd_inj_low_cnt,
-    CCPD_INJ_OUT_EN   => ccpd_inj_out_en
-    );
+--    CCPD_INJ_FLG      => ccpd_inj_flg,
+--    CCPD_INJ_PLS_CNT  => ccpd_inj_pls_cnt,
+--    CCPD_INJ_HIGH_CNT => ccpd_inj_high_cn,
+--    CCPD_INJ_LOW_CNT  => ccpd_inj_low_cnt,
+--    CCPD_INJ_OUT_EN   => ccpd_inj_out_en
+--    );
 
 si570_controller:entity work.iic_controller2 
 port map(
@@ -1412,9 +1423,9 @@ generic map (
     IOSTANDARD => "LVDS_25"
 )
 port map (
-O =>  tlu_trigger_in, 
-I  => TLU_TRIGGER_I_P, 
-IB => TLU_TRIGGER_I_N 
+    O =>  tlu_trigger_in, 
+    I  => TLU_TRIGGER_I_P, 
+    IB => TLU_TRIGGER_I_N 
 );
 
 TLU_BUSY_OUT_BUF:OBUFDS
@@ -1453,9 +1464,6 @@ I  => TLU_BUSY_I_P,
 IB => TLU_BUSY_I_N 
 );
 
-PL_IIC_BUFFER_EN <= '1';
-SI5324_RST_N  <= '1';
-
 SI5324_CLK_OUT_BUF:OBUFDS
 generic map (
   IOSTANDARD => "DEFAULT",  
@@ -1467,7 +1475,5 @@ port map(
   I => si570_clk  
 );
 
-USER_SMA_P <= gbt_fpga_tx_frame_clk;
-USER_SMA_N <= gbt_fpga_rx_frame_clk;
                              
 end Behavioral;
