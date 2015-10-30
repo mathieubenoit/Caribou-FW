@@ -386,46 +386,37 @@ elsif rising_edge(GBT_RX_FRAME_CLK) then
     end if;
     data_valid_out <= '1';
     addr_out <= x"007c";
+    
+  when x"0080" =>  
+    if rw = '0' then
+       PL_IIC_CMD_FLG          <= data_in(0);
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"0080";
   
---  when x"0080" =>  
---    if rw = '1' then 
---       data_out       <= reg32;
---    elsif rw = '0' then
---       reg32          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"0080";
+  when x"0084" =>  
+    if rw = '0' then
+       PL_IIC_CTRL_IN          <= data_in;
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"0084";
   
---  when x"0084" =>  
---    if rw = '1' then 
---       data_out       <= reg33;
---    elsif rw = '0' then
---       reg33          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"0084";
+  when x"0088" =>  
+    if rw = '0' then
+       PL_IIC_WR_BUF          <= data_in;
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"0088";
   
---  when x"0088" =>  
---    if rw = '1' then 
---       data_out       <= reg34;
---    elsif rw = '0' then
---       reg34          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"0088";
-  
---  when x"008c" =>  
---    if rw = '1' then 
---       data_out       <= reg35;
---    elsif rw = '0' then
---       reg35          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"008c";
+  when x"008c" =>  
+    if rw = '1' then 
+       data_out       <= PL_IIC_RD_BUF;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"008c";
   
 --  when x"0090" =>  
 --    if rw = '1' then 

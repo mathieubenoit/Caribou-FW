@@ -12,15 +12,20 @@ entity iic_controller is
 	    RST    : in std_logic;
 		SYSCLK : in std_logic;
 		
-		--IP BUS
-		Bus2IP_Addr         : in std_logic_vector(31 downto 0);
-		Bus2IP_RD           : in std_logic;
-		Bus2IP_WR           : in std_logic;
-		Bus2IP_Data         : in std_logic_vector(31 downto 0);
-		IP2Bus_Data         : out std_logic_vector(31 downto 0);
-		RDACK               : out std_logic;
-		WRACK               : out std_logic;
+--		--IP BUS
+--		Bus2IP_Addr         : in std_logic_vector(31 downto 0);
+--		Bus2IP_RD           : in std_logic;
+--		Bus2IP_WR           : in std_logic;
+--		Bus2IP_Data         : in std_logic_vector(31 downto 0);
+--		IP2Bus_Data         : out std_logic_vector(31 downto 0);
+--		RDACK               : out std_logic;
+--		WRACK               : out std_logic;
 		
+		CMD_FLG             : in std_logic;		
+		CTRL_IN             : in std_logic_vector(31 downto 0);
+		WR_BUF              : in std_logic_vector(31 downto 0);
+		RD_BUF              : out std_logic_vector(31 downto 0);
+				
 		--IIC IO
 		SCL                 : inout std_logic;
 		SDA                 : inout std_logic
@@ -48,14 +53,14 @@ COMPONENT i2c_master IS
     scl       : INOUT  STD_LOGIC);                   --serial clock output of i2c bus
 END COMPONENT;
 
--- IP BUS Signal
-signal ipbus_wr               :std_logic;
-signal ipbus_rd               :std_logic;
-signal ipbus_addr             :std_logic_vector(31 downto 0);
-signal ipbus_rdack            :std_logic;
-signal ipbus_wrack          :std_logic;
-signal ipbus_data_in    :std_logic_vector(31 downto 0);
-signal ipbus_data_out   :std_logic_vector(31 downto 0);
+---- IP BUS Signal
+--signal ipbus_wr               :std_logic;
+--signal ipbus_rd               :std_logic;
+--signal ipbus_addr             :std_logic_vector(31 downto 0);
+--signal ipbus_rdack            :std_logic;
+--signal ipbus_wrack          :std_logic;
+--signal ipbus_data_in    :std_logic_vector(31 downto 0);
+--signal ipbus_data_out   :std_logic_vector(31 downto 0);
 
 signal iic_ena      :std_logic;
 signal iic_addr     :std_logic_vector(6 downto 0);
@@ -69,10 +74,10 @@ signal iic_sda      :std_logic;
 
 signal iic_cmd_flg  :std_logic;
 signal iic_cmd_flg_pre :std_logic;
-signal reg0         :std_logic_vector(31 downto 0);
-signal reg1         :std_logic_vector(31 downto 0);
-signal reg2         :std_logic_vector(31 downto 0);
-signal reg3         :std_logic_vector(31 downto 0);
+--signal reg0         :std_logic_vector(31 downto 0);
+--signal reg1         :std_logic_vector(31 downto 0);
+--signal reg2         :std_logic_vector(31 downto 0);
+--signal reg3         :std_logic_vector(31 downto 0);
 TYPE iic_enable IS(start, enable, busy, finish); --needed states
 SIGNAL state         : iic_enable;  
 signal cmd_cnt     :integer range 0 to 3:= 0;
@@ -86,7 +91,7 @@ signal rd_dat_buf :dat_buf := (others => (others => '0'));
 
 begin
 -- REG assignment
-iic_cmd_flg     <= reg0(0);
+iic_cmd_flg     <= CMD_FLG;
 
 process(SYSCLK, RST)
 begin
@@ -106,7 +111,7 @@ elsif rising_edge(SYSCLK) then
 
   iic_cmd_flg_pre <= iic_cmd_flg;
   iic_busy_pre <= iic_busy;
-  wr_dat_buf <= (reg2(7 downto 0), reg2(15 downto 8), reg2(23 downto 16), reg2(31 downto 24));
+  wr_dat_buf <= (WR_BUF(7 downto 0), WR_BUF(15 downto 8), WR_BUF(23 downto 16), WR_BUF(31 downto 24));
 
   case state is  
   --
@@ -114,10 +119,10 @@ elsif rising_edge(SYSCLK) then
     iic_ena <= '0';
     if iic_cmd_flg = '1' and iic_cmd_flg_pre = '0' then
        
-       cnt <= conv_integer(reg1(9 downto 8));
-       cmd_cnt <= conv_integer(reg1(9 downto 8));     
-       iic_addr        <= reg1(6 downto 0);
-       iic_rw          <= reg1(7);
+       cnt <= conv_integer(CTRL_IN(9 downto 8));
+       cmd_cnt <= conv_integer(CTRL_IN(9 downto 8));     
+       iic_addr        <= CTRL_IN(6 downto 0);
+       iic_rw          <= CTRL_IN(7);
        iic_data_wr <= wr_dat_buf(0);
        rd_dat_buf <= (others => (others => '0'));
        state <= enable;
@@ -181,92 +186,9 @@ iic_master_test:i2c_master
 SCL <= iic_scl;
 SDA <= iic_sda;
 
-----------------------------------IP BUS------------------------------------------------------
-ipbus_wr      <= Bus2IP_WR;
-ipbus_rd      <= Bus2IP_RD;
-ipbus_addr    <= Bus2IP_Addr;
-ipbus_data_in <= Bus2IP_Data;
-
-process(SYSCLK,RST)
-begin
-		if (RST = '1') then
-        ipbus_rdack <= '0';
-        ipbus_wrack <= '0'; 
-		else
-			if rising_edge(SYSCLK) then
-				if  (ipbus_addr(31 downto 8) = BASE_ADDR(31 downto 8)) then
-					case ipbus_addr(7 downto 0) is
-						--ADC DCLK frequency readout
-                        when x"00" =>   if (ipbus_wr = '1') then 
-                                            reg0 <= ipbus_data_in;
-                                        elsif (ipbus_rd = '1') then
-                                            ipbus_data_out <= reg0;
-                                        end if; 
-                        when x"04" =>   if (ipbus_wr = '1') then 
-                                            reg1 <= ipbus_data_in;
-                                        elsif (ipbus_rd = '1') then
-                                            ipbus_data_out <= reg1;
-                                        end if;    
-                        when x"08" =>   if (ipbus_wr = '1') then 
-                                          reg2 <= ipbus_data_in;
-                                        elsif (ipbus_rd = '1') then
-                                          ipbus_data_out <= reg2;
-                                        end if;     
-                                                                                                    						
-                        when x"0C" =>   if (ipbus_rd = '1') then 
-                                            ipbus_data_out(31 downto 24) <= rd_dat_buf(3);
-                                            ipbus_data_out(23 downto 16) <= rd_dat_buf(2);
-                                            ipbus_data_out(15 downto  8) <= rd_dat_buf(1);
-                                            ipbus_data_out(7  downto  0) <= rd_dat_buf(0);
-                                        else
-                                           ipbus_data_out <= (others => '0');
-                                        end if;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              											
-						when others =>
-										  ipbus_data_out(31 downto 0) <= (others => '0');
-				   end case;
-				   
-				   --read acknowlege generation
-				   if(ipbus_rd = '1') then 
-				     ipbus_rdack <= '1'; 
-				   else 
-				     ipbus_rdack <= '0';
-				   end if;
-				   
-                   --write acknowlege generation
-				   if(ipbus_wr = '1') then 
-				     ipbus_wrack <= '1'; 
-				   else 
-				     ipbus_wrack <= '0'; 
-				   end if;	
-				  			  		   				   
-				end if;
-			end if;
-		end if;
-end process;	
-
-
-select_output:process(ipbus_addr)
-begin
-    if  (ipbus_addr(31 downto 8) = BASE_ADDR(31 downto 8)) then 
-    IP2Bus_Data <= ipbus_data_out;
-    else
-    IP2Bus_Data <= (others => 'Z');
-    end if;
-end process;	
-
-process(SYSCLK)
-begin
-  if rising_edge(SYSCLK) then
-    if  (ipbus_addr(31 downto 8) = BASE_ADDR(31 downto 8)) then 
-      RDACK <= ipbus_rdack;
-      WRACK <= ipbus_wrack;
-    else
-      RDACK <= 'Z';
-      WRACK <= 'Z';
-   end if;
- end if;
-end process;
-
+RD_BUF(31 downto 24) <= rd_dat_buf(3);
+RD_BUF(23 downto 16) <= rd_dat_buf(2);
+RD_BUF(15 downto  8) <= rd_dat_buf(1);
+RD_BUF(7  downto  0) <= rd_dat_buf(0);
 
 end Behavioral;

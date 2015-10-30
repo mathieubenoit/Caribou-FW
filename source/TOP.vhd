@@ -393,6 +393,11 @@ signal tlu_busy_in                     :std_logic;
 
 signal si570_clk                       :std_logic;
 
+signal pl_iic_cmd_flg                  :std_logic;
+signal pl_iic_ctrl_in                  :std_logic_vector(31 downto 0);
+signal pl_iic_wr_buf                   :std_logic_vector(31 downto 0);
+signal pl_iic_rd_buf                   :std_logic_vector(31 downto 0);
+
 COMPONENT vio_1
   PORT (
     clk : IN STD_LOGIC;
@@ -870,16 +875,21 @@ port map(
     RST    => global_reset,
     SYSCLK => ps7_aclk,   
      
-    Bus2IP_Addr    => bus2ip_addr_t,
-    Bus2IP_RD      => bus2ip_rd_t,
-    Bus2IP_WR      => bus2ip_wr_t,
-    Bus2IP_Data    => bus2ip_data_t,
-    IP2Bus_Data    => ip2bus_data_t,
-    RDACK          => rdack_t,
-    WRACK          => wrack_t,
+--    Bus2IP_Addr    => bus2ip_addr_t,
+--    Bus2IP_RD      => bus2ip_rd_t,
+--    Bus2IP_WR      => bus2ip_wr_t,
+--    Bus2IP_Data    => bus2ip_data_t,
+--    IP2Bus_Data    => ip2bus_data_t,
+--    RDACK          => rdack_t,
+--    WRACK          => wrack_t,
     
     SCL            => PL_IIC1_SCL,
-    SDA            => PL_IIC1_SDA
+    SDA            => PL_IIC1_SDA,
+    
+    CMD_FLG        => pl_iic_cmd_flg,
+    CTRL_IN        => pl_iic_ctrl_in,
+    WR_BUF         => pl_iic_wr_buf,
+    RD_BUF         => pl_iic_rd_buf  
 );
 
 ccpd_inj_gen:entity work.pulse_gen
@@ -971,6 +981,11 @@ port map(
     ADC_DCLK_FREQ         => adc_dclk_freq_t,
     ADC_FCLK_FREQ         => adc_fclk_freq_t,    
     ADC_FCLK_POS          => adc_fclk_pos,  
+
+    PL_IIC_CMD_FLG       => pl_iic_cmd_flg,
+    PL_IIC_CTRL_IN       => pl_iic_c,
+    PL_IIC_WR_BUF        => pl_iic_wr,
+    PL_IIC_RD_BUF        => pl_iic_rd_buf,
     
     HP_GEN_RST            => hp_data_gen_softreset,
     HP_TRIGER             => hp_data_gen_softtrig,
@@ -1189,7 +1204,12 @@ gbt_slow_ctronl: entity work.gbt_fpga_control_link
     ADC_DCLK_FREQ         => adc_dclk_freq_t,
     ADC_FCLK_FREQ         => adc_fclk_freq_t,    
     ADC_FCLK_POS          => adc_fclk_pos,  
-    
+
+    PL_IIC_CMD_FLG        => pl_iic_cmd_flg,
+    PL_IIC_CTRL_IN        => pl_iic_c,
+    PL_IIC_WR_BUF         => pl_iic_wr,
+    PL_IIC_RD_BUF         => pl_iic_rd_buf,
+  
     HP_GEN_RST            => hp_data_gen_softreset,
     HP_TRIGER             => hp_data_gen_softtrig,
     HP_FIFO_RST           => hp_fifo_rst,
