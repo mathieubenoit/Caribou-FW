@@ -39,14 +39,11 @@ generic (
   RST    : in std_logic;
   SYSCLK : in std_logic;
   
-  --IP BUS
-  Bus2IP_Addr         : in std_logic_vector(31 downto 0);
-  Bus2IP_RD           : in std_logic;
-  Bus2IP_WR           : in std_logic;
-  Bus2IP_Data         : in std_logic_vector(31 downto 0);
-  IP2Bus_Data         : out std_logic_vector(31 downto 0);
-  RDACK               : out std_logic;
-  WRACK               : out std_logic;
+  INJ_FLG  :in std_logic;
+  INJ_PLS_CNT :in std_logic_vector(15 downto 0);
+  INJ_HIGH_CNT :in std_logic_vector(31 downto 0);
+  INJ_LOW_CNT :in std_logic_vector(31 downto 0);
+  INJ_OUT_EN :in std_logic_vector(3  downto 0);
   
   --pulse output
   pulse_out1          : out std_logic; 
@@ -76,19 +73,6 @@ PORT(
 );     
 end COMPONENT;
 
--- IP BUS Signal
-signal ipbus_wr               :std_logic;
-signal ipbus_rd               :std_logic;
-signal ipbus_addr             :std_logic_vector(31 downto 0);
-signal ipbus_rdack            :std_logic;
-signal ipbus_wrack          :std_logic;
-signal ipbus_data_in    :std_logic_vector(31 downto 0);
-signal ipbus_data_out   :std_logic_vector(31 downto 0);
-
-signal reg0   :STD_LOGIC_VECTOR(31 DOWNTO 0);
-signal reg1   :STD_LOGIC_VECTOR(31 DOWNTO 0);
-signal reg2   :STD_LOGIC_VECTOR(31 DOWNTO 0);
-signal reg3   :STD_LOGIC_VECTOR(31 DOWNTO 0);
 signal pulse_out :STD_LOGIC;
 
 begin
@@ -101,102 +85,19 @@ PORT MAP(
   clk            => sysclk,
   reset          => rst,
   
-  start_flg      => reg0(0),
+  start_flg      => INJ_FLG,
   
-  pulse_counter  => reg1(31 downto 16),
-  time_high_cnt  => reg2,
-  time_low_cnt   => reg3,
+  pulse_counter  => INJ_PLS_CNT,
+  time_high_cnt  => INJ_HIGH_CNT,
+  time_low_cnt   => INJ_LOW_CNT,
     
   pulse_out      => pulse_out
 );     
 
-pulse_out1 <= pulse_out and reg1(0);
-pulse_out2 <= pulse_out and reg1(1);
-pulse_out3 <= pulse_out and reg1(2);
-pulse_out4 <= pulse_out and reg1(3);
+pulse_out1 <= pulse_out and INJ_OUT_EN(0);
+pulse_out2 <= pulse_out and INJ_OUT_EN(1);
+pulse_out3 <= pulse_out and INJ_OUT_EN(2);
+pulse_out4 <= pulse_out and INJ_OUT_EN(3);
 
-----------------------------------IP BUS------------------------------------------------------
-ipbus_wr      <= Bus2IP_WR;
-ipbus_rd      <= Bus2IP_RD;
-ipbus_addr    <= Bus2IP_Addr;
-ipbus_data_in <= Bus2IP_Data;
-
-process(SYSCLK,RST)
-begin
-		if (RST = '1') then
-        ipbus_rdack <= '0';
-        ipbus_wrack <= '0'; 
-		else
-			if rising_edge(SYSCLK) then
-				if  (ipbus_addr(31 downto 8) = BASE_ADDR(31 downto 8)) then
-					case ipbus_addr(7 downto 0) is
-						--ADC DCLK frequency readout
-                        when x"00" =>   if (ipbus_wr = '1') then 
-                                            reg0 <= ipbus_data_in;
-                                        elsif (ipbus_rd = '1') then
-                                            ipbus_data_out <= reg0;
-                                        end if; 
-                        when x"04" =>   if (ipbus_wr = '1') then 
-                                            reg1 <= ipbus_data_in;
-                                        elsif (ipbus_rd = '1') then
-                                            ipbus_data_out <= reg1;
-                                        end if;    
-                        when x"08" =>   if (ipbus_wr = '1') then 
-                                          reg2 <= ipbus_data_in;
-                                        elsif (ipbus_rd = '1') then
-                                          ipbus_data_out <= reg2;
-                                        end if;     
-                                                                                                    						
-                        when x"0C" =>   if (ipbus_wr = '1') then 
-                                          reg3 <= ipbus_data_in;
-                                        elsif (ipbus_rd = '1') then
-                                          ipbus_data_out <= reg3;
-                                        end if;  
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              											
-						when others =>
-										  ipbus_data_out(31 downto 0) <= (others => '0');
-				   end case;
-				   
-				   --read acknowlege generation
-				   if(ipbus_rd = '1') then 
-				     ipbus_rdack <= '1'; 
-				   else 
-				     ipbus_rdack <= '0';
-				   end if;
-				   
-                   --write acknowlege generation
-				   if(ipbus_wr = '1') then 
-				     ipbus_wrack <= '1'; 
-				   else 
-				     ipbus_wrack <= '0'; 
-				   end if;	
-				  			  		   				   
-				end if;
-			end if;
-		end if;
-end process;	
-
-
-select_output:process(ipbus_addr)
-begin
-    if  (ipbus_addr(31 downto 8) = BASE_ADDR(31 downto 8)) then 
-    IP2Bus_Data <= ipbus_data_out;
-    else
-    IP2Bus_Data <= (others => 'Z');
-    end if;
-end process;	
-
-process(SYSCLK)
-begin
-  if rising_edge(SYSCLK) then
-    if  (ipbus_addr(31 downto 8) = BASE_ADDR(31 downto 8)) then 
-      RDACK <= ipbus_rdack;
-      WRACK <= ipbus_wrack;
-    else
-      RDACK <= 'Z';
-      WRACK <= 'Z';
-   end if;
- end if;
-end process;
 
 end Behavioral;

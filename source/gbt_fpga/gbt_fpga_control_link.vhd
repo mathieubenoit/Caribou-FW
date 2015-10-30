@@ -86,7 +86,22 @@ entity gbt_fpga_control_link is
     FEI4_IDELAY_CNT_OUT :in  std_logic_vector(9 downto 0);
     FEI4_IDELAY_CTRL_RDY:in  std_logic_vector(1 downto 0);
     FEI4_IDELAY_LD      :out std_logic_vector(1 downto 0);
-    FEI4_IDELAY_CNT_IN  :out std_logic_vector(9 downto 0)     
+    FEI4_IDELAY_CNT_IN  :out std_logic_vector(9 downto 0);  
+    
+    CCPD_CFG_FLG         :out std_logic;
+    CCPD_CFG_REG_LIMIT   :out std_logic_vector(4 downto 0);
+    CCPD_CFG_SHIFT_LIMIT :out std_logic_vector(4 downto 0);
+    CCPD_CFG_CLK_EN      :out std_logic_vector(1 downto 0);
+    CCPD_CFG_RAM_WR_EN   :out std_logic;
+    CCPD_RAM_WR_DAT      :out std_logic_vector(31 downto 0);
+    CCPD_CFG_RAM_ADDR    :out std_logic_vector(3 downto 0);
+    CCPD_CFG_RAM_RD_DAT  :in std_logic_vector(31 downto 0);
+
+    CCPD_INJ_FLG         :out std_logic;
+    CCPD_INJ_PLS_CNT     :out std_logic_vector(15 downto 0);
+    CCPD_INJ_HIGH_CNT    :out std_logic_vector(31 downto 0);
+    CCPD_INJ_LOW_CNT     :out std_logic_vector(31 downto 0);
+    CCPD_INJ_OUT_EN      :out std_logic_vector(3  downto 0)         
     );
 end gbt_fpga_control_link;
 
@@ -415,130 +430,114 @@ elsif rising_edge(GBT_RX_FRAME_CLK) then
   
   when x"008c" =>  
     if rw = '1' then 
-       data_out       <= PL_IIC_RD_BUF;
+       data_out    <= PL_IIC_RD_BUF;
     end if;
     data_valid_out <= '1';
     addr_out <= x"008c";
+   
+  when x"0090" =>  
+    if rw = '0' then
+       CCPD_CFG_FLG   <= data_in(0);
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"0090";
   
---  when x"0090" =>  
---    if rw = '1' then 
---       data_out       <= reg36;
---    elsif rw = '0' then
---       reg36          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"0090";
+  when x"0094" =>  
+    if rw = '0' then
+       CCPD_CFG_REG_LIMIT    <= data_in(4 downto 0);
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"0094";
   
---  when x"0094" =>  
---    if rw = '1' then 
---       data_out       <= reg37;
---    elsif rw = '0' then
---       reg37          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"0094";
+  when x"0098" =>  
+    if rw = '0' then
+       CCPD_CFG_SHIFT_LIMIT   <= data_in(4 downto 0);
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"0098";
+    
+  when x"009c" =>  
+    if rw = '0' then
+       CCPD_CFG_CLK_EN        <= data_in(1 downto 0);
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"009c";
   
---  when x"0098" =>  
---    if rw = '1' then 
---       data_out       <= reg38;
---    elsif rw = '0' then
---       reg38          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"0098";
+  when x"00a0" =>  
+    if rw = '0' then
+       CCPD_CFG_RAM_WR_EN     <= data_in(0);
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00a0";
+
+  when x"00a4" =>  
+    if rw = '0' then
+       CCPD_RAM_WR_DAT        <= data_in;
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00a0";
+    
   
---  when x"009c" =>  
---    if rw = '1' then 
---       data_out       <= reg39;
---    elsif rw = '0' then
---       reg39          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"009c";
+  when x"00a8" =>  
+    if rw = '0' then
+       CCPD_CFG_RAM_ADDR      <= data_in(3 downto 0);
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00a8";
   
---  when x"00a0" =>  
---    if rw = '1' then 
---       data_out       <= reg40;
---    elsif rw = '0' then
---       reg40          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"00a0";
+  when x"00ac" =>  
+    if rw = '0' then
+       data_out       <= CCPD_CFG_RAM_RD_DAT;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00ac";
+ 
+  when x"00b0" =>  
+    if rw = '0' then
+       CCPD_INJ_FLG     <= data_in(0);
+       data_out         <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00b0";
   
---  when x"00a4" =>  
---    if rw = '1' then 
---       data_out       <= reg41;
---    elsif rw = '0' then
---       reg41          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"00a4";
+  when x"00b4" =>  
+    if rw = '0' then
+       CCPD_INJ_PLS_CNT    <= data_in(15 downto 0);
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00b4";
   
---  when x"00a8" =>  
---    if rw = '1' then 
---       data_out       <= reg42;
---    elsif rw = '0' then
---       reg42          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"00a8";
+  when x"00b8" =>  
+    if rw = '0' then
+       CCPD_INJ_HIGH_CNT    <= data_in;
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00b8";
   
---  when x"00ac" =>  
---    if rw = '1' then 
---       data_out       <= reg43;
---    elsif rw = '0' then
---       reg43          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"00ac";
+  when x"00bc" =>  
+    if rw = '0' then
+       CCPD_INJ_LOW_CNT     <= data_in;
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00c0";
   
---  when x"00b0" =>  
---    if rw = '1' then 
---       data_out       <= reg44;
---    elsif rw = '0' then
---       reg44          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"00b0";
-  
---  when x"00b4" =>  
---    if rw = '1' then 
---       data_out       <= reg45;
---    elsif rw = '0' then
---       reg45          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"00b4";
-  
---  when x"00b8" =>  
---    if rw = '1' then 
---       data_out       <= reg46;
---    elsif rw = '0' then
---       reg46          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"00b8";
-  
---  when x"00bc" =>  
---    if rw = '1' then 
---       data_out       <= reg47;
---    elsif rw = '0' then
---       reg47          <= data_in;
---       data_out       <= data_in;
---    end if;
---    data_valid_out <= '1';
---    addr_out <= x"00bc";
+  when x"00c0" =>  
+    if rw = '0' then
+       CCPD_INJ_OUT_EN      <= data_in(3 downto 0);
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00c4";
   
 --  when x"00c0" =>  
 --    if rw = '1' then 
@@ -550,17 +549,46 @@ elsif rising_edge(GBT_RX_FRAME_CLK) then
 --    data_valid_out <= '1';
 --    addr_out <= x"00c0";
   
-  when x"00c4" =>  
+  when x"00f0" =>  
     if rw = '1' then 
-       data_out       <= reg49;
+       data_out       <= test_reg1;
     elsif rw = '0' then
-       reg49          <= data_in;
+       test_reg1          <= data_in;
        data_out       <= data_in;
     end if;
     data_valid_out <= '1';
-    addr_out <= x"00c4";
-  
-      
+    addr_out <= x"00f0";
+
+  when x"00f4" =>  
+    if rw = '1' then 
+       data_out       <= test_reg2;
+    elsif rw = '0' then
+       test_reg2          <= data_in;
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00f4";
+
+  when x"00f8" =>  
+    if rw = '1' then 
+       data_out       <= test_reg3;
+    elsif rw = '0' then
+       test_reg3          <= data_in;
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00f8";
+
+  when x"00fc" =>  
+    if rw = '1' then 
+       data_out       <= test_reg4;
+    elsif rw = '0' then
+       test_reg4          <= data_in;
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00fc";
+   
   when others =>
      data_valid_out   <= '0';
      data_out         <= (others => '0');
