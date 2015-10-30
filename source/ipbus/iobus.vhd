@@ -61,7 +61,22 @@ port (
     FEI4_IDELAY_CNT_OUT :in  std_logic_vector(9 downto 0);
     FEI4_IDELAY_CTRL_RDY:in  std_logic_vector(1 downto 0);
     FEI4_IDELAY_LD      :out std_logic_vector(1 downto 0);
-    FEI4_IDELAY_CNT_IN  :out std_logic_vector(9 downto 0)       					
+    FEI4_IDELAY_CNT_IN  :out std_logic_vector(9 downto 0);
+    
+    CCPD_CFG_FLG        :out std_logic;
+    CCPD_CFG_REG_LIMIT  :out std_logic_vector(4 downto 0);
+    CCPD_CFG_SHIFT_LIMIT :out std_logic_vector(4 downto 0);
+    CCPD_CFG_CLK_EN      :out std_logic_vector(1 downto 0);
+    CCPD_CFG_RAM_WR_EN   :out std_logic;
+    CCPD_RAM_WR_DAT      :out std_logic_vector(31 downto 0);
+    CCPD_CFG_RAM_ADDR    :out std_logic_vector(3 downto 0);
+    CCPD_CFG_RAM_RD_DAT  :in std_logic_vector(31 downto 0);
+
+    CCPD_INJ_FLG         :out std_logic;
+    CCPD_INJ_PLS_CNT     :out std_logic_vector(15 downto 0);
+    CCPD_INJ_HIGH_CNT    :out std_logic_vector(31 downto 0);
+    CCPD_INJ_LOW_CNT     :out std_logic_vector(31 downto 0);
+    CCPD_INJ_OUT_EN      :out std_logic_vector(3  downto 0)    					
 );		  
 end iobus_interface;
   
@@ -74,8 +89,7 @@ signal addr              :std_logic_vector(31 downto 0);
 signal rdack_i           :std_logic;
 signal wrack_i           :std_logic;
 signal ip2bus_data_i     :std_logic_vector(31 downto 0);
-
-
+                  
 begin
 
 wr <= Bus2IP_WR;
@@ -101,7 +115,7 @@ begin
         wrack_i <= '0'; 
 		else
 			if rising_edge(SYSCLK) then
-				if  (addr(31 downto 8) = BASE_ADDR(31 downto 8)) then
+				if  (addr(31 downto 16) = BASE_ADDR(31 downto 16)) then
 					case addr(15 downto 0) is
 
                         when x"0004" =>   if (wr = '1') then RST_CTRL <= Bus2IP_Data; 
@@ -220,9 +234,47 @@ begin
                         end if;
 
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        											
+                        when x"0090" =>   if (wr = '1') then CCPD_CFG_FLG <= Bus2IP_Data(0);
+                        end if; 
+                        
+                        when x"0094" =>   if (wr = '1') then CCPD_CFG_REG_LIMIT <= Bus2IP_Data(4 downto 0);
+                        end if;   
+                                         
+                        when x"0098" =>   if (wr = '1') then CCPD_CFG_SHIFT_LIMIT <= Bus2IP_Data(4 downto 0);
+                        end if;     
+                                                                                                    						
+                        when x"009C" =>   if (wr = '1') then CCPD_CFG_CLK_EN <= Bus2IP_Data(1 downto 0);
+                        end if;  
+                                        
+                        when x"0100" =>   if (wr = '1') then CCPD_CFG_RAM_WR_EN <= Bus2IP_Data(0);
+                        end if;   
+                                               
+                        when x"0104" =>   if (wr = '1') then CCPD_RAM_WR_DAT <= Bus2IP_Data;
+                        end if; 
+                                        
+                        when x"0108" =>   if (wr = '1') then CCPD_CFG_RAM_ADDR <= Bus2IP_Data(3 downto 0); 
+                        end if;                                         
+
+                        when x"010C" =>   if (rd = '1') then ip2bus_data_i <= CCPD_CFG_RAM_RD_DAT;                                         
+                        end if; 
+                        
+                        when x"0120" =>   if (wr = '1') then CCPD_INJ_FLG <= Bus2IP_Data(0);                                         
+                        end if;                         
+
+                        when x"0124" =>   if (wr = '1') then CCPD_INJ_PLS_CNT <= Bus2IP_Data(15 downto 0);                                         
+                        end if;   
+
+                        when x"012C" =>   if (wr = '1') then CCPD_INJ_HIGH_CNT <= Bus2IP_Data(31 downto 0);                                         
+                        end if;  
+
+                        when x"0130" =>   if (wr = '1') then CCPD_INJ_LOW_CNT <= Bus2IP_Data(31 downto 0);                                         
+                        end if;  
+
+                        when x"0134" =>   if (wr = '1') then CCPD_INJ_OUT_EN <= Bus2IP_Data(3 downto 0);                                         
+                        end if; 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       											
 						when others =>
-										 ip2bus_data_i(19 downto 0) <= (others => '0');
+							ip2bus_data_i(19 downto 0) <= (others => '0');
 				        end case;
 				   
 				   --read acknowlege generation
