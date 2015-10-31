@@ -31,7 +31,18 @@ entity TOP is
     LPC_LVDS4_N                                  : OUT  STD_LOGIC;
                
     LPC_LVDS6_P                                  : OUT  STD_LOGIC;
-    LPC_LVDS6_N                                  : OUT  STD_LOGIC;       
+    LPC_LVDS6_N                                  : OUT  STD_LOGIC;   
+    
+    
+    LPC_LVDS7_P                                  : OUT  STD_LOGIC;
+    LPC_LVDS7_N                                  : OUT  STD_LOGIC;       
+    LPC_LVDS8_P                                  : OUT  STD_LOGIC;
+    LPC_LVDS8_N                                  : OUT  STD_LOGIC;
+    LPC_LVDS9_P                                  : OUT  STD_LOGIC;
+    LPC_LVDS9_N                                  : OUT  STD_LOGIC;       
+    LPC_LVDS10_P                                  : OUT  STD_LOGIC;
+    LPC_LVDS10_N                                  : OUT  STD_LOGIC;  
+          
     LPC_LVDS12_P                                 : OUT  STD_LOGIC;
     LPC_LVDS12_N                                 : OUT  STD_LOGIC;
     
@@ -355,11 +366,15 @@ signal ccpd_inj_pulse_a2       :std_logic;
 signal ccpd_inj_pulse_b1       :std_logic;
 signal ccpd_inj_pulse_b2       :std_logic;
 
-signal ccpd_sin                :std_logic;
-signal ccpd_ld                 :std_logic;
-signal ccpd_ckc                :std_logic;
-signal ccpd_ckd                :std_logic;
+signal ccpd_sin_a                :std_logic;
+signal ccpd_ld_a                 :std_logic;
+signal ccpd_ckc_a                :std_logic;
+signal ccpd_ckd_a                :std_logic;
 
+signal ccpd_sin_b                :std_logic;
+signal ccpd_ld_b                 :std_logic;
+signal ccpd_ckc_b                :std_logic;
+signal ccpd_ckd_b                :std_logic;
 
 signal gbt_fei4_tx_data        :std_logic_vector(31 downto 0);
 signal gbt_fei4_tx_is_data     :std_logic;
@@ -407,12 +422,15 @@ signal ccpd_cfg_ram_wr_en :std_logic;
 signal ccpd_ram_wr_dat :std_logic_vector(31 downto 0);
 signal ccpd_cfg_ram_addr :std_logic_vector(3 downto 0);
 signal ccpd_cfg_ram_rd_dat :std_logic_vector(31 downto 0);
+signal ccpd_cfg_out_en :std_logic_vector(1 downto 0);
 
 signal ccpd_inj_flg :std_logic;
 signal ccpd_inj_pls_cnt :std_logic_vector(15 downto 0);
 signal ccpd_inj_high_cn :std_logic_vector(31 downto 0);
 signal ccpd_inj_low_cnt :std_logic_vector(31 downto 0);
-signal ccpd_inj_out_en :std_logic_vector(3 downto 0);
+signal ccpd_inj_out_en  :std_logic_vector(3 downto 0);
+signal ccpd_inj_tri_delay :std_logic_vector(4 downto 0);
+signal ccpd_inj_trigger_out :std_logic;
 
 COMPONENT vio_1
   PORT (
@@ -911,6 +929,9 @@ port map(
 );
 
 ccpd_inj_gen:entity work.pulse_gen
+generic map(
+  input_clk => 100_000_000
+)
 port map( 
   RST            => global_reset,
   SYSCLK         => clk100m,
@@ -920,6 +941,9 @@ port map(
   INJ_HIGH_CNT => ccpd_inj_high_cn,
   INJ_LOW_CNT  => ccpd_inj_low_cnt,
   INJ_OUT_EN   => ccpd_inj_out_en,
+  TRI_DLY_CNT  => ccpd_inj_tri_delay,
+  
+  TRIGGER_OUT  => ccpd_inj_trigger_out,
   --pulse output
   PULSE_OUT1     => ccpd_inj_pulse_a1,
   PULSE_OUT2     => ccpd_inj_pulse_a2,
@@ -937,14 +961,20 @@ Port map (
     SHIFT_LIMIT  => ccpd_cfg_shift_limit,
     CLK_EN       => ccpd_cfg_clk_en,
     RAM_WR_EN    => ccpd_cfg_ram_wr_en,
-    RAM_WR_DAT       => ccpd_ram_wr_dat,
+    RAM_WR_DAT   => ccpd_ram_wr_dat,
     RAM_ADDR     => ccpd_cfg_ram_addr,
     RAM_RD_DAT   => ccpd_cfg_ram_rd_dat,
+    OUT_EN       => ccpd_cfg_out_en,
            
-    Sin            => ccpd_sin,
-    CkC            => ccpd_ckc,
-    CkD            => ccpd_ckd,
-    Ld             => ccpd_ld
+    Sin_A            => ccpd_sin_a,
+    CkC_A            => ccpd_ckc_a,
+    CkD_A            => ccpd_ckd_a,
+    Ld_A             => ccpd_ld_a,
+
+    Sin_B            => ccpd_sin_b,
+    CkC_B            => ccpd_ckc_b,
+    CkD_B            => ccpd_ckd_b,
+    Ld_B             => ccpd_ld_b
  );      
     
 control_interface:entity work.iobus_interface 
@@ -1015,12 +1045,14 @@ port map(
     CCPD_RAM_WR_DAT       => ccpd_ram_wr_dat,
     CCPD_CFG_RAM_ADDR     => ccpd_cfg_ram_addr,
     CCPD_CFG_RAM_RD_DAT   => ccpd_cfg_ram_rd_dat,
+    CCPD_CFG_OUTPUT_EN    => ccpd_cfg_out_en,
     
     CCPD_INJ_FLG      => ccpd_inj_flg,
     CCPD_INJ_PLS_CNT  => ccpd_inj_pls_cnt,
     CCPD_INJ_HIGH_CNT => ccpd_inj_high_cn,
     CCPD_INJ_LOW_CNT  => ccpd_inj_low_cnt,
-    CCPD_INJ_OUT_EN   => ccpd_inj_out_en
+    CCPD_INJ_OUT_EN   => ccpd_inj_out_en,
+    CCPD_TRI_DLY_CNT  => ccpd_inj_tri_delay
 );	  
 
 fei4_cfg:entity work.FEI4B_CFG
@@ -1044,7 +1076,7 @@ Port map(
     
     CMD_OUT         => fei4_cmd_out,
 
-    EXT_TRI         => tlu_trigger_in,
+    EXT_TRI         => tlu_trigger_in or ccpd_inj_trigger_out,
     BUSY            => tlu_busy_out  
 );
 
@@ -1250,12 +1282,14 @@ gbt_fpga_tx_data(63 downto 32) <= gbt_ctrl_data_o;
 --    CCPD_RAM_WR_DAT       => ccpd_ram_wr_dat,
 --    CCPD_CFG_RAM_ADDR     => ccpd_cfg_ram_addr,
 --    CCPD_CFG_RAM_RD_DAT   => ccpd_cfg_ram_rd_dat,
+--    CCPD_CFG_OUTPUT_EN    => ccpd_cfg_out_en,
 
 --    CCPD_INJ_FLG      => ccpd_inj_flg,
 --    CCPD_INJ_PLS_CNT  => ccpd_inj_pls_cnt,
 --    CCPD_INJ_HIGH_CNT => ccpd_inj_high_cn,
 --    CCPD_INJ_LOW_CNT  => ccpd_inj_low_cnt,
---    CCPD_INJ_OUT_EN   => ccpd_inj_out_en
+--    CCPD_INJ_OUT_EN   => ccpd_inj_out_en,
+--    CCPD_TRI_DLY_CNT  => ccpd_inj_tri_delay
 --    );
 
 si570_controller:entity work.iic_controller2 
@@ -1324,7 +1358,7 @@ port map(
     I =>  ccpd_inj_pulse_a2   
 );
 
-CCPD_LD_B1_OBUF:OBUFDS
+CCPD_LD_A1_OBUF:OBUFDS
 generic map (
     IOSTANDARD => "DEFAULT",  
     SLEW => "SLOW" 
@@ -1332,7 +1366,51 @@ generic map (
 port map(
     O  => LPC_LVDS1_P,  
     OB => LPC_LVDS1_N,  
-    I  => ccpd_ld       
+    I  => ccpd_ld_a       
+);
+
+CCPD_SIN_A1_OBUF:OBUFDS
+generic map (
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
+) 
+port map(
+    O  => LPC_LVDS2_P,  
+    OB => LPC_LVDS2_N,  
+    I  => ccpd_sin_a      
+);
+
+CCPD_CKD_A1_OBUF:OBUFDS
+generic map (
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
+) 
+port map(
+    O  => LPC_LVDS3_P,  
+    OB => LPC_LVDS3_N,  
+    I  => ccpd_ckd_a      
+);
+
+CCPD_CKC_A1_OBUF:OBUFDS
+generic map (
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
+) 
+port map(
+    O  => LPC_LVDS4_P,  
+    OB => LPC_LVDS4_N,  
+    I  => ccpd_ckc_a   
+);
+
+CCPD_LD_B1_OBUF:OBUFDS
+generic map (
+    IOSTANDARD => "DEFAULT",  
+    SLEW => "SLOW" 
+) 
+port map(
+    O  => LPC_LVDS7_P,  
+    OB => LPC_LVDS7_N,  
+    I  => ccpd_ld_b       
 );
 
 CCPD_SIN_B1_OBUF:OBUFDS
@@ -1341,9 +1419,9 @@ generic map (
     SLEW => "SLOW" 
 ) 
 port map(
-    O  => LPC_LVDS2_P,  
-    OB => LPC_LVDS2_N,  
-    I  => ccpd_sin      
+    O  => LPC_LVDS8_P,  
+    OB => LPC_LVDS8_N,  
+    I  => ccpd_sin_b      
 );
 
 CCPD_CKD_B1_OBUF:OBUFDS
@@ -1352,9 +1430,9 @@ generic map (
     SLEW => "SLOW" 
 ) 
 port map(
-    O  => LPC_LVDS3_P,  
-    OB => LPC_LVDS3_N,  
-    I  => ccpd_ckd      
+    O  => LPC_LVDS9_P,  
+    OB => LPC_LVDS9_N,  
+    I  => ccpd_ckd_b      
 );
 
 CCPD_CKC_B1_OBUF:OBUFDS
@@ -1363,9 +1441,9 @@ generic map (
     SLEW => "SLOW" 
 ) 
 port map(
-    O  => LPC_LVDS4_P,  
-    OB => LPC_LVDS4_N,  
-    I  => ccpd_ckc   
+    O  => LPC_LVDS10_P,  
+    OB => LPC_LVDS10_N,  
+    I  => ccpd_ckc_b   
 );
          
 CCPD_INJ_B1_OBUF:OBUFDS
