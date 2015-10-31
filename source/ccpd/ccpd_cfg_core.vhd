@@ -92,7 +92,7 @@ signal ckd_i :std_logic;
 signal ld_i  :std_logic;
 
 attribute MARK_DEBUG : string;
-attribute MARK_DEBUG of state : signal is "TRUE";
+attribute MARK_DEBUG of state,reg_cnt_limit,shift_cnt_limit : signal is "TRUE";
 
 begin
 

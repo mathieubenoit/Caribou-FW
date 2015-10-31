@@ -45,7 +45,7 @@ Port (
     RAM_WR_DAT            :in std_logic_vector(31 downto 0);
     RAM_ADDR              :in std_logic_vector(3 downto 0);
     RAM_RD_DAT            :out std_logic_vector(31 downto 0);
-    OUT_EN                :in std_logic_vector(2 downto 0);    
+    OUT_EN                :in std_logic_vector(1 downto 0);    
 
            
     Sin_A                 :out std_logic;
@@ -67,14 +67,9 @@ signal ccpd_ckc        :std_logic;
 signal ccpd_ckd        :std_logic;
 signal ccpd_ld         :std_logic;
 
---signal ram_addr        :std_logic_vector(3 downto 0);
---signal ram_wr_dat      :std_logic_vector(31 downto 0);
---signal ram_rd_dat      :std_logic_vector(31 downto 0);
---signal ram_wr_en       :std_logic;
---signal ram_wr_clk      :std_logic;
+
 
 attribute MARK_DEBUG : string;
---attribute MARK_DEBUG of ram_addr,ram_wr_dat,ram_rd_dat,ram_wr_en : signal is "TRUE";
 attribute MARK_DEBUG of ccpd_sin,ccpd_ckc,ccpd_ckd,ccpd_ld : signal is "TRUE";
 
 

@@ -54,7 +54,7 @@ set_property IOSTANDARD LVCMOS25 [get_ports USER_SMA_P]
 set_property PACKAGE_PIN AD19 [get_ports USER_SMA_N]
 set_property IOSTANDARD LVCMOS25 [get_ports USER_SMA_N]
 
- FMC HPC LVDS OUTPUT
+FMC HPC LVDS OUTPUT
 set_property PACKAGE_PIN AJ16 [get_ports FMC_LVDS1_P]
 set_property IOSTANDARD LVDS_25 [get_ports FMC_LVDS1_P]
 set_property IOSTANDARD LVDS_25 [get_ports FMC_LVDS1_N]
@@ -128,19 +128,19 @@ set_property PACKAGE_PIN AG12 [get_ports LPC_LVDS6_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS6_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS6_N]
 
-set_property PACKAGE_PIN AE12   [get_ports LPC_LVDS7_P]
+set_property PACKAGE_PIN AE12 [get_ports LPC_LVDS7_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS7_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS7_N]
 
-set_property PACKAGE_PIN AE13   [get_ports LPC_LVDS8_P]
+set_property PACKAGE_PIN AE13 [get_ports LPC_LVDS8_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS8_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS8_N]
 
-set_property PACKAGE_PIN AH17   [get_ports LPC_LVDS9_P]
+set_property PACKAGE_PIN AH17 [get_ports LPC_LVDS9_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS9_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS9_N]
 
-set_property PACKAGE_PIN AH14   [get_ports LPC_LVDS10_P]
+set_property PACKAGE_PIN AH14 [get_ports LPC_LVDS10_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS10_P]
 set_property IOSTANDARD LVDS_25 [get_ports LPC_LVDS10_N]
 
@@ -282,6 +282,7 @@ set_clock_groups -asynchronous -group [get_clocks clk_fpga_0] -group [get_clocks
 set_clock_groups -asynchronous -group [get_clocks clk_fpga_0] -group [get_clocks ADC_FCLKP]
 
 
+
 create_debug_core u_ila_0_0 ila
 set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0_0]
 set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0_0]
@@ -306,8 +307,8 @@ set_property C_TRIGIN_EN false [get_debug_cores u_ila_1_0]
 set_property C_TRIGOUT_EN false [get_debug_cores u_ila_1_0]
 set_property port_width 1 [get_debug_ports u_ila_1_0/clk]
 connect_debug_port u_ila_1_0/clk [get_nets [list clk160]]
-set_property port_width 2 [get_debug_ports u_ila_1_0/probe0]
-connect_debug_port u_ila_1_0/probe0 [get_nets [list {fei4_a1_rx_1/data_deser/rx_state[0]} {fei4_a1_rx_1/data_deser/rx_state[1]}]]
+set_property port_width 4 [get_debug_ports u_ila_1_0/probe0]
+connect_debug_port u_ila_1_0/probe0 [get_nets [list {fei4_cfg/cfg_state[0]} {fei4_cfg/cfg_state[1]} {fei4_cfg/cfg_state[2]} {fei4_cfg/cfg_state[3]}]]
 create_debug_core u_ila_2_0 ila
 set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_2_0]
 set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_2_0]
@@ -319,8 +320,8 @@ set_property C_TRIGIN_EN false [get_debug_cores u_ila_2_0]
 set_property C_TRIGOUT_EN false [get_debug_cores u_ila_2_0]
 set_property port_width 1 [get_debug_ports u_ila_2_0/clk]
 connect_debug_port u_ila_2_0/clk [get_nets [list clk100]]
-set_property port_width 8 [get_debug_ports u_ila_2_0/probe0]
-connect_debug_port u_ila_2_0/probe0 [get_nets [list {pl_iic/iic_master_test/data_rx[0]} {pl_iic/iic_master_test/data_rx[1]} {pl_iic/iic_master_test/data_rx[2]} {pl_iic/iic_master_test/data_rx[3]} {pl_iic/iic_master_test/data_rx[4]} {pl_iic/iic_master_test/data_rx[5]} {pl_iic/iic_master_test/data_rx[6]} {pl_iic/iic_master_test/data_rx[7]}]]
+set_property port_width 32 [get_debug_ports u_ila_2_0/probe0]
+connect_debug_port u_ila_2_0/probe0 [get_nets [list {fei4_cfg/delay_cnt[0]} {fei4_cfg/delay_cnt[1]} {fei4_cfg/delay_cnt[2]} {fei4_cfg/delay_cnt[3]} {fei4_cfg/delay_cnt[4]} {fei4_cfg/delay_cnt[5]} {fei4_cfg/delay_cnt[6]} {fei4_cfg/delay_cnt[7]} {fei4_cfg/delay_cnt[8]} {fei4_cfg/delay_cnt[9]} {fei4_cfg/delay_cnt[10]} {fei4_cfg/delay_cnt[11]} {fei4_cfg/delay_cnt[12]} {fei4_cfg/delay_cnt[13]} {fei4_cfg/delay_cnt[14]} {fei4_cfg/delay_cnt[15]} {fei4_cfg/delay_cnt[16]} {fei4_cfg/delay_cnt[17]} {fei4_cfg/delay_cnt[18]} {fei4_cfg/delay_cnt[19]} {fei4_cfg/delay_cnt[20]} {fei4_cfg/delay_cnt[21]} {fei4_cfg/delay_cnt[22]} {fei4_cfg/delay_cnt[23]} {fei4_cfg/delay_cnt[24]} {fei4_cfg/delay_cnt[25]} {fei4_cfg/delay_cnt[26]} {fei4_cfg/delay_cnt[27]} {fei4_cfg/delay_cnt[28]} {fei4_cfg/delay_cnt[29]} {fei4_cfg/delay_cnt[30]} {fei4_cfg/delay_cnt[31]}]]
 create_debug_core u_ila_3_0 ila
 set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_3_0]
 set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_3_0]
@@ -333,7 +334,7 @@ set_property C_TRIGOUT_EN false [get_debug_cores u_ila_3_0]
 set_property port_width 1 [get_debug_ports u_ila_3_0/clk]
 connect_debug_port u_ila_3_0/clk [get_nets [list USER_SMA_P_OBUF]]
 set_property port_width 4 [get_debug_ports u_ila_3_0/probe0]
-connect_debug_port u_ila_3_0/probe0 [get_nets [list {fei4_to_gbt/fei4_a2_data_2_gbt[0]} {fei4_to_gbt/fei4_a2_data_2_gbt[1]} {fei4_to_gbt/fei4_a2_data_2_gbt[2]} {fei4_to_gbt/fei4_a2_data_2_gbt[3]}]]
+connect_debug_port u_ila_3_0/probe0 [get_nets [list {fei4_to_gbt/fei4_a1_data_2_gbt[0]} {fei4_to_gbt/fei4_a1_data_2_gbt[1]} {fei4_to_gbt/fei4_a1_data_2_gbt[2]} {fei4_to_gbt/fei4_a1_data_2_gbt[3]}]]
 create_debug_core u_ila_4_0 ila
 set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_4_0]
 set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_4_0]
@@ -385,109 +386,118 @@ set_property port_width 1 [get_debug_ports u_ila_0_0/probe12]
 connect_debug_port u_ila_0_0/probe12 [get_nets [list axi_hp2_burst/last_rd_tri_i]]
 create_debug_port u_ila_0_0 probe
 set_property port_width 1 [get_debug_ports u_ila_0_0/probe13]
-connect_debug_port u_ila_0_0/probe13 [get_nets [list fei4_a2_rx_1/data_deser/sync_tri]]
+connect_debug_port u_ila_0_0/probe13 [get_nets [list fei4_a1_rx_1/data_deser/sync_tri]]
 create_debug_port u_ila_0_0 probe
 set_property port_width 1 [get_debug_ports u_ila_0_0/probe14]
-connect_debug_port u_ila_0_0/probe14 [get_nets [list fei4_a1_rx_1/data_deser/sync_tri]]
+connect_debug_port u_ila_0_0/probe14 [get_nets [list fei4_a2_rx_1/data_deser/sync_tri]]
 create_debug_port u_ila_1_0 probe
-set_property port_width 16 [get_debug_ports u_ila_1_0/probe1]
-connect_debug_port u_ila_1_0/probe1 [get_nets [list {fei4_a1_rx_1/data_extract/reg_addr[0]} {fei4_a1_rx_1/data_extract/reg_addr[1]} {fei4_a1_rx_1/data_extract/reg_addr[2]} {fei4_a1_rx_1/data_extract/reg_addr[3]} {fei4_a1_rx_1/data_extract/reg_addr[4]} {fei4_a1_rx_1/data_extract/reg_addr[5]} {fei4_a1_rx_1/data_extract/reg_addr[6]} {fei4_a1_rx_1/data_extract/reg_addr[7]} {fei4_a1_rx_1/data_extract/reg_addr[8]} {fei4_a1_rx_1/data_extract/reg_addr[9]} {fei4_a1_rx_1/data_extract/reg_addr[10]} {fei4_a1_rx_1/data_extract/reg_addr[11]} {fei4_a1_rx_1/data_extract/reg_addr[12]} {fei4_a1_rx_1/data_extract/reg_addr[13]} {fei4_a1_rx_1/data_extract/reg_addr[14]} {fei4_a1_rx_1/data_extract/reg_addr[15]}]]
+set_property port_width 2 [get_debug_ports u_ila_1_0/probe1]
+connect_debug_port u_ila_1_0/probe1 [get_nets [list {fei4_a2_rx_1/data_deser/rx_state[0]} {fei4_a2_rx_1/data_deser/rx_state[1]}]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 16 [get_debug_ports u_ila_1_0/probe2]
-connect_debug_port u_ila_1_0/probe2 [get_nets [list {fei4_a1_rx_1/data_extract/reg_value[0]} {fei4_a1_rx_1/data_extract/reg_value[1]} {fei4_a1_rx_1/data_extract/reg_value[2]} {fei4_a1_rx_1/data_extract/reg_value[3]} {fei4_a1_rx_1/data_extract/reg_value[4]} {fei4_a1_rx_1/data_extract/reg_value[5]} {fei4_a1_rx_1/data_extract/reg_value[6]} {fei4_a1_rx_1/data_extract/reg_value[7]} {fei4_a1_rx_1/data_extract/reg_value[8]} {fei4_a1_rx_1/data_extract/reg_value[9]} {fei4_a1_rx_1/data_extract/reg_value[10]} {fei4_a1_rx_1/data_extract/reg_value[11]} {fei4_a1_rx_1/data_extract/reg_value[12]} {fei4_a1_rx_1/data_extract/reg_value[13]} {fei4_a1_rx_1/data_extract/reg_value[14]} {fei4_a1_rx_1/data_extract/reg_value[15]}]]
+connect_debug_port u_ila_1_0/probe2 [get_nets [list {fei4_a2_rx_1/data_extract/reg_addr[0]} {fei4_a2_rx_1/data_extract/reg_addr[1]} {fei4_a2_rx_1/data_extract/reg_addr[2]} {fei4_a2_rx_1/data_extract/reg_addr[3]} {fei4_a2_rx_1/data_extract/reg_addr[4]} {fei4_a2_rx_1/data_extract/reg_addr[5]} {fei4_a2_rx_1/data_extract/reg_addr[6]} {fei4_a2_rx_1/data_extract/reg_addr[7]} {fei4_a2_rx_1/data_extract/reg_addr[8]} {fei4_a2_rx_1/data_extract/reg_addr[9]} {fei4_a2_rx_1/data_extract/reg_addr[10]} {fei4_a2_rx_1/data_extract/reg_addr[11]} {fei4_a2_rx_1/data_extract/reg_addr[12]} {fei4_a2_rx_1/data_extract/reg_addr[13]} {fei4_a2_rx_1/data_extract/reg_addr[14]} {fei4_a2_rx_1/data_extract/reg_addr[15]}]]
 create_debug_port u_ila_1_0 probe
-set_property port_width 4 [get_debug_ports u_ila_1_0/probe3]
-connect_debug_port u_ila_1_0/probe3 [get_nets [list {fei4_a1_rx_1/data_extract/state[0]} {fei4_a1_rx_1/data_extract/state[1]} {fei4_a1_rx_1/data_extract/state[2]} {fei4_a1_rx_1/data_extract/state[3]}]]
+set_property port_width 16 [get_debug_ports u_ila_1_0/probe3]
+connect_debug_port u_ila_1_0/probe3 [get_nets [list {fei4_a2_rx_1/data_extract/reg_value[0]} {fei4_a2_rx_1/data_extract/reg_value[1]} {fei4_a2_rx_1/data_extract/reg_value[2]} {fei4_a2_rx_1/data_extract/reg_value[3]} {fei4_a2_rx_1/data_extract/reg_value[4]} {fei4_a2_rx_1/data_extract/reg_value[5]} {fei4_a2_rx_1/data_extract/reg_value[6]} {fei4_a2_rx_1/data_extract/reg_value[7]} {fei4_a2_rx_1/data_extract/reg_value[8]} {fei4_a2_rx_1/data_extract/reg_value[9]} {fei4_a2_rx_1/data_extract/reg_value[10]} {fei4_a2_rx_1/data_extract/reg_value[11]} {fei4_a2_rx_1/data_extract/reg_value[12]} {fei4_a2_rx_1/data_extract/reg_value[13]} {fei4_a2_rx_1/data_extract/reg_value[14]} {fei4_a2_rx_1/data_extract/reg_value[15]}]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 4 [get_debug_ports u_ila_1_0/probe4]
-connect_debug_port u_ila_1_0/probe4 [get_nets [list {fei4_a1_rx_1/dat_extrac_state[0]} {fei4_a1_rx_1/dat_extrac_state[1]} {fei4_a1_rx_1/dat_extrac_state[2]} {fei4_a1_rx_1/dat_extrac_state[3]}]]
+connect_debug_port u_ila_1_0/probe4 [get_nets [list {fei4_a2_rx_1/data_extract/state[0]} {fei4_a2_rx_1/data_extract/state[1]} {fei4_a2_rx_1/data_extract/state[2]} {fei4_a2_rx_1/data_extract/state[3]}]]
 create_debug_port u_ila_1_0 probe
-set_property port_width 3 [get_debug_ports u_ila_1_0/probe5]
-connect_debug_port u_ila_1_0/probe5 [get_nets [list {ccpd_cfg/ccpd_cfg/state[0]} {ccpd_cfg/ccpd_cfg/state[1]} {ccpd_cfg/ccpd_cfg/state[2]}]]
+set_property port_width 4 [get_debug_ports u_ila_1_0/probe5]
+connect_debug_port u_ila_1_0/probe5 [get_nets [list {fei4_a2_rx_1/dat_extrac_state[0]} {fei4_a2_rx_1/dat_extrac_state[1]} {fei4_a2_rx_1/dat_extrac_state[2]} {fei4_a2_rx_1/dat_extrac_state[3]}]]
 create_debug_port u_ila_1_0 probe
-set_property port_width 4 [get_debug_ports u_ila_1_0/probe6]
-connect_debug_port u_ila_1_0/probe6 [get_nets [list {fei4_cfg/cfg_state[0]} {fei4_cfg/cfg_state[1]} {fei4_cfg/cfg_state[2]} {fei4_cfg/cfg_state[3]}]]
+set_property port_width 2 [get_debug_ports u_ila_1_0/probe6]
+connect_debug_port u_ila_1_0/probe6 [get_nets [list {fei4_a1_rx_1/data_deser/rx_state[0]} {fei4_a1_rx_1/data_deser/rx_state[1]}]]
 create_debug_port u_ila_1_0 probe
-set_property port_width 2 [get_debug_ports u_ila_1_0/probe7]
-connect_debug_port u_ila_1_0/probe7 [get_nets [list {fei4_a2_rx_1/data_deser/rx_state[0]} {fei4_a2_rx_1/data_deser/rx_state[1]}]]
+set_property port_width 16 [get_debug_ports u_ila_1_0/probe7]
+connect_debug_port u_ila_1_0/probe7 [get_nets [list {fei4_a1_rx_1/data_extract/reg_addr[0]} {fei4_a1_rx_1/data_extract/reg_addr[1]} {fei4_a1_rx_1/data_extract/reg_addr[2]} {fei4_a1_rx_1/data_extract/reg_addr[3]} {fei4_a1_rx_1/data_extract/reg_addr[4]} {fei4_a1_rx_1/data_extract/reg_addr[5]} {fei4_a1_rx_1/data_extract/reg_addr[6]} {fei4_a1_rx_1/data_extract/reg_addr[7]} {fei4_a1_rx_1/data_extract/reg_addr[8]} {fei4_a1_rx_1/data_extract/reg_addr[9]} {fei4_a1_rx_1/data_extract/reg_addr[10]} {fei4_a1_rx_1/data_extract/reg_addr[11]} {fei4_a1_rx_1/data_extract/reg_addr[12]} {fei4_a1_rx_1/data_extract/reg_addr[13]} {fei4_a1_rx_1/data_extract/reg_addr[14]} {fei4_a1_rx_1/data_extract/reg_addr[15]}]]
 create_debug_port u_ila_1_0 probe
-set_property port_width 16 [get_debug_ports u_ila_1_0/probe8]
-connect_debug_port u_ila_1_0/probe8 [get_nets [list {fei4_a2_rx_1/data_extract/reg_addr[0]} {fei4_a2_rx_1/data_extract/reg_addr[1]} {fei4_a2_rx_1/data_extract/reg_addr[2]} {fei4_a2_rx_1/data_extract/reg_addr[3]} {fei4_a2_rx_1/data_extract/reg_addr[4]} {fei4_a2_rx_1/data_extract/reg_addr[5]} {fei4_a2_rx_1/data_extract/reg_addr[6]} {fei4_a2_rx_1/data_extract/reg_addr[7]} {fei4_a2_rx_1/data_extract/reg_addr[8]} {fei4_a2_rx_1/data_extract/reg_addr[9]} {fei4_a2_rx_1/data_extract/reg_addr[10]} {fei4_a2_rx_1/data_extract/reg_addr[11]} {fei4_a2_rx_1/data_extract/reg_addr[12]} {fei4_a2_rx_1/data_extract/reg_addr[13]} {fei4_a2_rx_1/data_extract/reg_addr[14]} {fei4_a2_rx_1/data_extract/reg_addr[15]}]]
+set_property port_width 4 [get_debug_ports u_ila_1_0/probe8]
+connect_debug_port u_ila_1_0/probe8 [get_nets [list {fei4_a1_rx_1/data_extract/state[0]} {fei4_a1_rx_1/data_extract/state[1]} {fei4_a1_rx_1/data_extract/state[2]} {fei4_a1_rx_1/data_extract/state[3]}]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 16 [get_debug_ports u_ila_1_0/probe9]
-connect_debug_port u_ila_1_0/probe9 [get_nets [list {fei4_a2_rx_1/data_extract/reg_value[0]} {fei4_a2_rx_1/data_extract/reg_value[1]} {fei4_a2_rx_1/data_extract/reg_value[2]} {fei4_a2_rx_1/data_extract/reg_value[3]} {fei4_a2_rx_1/data_extract/reg_value[4]} {fei4_a2_rx_1/data_extract/reg_value[5]} {fei4_a2_rx_1/data_extract/reg_value[6]} {fei4_a2_rx_1/data_extract/reg_value[7]} {fei4_a2_rx_1/data_extract/reg_value[8]} {fei4_a2_rx_1/data_extract/reg_value[9]} {fei4_a2_rx_1/data_extract/reg_value[10]} {fei4_a2_rx_1/data_extract/reg_value[11]} {fei4_a2_rx_1/data_extract/reg_value[12]} {fei4_a2_rx_1/data_extract/reg_value[13]} {fei4_a2_rx_1/data_extract/reg_value[14]} {fei4_a2_rx_1/data_extract/reg_value[15]}]]
+connect_debug_port u_ila_1_0/probe9 [get_nets [list {fei4_a1_rx_1/data_extract/reg_value[0]} {fei4_a1_rx_1/data_extract/reg_value[1]} {fei4_a1_rx_1/data_extract/reg_value[2]} {fei4_a1_rx_1/data_extract/reg_value[3]} {fei4_a1_rx_1/data_extract/reg_value[4]} {fei4_a1_rx_1/data_extract/reg_value[5]} {fei4_a1_rx_1/data_extract/reg_value[6]} {fei4_a1_rx_1/data_extract/reg_value[7]} {fei4_a1_rx_1/data_extract/reg_value[8]} {fei4_a1_rx_1/data_extract/reg_value[9]} {fei4_a1_rx_1/data_extract/reg_value[10]} {fei4_a1_rx_1/data_extract/reg_value[11]} {fei4_a1_rx_1/data_extract/reg_value[12]} {fei4_a1_rx_1/data_extract/reg_value[13]} {fei4_a1_rx_1/data_extract/reg_value[14]} {fei4_a1_rx_1/data_extract/reg_value[15]}]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 4 [get_debug_ports u_ila_1_0/probe10]
-connect_debug_port u_ila_1_0/probe10 [get_nets [list {fei4_a2_rx_1/data_extract/state[0]} {fei4_a2_rx_1/data_extract/state[1]} {fei4_a2_rx_1/data_extract/state[2]} {fei4_a2_rx_1/data_extract/state[3]}]]
+connect_debug_port u_ila_1_0/probe10 [get_nets [list {fei4_a1_rx_1/dat_extrac_state[0]} {fei4_a1_rx_1/dat_extrac_state[1]} {fei4_a1_rx_1/dat_extrac_state[2]} {fei4_a1_rx_1/dat_extrac_state[3]}]]
 create_debug_port u_ila_1_0 probe
-set_property port_width 4 [get_debug_ports u_ila_1_0/probe11]
-connect_debug_port u_ila_1_0/probe11 [get_nets [list {fei4_a2_rx_1/dat_extrac_state[0]} {fei4_a2_rx_1/dat_extrac_state[1]} {fei4_a2_rx_1/dat_extrac_state[2]} {fei4_a2_rx_1/dat_extrac_state[3]}]]
+set_property port_width 32 [get_debug_ports u_ila_1_0/probe11]
+connect_debug_port u_ila_1_0/probe11 [get_nets [list {hp2_burst_fifo_wrdata_t[0]} {hp2_burst_fifo_wrdata_t[1]} {hp2_burst_fifo_wrdata_t[2]} {hp2_burst_fifo_wrdata_t[3]} {hp2_burst_fifo_wrdata_t[4]} {hp2_burst_fifo_wrdata_t[5]} {hp2_burst_fifo_wrdata_t[6]} {hp2_burst_fifo_wrdata_t[7]} {hp2_burst_fifo_wrdata_t[8]} {hp2_burst_fifo_wrdata_t[9]} {hp2_burst_fifo_wrdata_t[10]} {hp2_burst_fifo_wrdata_t[11]} {hp2_burst_fifo_wrdata_t[12]} {hp2_burst_fifo_wrdata_t[13]} {hp2_burst_fifo_wrdata_t[14]} {hp2_burst_fifo_wrdata_t[15]} {hp2_burst_fifo_wrdata_t[16]} {hp2_burst_fifo_wrdata_t[17]} {hp2_burst_fifo_wrdata_t[18]} {hp2_burst_fifo_wrdata_t[19]} {hp2_burst_fifo_wrdata_t[20]} {hp2_burst_fifo_wrdata_t[21]} {hp2_burst_fifo_wrdata_t[22]} {hp2_burst_fifo_wrdata_t[23]} {hp2_burst_fifo_wrdata_t[24]} {hp2_burst_fifo_wrdata_t[25]} {hp2_burst_fifo_wrdata_t[26]} {hp2_burst_fifo_wrdata_t[27]} {hp2_burst_fifo_wrdata_t[28]} {hp2_burst_fifo_wrdata_t[29]} {hp2_burst_fifo_wrdata_t[30]} {hp2_burst_fifo_wrdata_t[31]}]]
 create_debug_port u_ila_1_0 probe
-set_property port_width 32 [get_debug_ports u_ila_1_0/probe12]
-connect_debug_port u_ila_1_0/probe12 [get_nets [list {hp2_burst_fifo_wrdata_t[0]} {hp2_burst_fifo_wrdata_t[1]} {hp2_burst_fifo_wrdata_t[2]} {hp2_burst_fifo_wrdata_t[3]} {hp2_burst_fifo_wrdata_t[4]} {hp2_burst_fifo_wrdata_t[5]} {hp2_burst_fifo_wrdata_t[6]} {hp2_burst_fifo_wrdata_t[7]} {hp2_burst_fifo_wrdata_t[8]} {hp2_burst_fifo_wrdata_t[9]} {hp2_burst_fifo_wrdata_t[10]} {hp2_burst_fifo_wrdata_t[11]} {hp2_burst_fifo_wrdata_t[12]} {hp2_burst_fifo_wrdata_t[13]} {hp2_burst_fifo_wrdata_t[14]} {hp2_burst_fifo_wrdata_t[15]} {hp2_burst_fifo_wrdata_t[16]} {hp2_burst_fifo_wrdata_t[17]} {hp2_burst_fifo_wrdata_t[18]} {hp2_burst_fifo_wrdata_t[19]} {hp2_burst_fifo_wrdata_t[20]} {hp2_burst_fifo_wrdata_t[21]} {hp2_burst_fifo_wrdata_t[22]} {hp2_burst_fifo_wrdata_t[23]} {hp2_burst_fifo_wrdata_t[24]} {hp2_burst_fifo_wrdata_t[25]} {hp2_burst_fifo_wrdata_t[26]} {hp2_burst_fifo_wrdata_t[27]} {hp2_burst_fifo_wrdata_t[28]} {hp2_burst_fifo_wrdata_t[29]} {hp2_burst_fifo_wrdata_t[30]} {hp2_burst_fifo_wrdata_t[31]}]]
+set_property port_width 1 [get_debug_ports u_ila_1_0/probe12]
+connect_debug_port u_ila_1_0/probe12 [get_nets [list fei4_a2_rx_1/dat_extrac_error_flg]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 1 [get_debug_ports u_ila_1_0/probe13]
-connect_debug_port u_ila_1_0/probe13 [get_nets [list fei4_a2_rx_1/dat_extrac_error_flg]]
+connect_debug_port u_ila_1_0/probe13 [get_nets [list fei4_a1_rx_1/dat_extrac_error_flg]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 1 [get_debug_ports u_ila_1_0/probe14]
-connect_debug_port u_ila_1_0/probe14 [get_nets [list fei4_a1_rx_1/dat_extrac_error_flg]]
+connect_debug_port u_ila_1_0/probe14 [get_nets [list fei4_a1_rx_1/data_deser/data_i]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 1 [get_debug_ports u_ila_1_0/probe15]
 connect_debug_port u_ila_1_0/probe15 [get_nets [list fei4_a2_rx_1/data_deser/data_i]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 1 [get_debug_ports u_ila_1_0/probe16]
-connect_debug_port u_ila_1_0/probe16 [get_nets [list fei4_a1_rx_1/data_deser/data_i]]
+connect_debug_port u_ila_1_0/probe16 [get_nets [list fei4_a1_data_is_pix_dat]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 1 [get_debug_ports u_ila_1_0/probe17]
-connect_debug_port u_ila_1_0/probe17 [get_nets [list fei4_a1_data_is_pix_dat]]
+connect_debug_port u_ila_1_0/probe17 [get_nets [list fei4_a2_data_is_pix_dat]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 1 [get_debug_ports u_ila_1_0/probe18]
-connect_debug_port u_ila_1_0/probe18 [get_nets [list fei4_a2_data_is_pix_dat]]
+connect_debug_port u_ila_1_0/probe18 [get_nets [list fei4_a1_rx_1/data_deser/fram_is_synced]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 1 [get_debug_ports u_ila_1_0/probe19]
 connect_debug_port u_ila_1_0/probe19 [get_nets [list fei4_a2_rx_1/data_deser/fram_is_synced]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 1 [get_debug_ports u_ila_1_0/probe20]
-connect_debug_port u_ila_1_0/probe20 [get_nets [list fei4_a1_rx_1/data_deser/fram_is_synced]]
+connect_debug_port u_ila_1_0/probe20 [get_nets [list fei4_a1_rx_1/data_deser/idle]]
 create_debug_port u_ila_1_0 probe
 set_property port_width 1 [get_debug_ports u_ila_1_0/probe21]
 connect_debug_port u_ila_1_0/probe21 [get_nets [list fei4_a2_rx_1/data_deser/idle]]
-create_debug_port u_ila_1_0 probe
-set_property port_width 1 [get_debug_ports u_ila_1_0/probe22]
-connect_debug_port u_ila_1_0/probe22 [get_nets [list fei4_a1_rx_1/data_deser/idle]]
 create_debug_port u_ila_2_0 probe
-set_property port_width 1 [get_debug_ports u_ila_2_0/probe1]
-connect_debug_port u_ila_2_0/probe1 [get_nets [list ccpd_cfg/ccpd_ckc]]
+set_property port_width 8 [get_debug_ports u_ila_2_0/probe1]
+connect_debug_port u_ila_2_0/probe1 [get_nets [list {pl_iic/iic_master_test/data_rx[0]} {pl_iic/iic_master_test/data_rx[1]} {pl_iic/iic_master_test/data_rx[2]} {pl_iic/iic_master_test/data_rx[3]} {pl_iic/iic_master_test/data_rx[4]} {pl_iic/iic_master_test/data_rx[5]} {pl_iic/iic_master_test/data_rx[6]} {pl_iic/iic_master_test/data_rx[7]}]]
 create_debug_port u_ila_2_0 probe
-set_property port_width 1 [get_debug_ports u_ila_2_0/probe2]
-connect_debug_port u_ila_2_0/probe2 [get_nets [list ccpd_ckc_b]]
+set_property port_width 5 [get_debug_ports u_ila_2_0/probe2]
+connect_debug_port u_ila_2_0/probe2 [get_nets [list {ccpd_cfg/ccpd_cfg/shift_cnt_limit[0]} {ccpd_cfg/ccpd_cfg/shift_cnt_limit[1]} {ccpd_cfg/ccpd_cfg/shift_cnt_limit[2]} {ccpd_cfg/ccpd_cfg/shift_cnt_limit[3]} {ccpd_cfg/ccpd_cfg/shift_cnt_limit[4]}]]
 create_debug_port u_ila_2_0 probe
-set_property port_width 1 [get_debug_ports u_ila_2_0/probe3]
-connect_debug_port u_ila_2_0/probe3 [get_nets [list ccpd_cfg/ccpd_ckd]]
+set_property port_width 3 [get_debug_ports u_ila_2_0/probe3]
+connect_debug_port u_ila_2_0/probe3 [get_nets [list {ccpd_cfg/ccpd_cfg/state[0]} {ccpd_cfg/ccpd_cfg/state[1]} {ccpd_cfg/ccpd_cfg/state[2]}]]
 create_debug_port u_ila_2_0 probe
-set_property port_width 1 [get_debug_ports u_ila_2_0/probe4]
-connect_debug_port u_ila_2_0/probe4 [get_nets [list ccpd_ckd_b]]
+set_property port_width 5 [get_debug_ports u_ila_2_0/probe4]
+connect_debug_port u_ila_2_0/probe4 [get_nets [list {ccpd_cfg/ccpd_cfg/reg_cnt_limit[0]} {ccpd_cfg/ccpd_cfg/reg_cnt_limit[1]} {ccpd_cfg/ccpd_cfg/reg_cnt_limit[2]} {ccpd_cfg/ccpd_cfg/reg_cnt_limit[3]} {ccpd_cfg/ccpd_cfg/reg_cnt_limit[4]}]]
 create_debug_port u_ila_2_0 probe
 set_property port_width 1 [get_debug_ports u_ila_2_0/probe5]
-connect_debug_port u_ila_2_0/probe5 [get_nets [list ccpd_inj_trigger_out]]
+connect_debug_port u_ila_2_0/probe5 [get_nets [list ccpd_cfg/ccpd_ckc]]
 create_debug_port u_ila_2_0 probe
 set_property port_width 1 [get_debug_ports u_ila_2_0/probe6]
-connect_debug_port u_ila_2_0/probe6 [get_nets [list ccpd_cfg/ccpd_ld]]
+connect_debug_port u_ila_2_0/probe6 [get_nets [list ccpd_ckc_b]]
 create_debug_port u_ila_2_0 probe
 set_property port_width 1 [get_debug_ports u_ila_2_0/probe7]
-connect_debug_port u_ila_2_0/probe7 [get_nets [list ccpd_ld_b]]
+connect_debug_port u_ila_2_0/probe7 [get_nets [list ccpd_cfg/ccpd_ckd]]
 create_debug_port u_ila_2_0 probe
 set_property port_width 1 [get_debug_ports u_ila_2_0/probe8]
-connect_debug_port u_ila_2_0/probe8 [get_nets [list ccpd_cfg/ccpd_sin]]
+connect_debug_port u_ila_2_0/probe8 [get_nets [list ccpd_ckd_b]]
 create_debug_port u_ila_2_0 probe
 set_property port_width 1 [get_debug_ports u_ila_2_0/probe9]
-connect_debug_port u_ila_2_0/probe9 [get_nets [list ccpd_sin_b]]
+connect_debug_port u_ila_2_0/probe9 [get_nets [list ccpd_inj_trigger_out]]
 create_debug_port u_ila_2_0 probe
 set_property port_width 1 [get_debug_ports u_ila_2_0/probe10]
-connect_debug_port u_ila_2_0/probe10 [get_nets [list pl_iic/iic_master_test/sda_ena_n]]
+connect_debug_port u_ila_2_0/probe10 [get_nets [list ccpd_cfg/ccpd_ld]]
+create_debug_port u_ila_2_0 probe
+set_property port_width 1 [get_debug_ports u_ila_2_0/probe11]
+connect_debug_port u_ila_2_0/probe11 [get_nets [list ccpd_ld_b]]
+create_debug_port u_ila_2_0 probe
+set_property port_width 1 [get_debug_ports u_ila_2_0/probe12]
+connect_debug_port u_ila_2_0/probe12 [get_nets [list ccpd_cfg/ccpd_sin]]
+create_debug_port u_ila_2_0 probe
+set_property port_width 1 [get_debug_ports u_ila_2_0/probe13]
+connect_debug_port u_ila_2_0/probe13 [get_nets [list ccpd_sin_b]]
+create_debug_port u_ila_2_0 probe
+set_property port_width 1 [get_debug_ports u_ila_2_0/probe14]
+connect_debug_port u_ila_2_0/probe14 [get_nets [list pl_iic/iic_master_test/sda_ena_n]]
 create_debug_port u_ila_3_0 probe
 set_property port_width 4 [get_debug_ports u_ila_3_0/probe1]
-connect_debug_port u_ila_3_0/probe1 [get_nets [list {fei4_to_gbt/fei4_a1_data_2_gbt[0]} {fei4_to_gbt/fei4_a1_data_2_gbt[1]} {fei4_to_gbt/fei4_a1_data_2_gbt[2]} {fei4_to_gbt/fei4_a1_data_2_gbt[3]}]]
+connect_debug_port u_ila_3_0/probe1 [get_nets [list {fei4_to_gbt/fei4_a2_data_2_gbt[0]} {fei4_to_gbt/fei4_a2_data_2_gbt[1]} {fei4_to_gbt/fei4_a2_data_2_gbt[2]} {fei4_to_gbt/fei4_a2_data_2_gbt[3]}]]
 create_debug_port u_ila_3_0 probe
 set_property port_width 84 [get_debug_ports u_ila_3_0/probe2]
 connect_debug_port u_ila_3_0/probe2 [get_nets [list {gbt_fpga_tx_data[0]} {gbt_fpga_tx_data[1]} {gbt_fpga_tx_data[2]} {gbt_fpga_tx_data[3]} {gbt_fpga_tx_data[4]} {gbt_fpga_tx_data[5]} {gbt_fpga_tx_data[6]} {gbt_fpga_tx_data[7]} {gbt_fpga_tx_data[8]} {gbt_fpga_tx_data[9]} {gbt_fpga_tx_data[10]} {gbt_fpga_tx_data[11]} {gbt_fpga_tx_data[12]} {gbt_fpga_tx_data[13]} {gbt_fpga_tx_data[14]} {gbt_fpga_tx_data[15]} {gbt_fpga_tx_data[16]} {gbt_fpga_tx_data[17]} {gbt_fpga_tx_data[18]} {gbt_fpga_tx_data[19]} {gbt_fpga_tx_data[20]} {gbt_fpga_tx_data[21]} {gbt_fpga_tx_data[22]} {gbt_fpga_tx_data[23]} {gbt_fpga_tx_data[24]} {gbt_fpga_tx_data[25]} {gbt_fpga_tx_data[26]} {gbt_fpga_tx_data[27]} {gbt_fpga_tx_data[28]} {gbt_fpga_tx_data[29]} {gbt_fpga_tx_data[30]} {gbt_fpga_tx_data[31]} {gbt_fpga_tx_data[32]} {gbt_fpga_tx_data[33]} {gbt_fpga_tx_data[34]} {gbt_fpga_tx_data[35]} {gbt_fpga_tx_data[36]} {gbt_fpga_tx_data[37]} {gbt_fpga_tx_data[38]} {gbt_fpga_tx_data[39]} {gbt_fpga_tx_data[40]} {gbt_fpga_tx_data[41]} {gbt_fpga_tx_data[42]} {gbt_fpga_tx_data[43]} {gbt_fpga_tx_data[44]} {gbt_fpga_tx_data[45]} {gbt_fpga_tx_data[46]} {gbt_fpga_tx_data[47]} {gbt_fpga_tx_data[48]} {gbt_fpga_tx_data[49]} {gbt_fpga_tx_data[50]} {gbt_fpga_tx_data[51]} {gbt_fpga_tx_data[52]} {gbt_fpga_tx_data[53]} {gbt_fpga_tx_data[54]} {gbt_fpga_tx_data[55]} {gbt_fpga_tx_data[56]} {gbt_fpga_tx_data[57]} {gbt_fpga_tx_data[58]} {gbt_fpga_tx_data[59]} {gbt_fpga_tx_data[60]} {gbt_fpga_tx_data[61]} {gbt_fpga_tx_data[62]} {gbt_fpga_tx_data[63]} {gbt_fpga_tx_data[64]} {gbt_fpga_tx_data[65]} {gbt_fpga_tx_data[66]} {gbt_fpga_tx_data[67]} {gbt_fpga_tx_data[68]} {gbt_fpga_tx_data[69]} {gbt_fpga_tx_data[70]} {gbt_fpga_tx_data[71]} {gbt_fpga_tx_data[72]} {gbt_fpga_tx_data[73]} {gbt_fpga_tx_data[74]} {gbt_fpga_tx_data[75]} {gbt_fpga_tx_data[76]} {gbt_fpga_tx_data[77]} {gbt_fpga_tx_data[78]} {gbt_fpga_tx_data[79]} {gbt_fpga_tx_data[80]} {gbt_fpga_tx_data[81]} {gbt_fpga_tx_data[82]} {gbt_fpga_tx_data[83]}]]
