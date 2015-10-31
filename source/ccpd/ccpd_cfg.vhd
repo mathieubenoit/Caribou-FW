@@ -43,12 +43,18 @@ Port (
     RAM_WR_EN   :in std_logic;
     RAM_WR_DAT      :in std_logic_vector(31 downto 0);
     RAM_ADDR    :in std_logic_vector(3 downto 0);
-    RAM_RD_DAT  :out std_logic_vector(31 downto 0);    
+    RAM_RD_DAT  :out std_logic_vector(31 downto 0);
+    OUT_EN      :out std_logic_vector(2 downto 0);    
            
-    Sin                 :out std_logic;
-    CkC                 :out std_logic;
-    CkD                 :out std_logic;
-    Ld                  :out std_logic
+    Sin_A                 :out std_logic;
+    CkC_A                 :out std_logic;
+    CkD_A                 :out std_logic;
+    Ld_A                  :out std_logic;
+
+    Sin_B                 :out std_logic;
+    CkC_B                 :out std_logic;
+    CkD_B                 :out std_logic;
+    Ld_B                  :out std_logic
  );
 end ccpd_cfg_tb;
 
@@ -99,9 +105,14 @@ ccpd_cfg:entity work.ccpd_cfg_core
     Ld              => ccpd_ld
     );
 
-Sin    <= ccpd_sin;
-CkC    <= ccpd_ckc;
-CkD    <= ccpd_ckd;
-Ld     <= ccpd_ld;
+Sin_A    <= ccpd_sin and OUT_EN(0);
+CkC_A    <= ccpd_ckc and OUT_EN(0);
+CkD_A    <= ccpd_ckd and OUT_EN(0);
+Ld_A     <= ccpd_ld  and OUT_EN(0);
+
+Sin_B    <= ccpd_sin and OUT_EN(1);
+CkC_B    <= ccpd_ckc and OUT_EN(1);
+CkD_B    <= ccpd_ckd and OUT_EN(1);
+Ld_B     <= ccpd_ld  and OUT_EN(1);
 
 end Behavioral;
