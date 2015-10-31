@@ -46,6 +46,8 @@ entity pulse_gen is
   INJ_OUT_EN   :in std_logic_vector(3  downto 0);
   TRI_DLY_CNT  :in std_logic_vector(4 downto 0);
   
+  TRIGGER_OUT : out std_logic;
+  
   --pulse output
   pulse_out1          : out std_logic; 
   pulse_out2          : out std_logic; 
@@ -83,5 +85,6 @@ pulse_out2 <= pulse_out and INJ_OUT_EN(1);
 pulse_out3 <= pulse_out and INJ_OUT_EN(2);
 pulse_out4 <= pulse_out and INJ_OUT_EN(3);
 
+TRIGGER_OUT <= pulse_out;
 
 end Behavioral;

@@ -78,6 +78,7 @@ if reset = '1' then
     delay_cnt <= 0;
     cnt <= 0;
     trigger_cnt <= 0;
+    trigger_out_i <= '0';
     
 elsif rising_edge(clk) then
 
@@ -150,5 +151,6 @@ end if;
 end process;
 
 pulse_out <= pulse_out_i;
+trigger_out <= trigger_out_i;
 
 end Behavioral;
