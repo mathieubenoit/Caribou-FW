@@ -32,15 +32,19 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity pulse_gen is
+  GENERIC (
+  input_clk_freq : integer:= 100_000_000
+  );   
   port ( 
   RST    : in std_logic;
   SYSCLK : in std_logic;
   
-  INJ_FLG  :in std_logic;
-  INJ_PLS_CNT :in std_logic_vector(15 downto 0);
+  INJ_FLG      :in std_logic;
+  INJ_PLS_CNT  :in std_logic_vector(15 downto 0);
   INJ_HIGH_CNT :in std_logic_vector(31 downto 0);
-  INJ_LOW_CNT :in std_logic_vector(31 downto 0);
-  INJ_OUT_EN :in std_logic_vector(3  downto 0);
+  INJ_LOW_CNT  :in std_logic_vector(31 downto 0);
+  INJ_OUT_EN   :in std_logic_vector(3  downto 0);
+  TRI_DLY_CNT  :in std_logic_vector(4 downto 0);
   
   --pulse output
   pulse_out1          : out std_logic; 
@@ -52,31 +56,13 @@ end pulse_gen;
 
 architecture Behavioral of pulse_gen is
 
-COMPONENT pulse_gen_core is
-GENERIC(
-  input_clk : INTEGER := 100_000_000 --input clock speed from user logic in Hz
-  );   
-PORT(
-  clk           : IN    STD_LOGIC;   --system clock
-  reset         : IN    STD_LOGIC;
-  
-  start_flg     : IN    STD_LOGIC;
-  
-  pulse_counter : IN    STD_LOGIC_VECTOR(15 DOWNTO 0);
-  time_high_cnt : IN    STD_LOGIC_VECTOR(31 DOWNTO 0);
-  time_low_cnt  : IN    STD_LOGIC_VECTOR(31 DOWNTO 0);
-    
-  pulse_out     : OUT   STD_LOGIC
-);     
-end COMPONENT;
-
 signal pulse_out :STD_LOGIC;
 
 begin
 
-pulse_generator:pulse_gen_core
+pulse_generator: entity work.pulse_gen_core
 GENERIC MAP(
-  input_clk => 100_000_000
+  input_clk => input_clk_freq
   ) 
 PORT MAP(
   clk            => sysclk,
@@ -87,6 +73,7 @@ PORT MAP(
   pulse_counter  => INJ_PLS_CNT,
   time_high_cnt  => INJ_HIGH_CNT,
   time_low_cnt   => INJ_LOW_CNT,
+  trig_dly_cnt    => TRI_DLY_CNT,
     
   pulse_out      => pulse_out
 );     
