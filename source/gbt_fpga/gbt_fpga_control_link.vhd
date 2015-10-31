@@ -96,12 +96,14 @@ entity gbt_fpga_control_link is
     CCPD_RAM_WR_DAT      :out std_logic_vector(31 downto 0);
     CCPD_CFG_RAM_ADDR    :out std_logic_vector(3 downto 0);
     CCPD_CFG_RAM_RD_DAT  :in std_logic_vector(31 downto 0);
+    CCPD_CFG_OUTPUT_EN   :out std_logic_vector(1 downto 0);
 
     CCPD_INJ_FLG         :out std_logic;
     CCPD_INJ_PLS_CNT     :out std_logic_vector(15 downto 0);
     CCPD_INJ_HIGH_CNT    :out std_logic_vector(31 downto 0);
     CCPD_INJ_LOW_CNT     :out std_logic_vector(31 downto 0);
-    CCPD_INJ_OUT_EN      :out std_logic_vector(3  downto 0)         
+    CCPD_INJ_OUT_EN      :out std_logic_vector(3  downto 0);
+    CCPD_TRI_DLY_CNT     :out std_logic_vector(4  downto 0)           
     );
 end gbt_fpga_control_link;
 
@@ -496,31 +498,30 @@ elsif rising_edge(GBT_RX_FRAME_CLK) then
     addr_out <= x"00a8";
   
   when x"00ac" =>  
-    if rw = '0' then
+    if rw = '1' then
        data_out       <= CCPD_CFG_RAM_RD_DAT;
     end if;
     data_valid_out <= '1';
     addr_out <= x"00ac";
  
   when x"00b0" =>  
+   if rw = '0' then
+      CCPD_CFG_OUTPUT_EN       <= data_in(1 downto 0);
+   end if;
+   data_valid_out <= '1';
+   addr_out <= x"00b0";
+   
+  when x"00b4" =>  
     if rw = '0' then
        CCPD_INJ_FLG     <= data_in(0);
        data_out         <= data_in;
     end if;
     data_valid_out <= '1';
-    addr_out <= x"00b0";
-  
-  when x"00b4" =>  
-    if rw = '0' then
-       CCPD_INJ_PLS_CNT    <= data_in(15 downto 0);
-       data_out       <= data_in;
-    end if;
-    data_valid_out <= '1';
-    addr_out <= x"00b4";
+    addr_out <= x"00b8";
   
   when x"00b8" =>  
     if rw = '0' then
-       CCPD_INJ_HIGH_CNT    <= data_in;
+       CCPD_INJ_PLS_CNT    <= data_in(15 downto 0);
        data_out       <= data_in;
     end if;
     data_valid_out <= '1';
@@ -528,20 +529,36 @@ elsif rising_edge(GBT_RX_FRAME_CLK) then
   
   when x"00bc" =>  
     if rw = '0' then
+       CCPD_INJ_HIGH_CNT    <= data_in;
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00bc";
+  
+  when x"00c0" =>  
+    if rw = '0' then
        CCPD_INJ_LOW_CNT     <= data_in;
        data_out       <= data_in;
     end if;
     data_valid_out <= '1';
     addr_out <= x"00c0";
   
-  when x"00c0" =>  
+  when x"00c4" =>  
     if rw = '0' then
        CCPD_INJ_OUT_EN      <= data_in(3 downto 0);
        data_out       <= data_in;
     end if;
     data_valid_out <= '1';
     addr_out <= x"00c4";
-  
+
+  when x"00c8" =>  
+    if rw = '0' then
+       CCPD_TRI_DLY_CNT      <= data_in(3 downto 0);
+       data_out       <= data_in;
+    end if;
+    data_valid_out <= '1';
+    addr_out <= x"00c8";
+      
 --  when x"00c0" =>  
 --    if rw = '1' then 
 --       data_out       <= reg48;

@@ -71,12 +71,14 @@ port (
     CCPD_RAM_WR_DAT      :out std_logic_vector(31 downto 0);
     CCPD_CFG_RAM_ADDR    :out std_logic_vector(3 downto 0);
     CCPD_CFG_RAM_RD_DAT  :in std_logic_vector(31 downto 0);
+    CCPD_CFG_OUTPUT_EN   :out std_logic_vector(1 downto 0);
 
     CCPD_INJ_FLG         :out std_logic;
     CCPD_INJ_PLS_CNT     :out std_logic_vector(15 downto 0);
     CCPD_INJ_HIGH_CNT    :out std_logic_vector(31 downto 0);
     CCPD_INJ_LOW_CNT     :out std_logic_vector(31 downto 0);
-    CCPD_INJ_OUT_EN      :out std_logic_vector(3  downto 0)    					
+    CCPD_INJ_OUT_EN      :out std_logic_vector(3  downto 0);
+    CCPD_TRI_DLY_CNT     :out std_logic_vector(4  downto 0)    					
 );		  
 end iobus_interface;
   
@@ -246,34 +248,40 @@ begin
                         when x"009C" =>   if (wr = '1') then CCPD_CFG_CLK_EN <= Bus2IP_Data(1 downto 0);
                         end if;  
                                         
-                        when x"0100" =>   if (wr = '1') then CCPD_CFG_RAM_WR_EN <= Bus2IP_Data(0);
+                        when x"00a0" =>   if (wr = '1') then CCPD_CFG_RAM_WR_EN <= Bus2IP_Data(0);
                         end if;   
                                                
-                        when x"0104" =>   if (wr = '1') then CCPD_RAM_WR_DAT <= Bus2IP_Data;
+                        when x"00a4" =>   if (wr = '1') then CCPD_RAM_WR_DAT <= Bus2IP_Data;
                         end if; 
                                         
-                        when x"0108" =>   if (wr = '1') then CCPD_CFG_RAM_ADDR <= Bus2IP_Data(3 downto 0); 
+                        when x"00a8" =>   if (wr = '1') then CCPD_CFG_RAM_ADDR <= Bus2IP_Data(3 downto 0); 
                         end if;                                         
 
-                        when x"010C" =>   if (rd = '1') then ip2bus_data_i <= CCPD_CFG_RAM_RD_DAT;                                         
+                        when x"00ac" =>   if (rd = '1') then ip2bus_data_i <= CCPD_CFG_RAM_RD_DAT;                                         
                         end if; 
-                        
-                        when x"0120" =>   if (wr = '1') then CCPD_INJ_FLG <= Bus2IP_Data(0);                                         
+
+                        when x"00b0" =>   if (wr = '1') then CCPD_CFG_OUTPUT_EN <= Bus2IP_Data(1 downto 0);                                         
+                        end if; 
+                                                
+                        when x"00b4" =>   if (wr = '1') then CCPD_INJ_FLG <= Bus2IP_Data(0);                                         
                         end if;                         
 
-                        when x"0124" =>   if (wr = '1') then CCPD_INJ_PLS_CNT <= Bus2IP_Data(15 downto 0);                                         
+                        when x"00b8" =>   if (wr = '1') then CCPD_INJ_PLS_CNT <= Bus2IP_Data(15 downto 0);                                         
                         end if;   
 
-                        when x"012C" =>   if (wr = '1') then CCPD_INJ_HIGH_CNT <= Bus2IP_Data(31 downto 0);                                         
+                        when x"00bc" =>   if (wr = '1') then CCPD_INJ_HIGH_CNT <= Bus2IP_Data;                                         
                         end if;  
 
-                        when x"0130" =>   if (wr = '1') then CCPD_INJ_LOW_CNT <= Bus2IP_Data(31 downto 0);                                         
+                        when x"00c0" =>   if (wr = '1') then CCPD_INJ_LOW_CNT <= Bus2IP_Data;                                         
                         end if;  
 
-                        when x"0134" =>   if (wr = '1') then CCPD_INJ_OUT_EN <= Bus2IP_Data(3 downto 0);                                         
+                        when x"00c4" =>   if (wr = '1') then CCPD_INJ_OUT_EN <= Bus2IP_Data(3 downto 0);                                                           
                         end if; 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       											
-						when others =>
+                        
+                        when x"00c8" =>   if (wr = '1') then CCPD_TRI_DLY_CNT <= Bus2IP_Data(4 downto 0);                                                           
+                        end if;						
+                        
+                        when others =>
 							ip2bus_data_i(19 downto 0) <= (others => '0');
 				        end case;
 				   
