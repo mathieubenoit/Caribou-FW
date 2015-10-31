@@ -370,11 +370,13 @@ signal ccpd_sin_a                :std_logic;
 signal ccpd_ld_a                 :std_logic;
 signal ccpd_ckc_a                :std_logic;
 signal ccpd_ckd_a                :std_logic;
+attribute MARK_DEBUG of ccpd_sin_a,ccpd_ld_a,ccpd_ckc_a,ccpd_ckd_a : signal is "TRUE";
 
 signal ccpd_sin_b                :std_logic;
 signal ccpd_ld_b                 :std_logic;
 signal ccpd_ckc_b                :std_logic;
 signal ccpd_ckd_b                :std_logic;
+attribute MARK_DEBUG of ccpd_sin_b,ccpd_ld_b,ccpd_ckc_b,ccpd_ckd_b : signal is "TRUE";
 
 signal gbt_fei4_tx_data        :std_logic_vector(31 downto 0);
 signal gbt_fei4_tx_is_data     :std_logic;
@@ -431,6 +433,8 @@ signal ccpd_inj_low_cnt :std_logic_vector(31 downto 0);
 signal ccpd_inj_out_en  :std_logic_vector(3 downto 0);
 signal ccpd_inj_tri_delay :std_logic_vector(4 downto 0);
 signal ccpd_inj_trigger_out :std_logic;
+
+attribute MARK_DEBUG of ccpd_inj_pulse_a1,ccpd_inj_trigger_out : signal is "TRUE";
 
 COMPONENT vio_1
   PORT (
@@ -930,7 +934,7 @@ port map(
 
 ccpd_inj_gen:entity work.pulse_gen
 generic map(
-  input_clk => 100_000_000
+  input_clk_freq => 100_000_000
 )
 port map( 
   RST            => global_reset,
@@ -1490,7 +1494,7 @@ port map(
   
   -- Since the Positive output is connected to the negative input of the A2 FEI4, the cmd out is \
   -- reversed.
-  I => not fei4_cmd_out  -- Buffer input
+  I => fei4_cmd_out  -- Buffer input
 );
 
 --TLU signals
