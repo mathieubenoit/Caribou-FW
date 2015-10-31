@@ -33,18 +33,18 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity ccpd_cfg_tb is
 Port (
-    sysclk             :in std_logic;
-    rst                :in std_logic;
+    sysclk                :in std_logic;
+    rst                   :in std_logic;
 
-    CFG_FLG        :in std_logic;
-    REG_LIMIT  :in std_logic_vector(4 downto 0);
-    SHIFT_LIMIT :in std_logic_vector(4 downto 0);
-    CLK_EN      :in std_logic_vector(1 downto 0);
-    RAM_WR_EN   :in std_logic;
-    RAM_WR_DAT      :in std_logic_vector(31 downto 0);
-    RAM_ADDR    :in std_logic_vector(3 downto 0);
-    RAM_RD_DAT  :out std_logic_vector(31 downto 0);
-    OUT_EN      :out std_logic_vector(2 downto 0);    
+    CFG_FLG               :in std_logic;
+    REG_LIMIT             :in std_logic_vector(4 downto 0);
+    SHIFT_LIMIT           :in std_logic_vector(4 downto 0);
+    CLK_EN                :in std_logic_vector(1 downto 0);
+    RAM_WR_EN             :in std_logic;
+    RAM_WR_DAT            :in std_logic_vector(31 downto 0);
+    RAM_ADDR              :in std_logic_vector(3 downto 0);
+    RAM_RD_DAT            :out std_logic_vector(31 downto 0);
+    OUT_EN                :in std_logic_vector(2 downto 0);    
            
     Sin_A                 :out std_logic;
     CkC_A                 :out std_logic;
