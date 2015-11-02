@@ -62,12 +62,12 @@ architecture Behavioral of ccpd_cfg_core is
 
 constant divider  :  integer := (input_clk_fre/cfg_clk_freq)/2;
 type ram_type is array(0 to 15) of std_logic_vector(31 downto 0);
-signal DAT_RAM :ram_type := (others => (others => '0'));
---(
---X"a1234565",X"a789abc6",X"adef0135",X"a3456785",
---X"00000000",X"00000000",X"00000000",X"00000000",
---X"00000000",X"00000000",X"00000000",X"00000000",
---X"00000000",X"00000000",X"0fedcba9",X"87654321");
+signal DAT_RAM :ram_type := --(others => (others => '0'));
+(
+X"a1234565",X"a789abc6",X"adef0135",X"a3456785",
+X"00000000",X"00000000",X"00000000",X"00000000",
+X"00000000",X"00000000",X"00000000",X"00000000",
+X"00000000",X"00000000",X"0fedcba9",X"87654321");
 
 
 signal start_flg_prev :std_logic;
@@ -92,7 +92,7 @@ signal ckd_i :std_logic;
 signal ld_i  :std_logic;
 
 attribute MARK_DEBUG : string;
-attribute MARK_DEBUG of state,reg_cnt_limit,shift_cnt_limit : signal is "TRUE";
+attribute MARK_DEBUG of state : signal is "TRUE";
 
 begin
 
@@ -147,18 +147,15 @@ begin
       start_flg_prev <= start_flg;
       case state is     
       when idle =>
+        ld_i <= '0';
         if start_flg_prev = '0' and start_flg = '1' then
           state <= start;
           shift_cnt_limit <= conv_integer(shift_limit);
-          reg_cnt_limit <= conv_integer(reg_limit);
-        else
-          cfg_clk_en <= '0';
-          ld_i    <= '0'; 
+          reg_cnt_limit <= conv_integer(reg_limit);         
         end if;
-       
+        
       when start =>
         cfg_clk_en <= '1';
-        ld_i    <= '1'; 
         if reg_cnt_limit = 0 then
             shift_out_reg <= DAT_RAM(0);
             sin_i <= DAT_RAM(0)(0);
@@ -166,17 +163,15 @@ begin
         else
             shift_out_reg <= DAT_RAM(0);
             sin_i <= DAT_RAM(0)(0);
-            state <= shift1;           
+            state <= shift1;
         end if;
-  
-      -- shift the data fully filled in the data buffer reg 
+      
       when shift1 =>
 
       if shift_cnt = 31 then
         if reg_cnt = reg_cnt_limit - 1 then
           if shift_cnt_limit = 0 then
-            state <= finish;
-            ld_i  <= '0';
+            state <= load;
             sin_i <= '0';
             cfg_clk_en <= '0';
           else
@@ -196,11 +191,9 @@ begin
         shift_cnt <= shift_cnt +1;
       end if;      
       
-      --shift out the remianed data in the last data buffer reg
       when shift2 =>
         if shift_cnt = shift_cnt_limit - 1 then
-           state <= finish;
-           ld_i  <= '0';
+           state <= load;
            sin_i <= '0';
            cfg_clk_en <= '0';
         else
@@ -208,9 +201,9 @@ begin
            sin_i <= shift_out_reg(shift_cnt+1);
         end if;
       
---      when load =>
---        ld_i    <= '1';
---        state <= finish;
+      when load =>
+        ld_i    <= '1';
+        state <= finish;
         
       when finish =>
         ld_i    <= '0';
@@ -224,12 +217,12 @@ begin
   end if;
 end process;
 
-ckc_i <= cfg_clk_prev when (cfg_clk_en = '1' and clock_enable(0) = '1') else '1';
-ckd_i <= cfg_clk_prev when (cfg_clk_en = '1' and clock_enable(1) = '1') else '1';
+ckc_i <= not cfg_clk_prev when (cfg_clk_en = '1' and clock_enable(0) = '1') else '0';
+ckd_i <= not cfg_clk_prev when (cfg_clk_en = '1' and clock_enable(1) = '1') else '0';
 
 Sin <= sin_i;
-CkC <= not ckc_i;
-CkD <= not ckd_i;
+CkC <= ckc_i;
+CkD <= ckd_i;
 Ld  <= ld_i;
 --process(clk, rst)
 --begin
